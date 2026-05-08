@@ -3,6 +3,8 @@ package com.richglez.hotel.model;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.time.LocalDate;
+
 @Entity
 @Data
 @NoArgsConstructor
@@ -12,8 +14,14 @@ public class Reservation {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String clientName;
-    private String roomName;
-    private String date;
+    private LocalDate checkIn;
+    private LocalDate checkOut;
 
+    @ManyToOne
+    @JoinColumn(name = "client_id")
+    private Client client;
+
+    @ManyToOne
+    @JoinColumn(name = "room_id")
+    private Room room;
 }
