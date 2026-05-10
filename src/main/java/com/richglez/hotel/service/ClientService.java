@@ -7,6 +7,7 @@ import com.richglez.hotel.repository.ClientRepository;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.List;
 
@@ -16,32 +17,43 @@ public class ClientService {
     @Autowired
     private ClientRepository clientRepository;
 
-    public List<Client> getAllClients() {
-        return clientRepository.findAll();
+    public ClientResponse createClient(Client client) {
+        return toResponse(clientRepository.save(client));
     }
 
-    public Client getClientById(Long id) {
+    public List<ClientResponse> getAllClients() {
+        return clientRepository.findAll()
+                .stream()
+                .map(this::toResponse) // DTO response
+                .toList();
+    }
+
+    // Metodo privado - para funcionamiento de logica
+    private Client findClientById(Long id) {
         return clientRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Client with id " + id + " not found"));
+
     }
 
-    public Client saveClient(Client client) {
-        return clientRepository.save(client);
+    // Metodo publico
+    public ClientResponse getClientById(Long id) {
+        return toResponse(findClientById(id)); // DTO response
     }
 
-    public Client updateClient(Long id, Client newClient) {
-        Client client = getClientById(id);
+
+    public ClientResponse updateClient(Long id, Client newClient) {
+        Client client = findClientById(id);
 
         client.setName(newClient.getName());
         client.setEmail(newClient.getEmail());
         client.setPassword(newClient.getPassword());
         client.setPhone(newClient.getPhone());
 
-        return clientRepository.save(client);
+        return toResponse(clientRepository.save(client));
     }
 
     public ClientResponse patchClient(Long id, ClientPatchRequest request) {
-        Client client = getClientById(id);
+        Client client = findClientById(id);
 
         if (request.getName() != null) client.setName(request.getName());
         if (request.getEmail() != null) client.setEmail(request.getEmail());
@@ -49,7 +61,7 @@ public class ClientService {
         if (request.getPhone() != null) client.setPhone(request.getPhone());
 
         Client saved = clientRepository.save(client);
-        return toResponse(saved);
+        return toResponse(saved); // DTO response
 
     }
 
