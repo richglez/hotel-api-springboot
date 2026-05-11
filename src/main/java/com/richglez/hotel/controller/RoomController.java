@@ -1,13 +1,13 @@
 package com.richglez.hotel.controller;
 
+import com.richglez.hotel.dto.ClientPatchRequest;
+import com.richglez.hotel.dto.RoomRequest;
+import com.richglez.hotel.dto.RoomResponse;
 import com.richglez.hotel.model.Room;
 import com.richglez.hotel.service.RoomService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -18,17 +18,37 @@ public class RoomController {
     private RoomService roomService;
 
     @GetMapping
-    public List<Room> getRooms() {
+    public List<RoomResponse> getAllRooms() {
         return roomService.getAllRooms();
     }
 
     @GetMapping("{id}")
-    public Room getRoomById(@PathVariable Long id) {
+    public RoomResponse getRoomById(@PathVariable Long id) {
         return roomService.getRoomById(id);
     }
 
     @PostMapping
-    public Room addRoom(@RequestBody Room room) {
-        return roomService.newRoom(room);
+    public RoomResponse addRoom(@RequestBody Room room) {
+        return roomService.addRoom(room);
+    }
+
+    @PutMapping("{id}")
+    public RoomResponse updateRoom(@PathVariable Long id, @RequestBody Room room) {
+        return roomService.updateRoom(id, room);
+    }
+
+    @PatchMapping("{id}")
+    public RoomResponse patchRoom(@PathVariable Long id, @RequestBody RoomRequest request) {
+        return roomService.patchRoom(id, request);
+    }
+
+    @DeleteMapping("{id")
+    public RoomResponse softDeleteRoom(@PathVariable Long id) {
+        return roomService.softDeleteRoom(id);
+    }
+
+    @DeleteMapping("{id}")
+    public RoomResponse hardDeleteRoom(@PathVariable Long id) {
+        return roomService.hardDeleteRoom(id);
     }
 }

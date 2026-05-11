@@ -14,4 +14,5 @@ public class RoomResponse {
     private Boolean available;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
+    private LocalDateTime deletedAt;
 }

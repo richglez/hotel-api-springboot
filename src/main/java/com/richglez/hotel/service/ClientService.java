@@ -65,6 +65,9 @@ public class ClientService {
 
     }
 
+    // soft delete
+    // hard delete
+
     private ClientResponse toResponse(Client client) {
         ClientResponse response = new ClientResponse();
         response.setId(client.getId());

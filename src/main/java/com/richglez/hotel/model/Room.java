@@ -27,4 +27,7 @@ public class Room {
 
     @LastModifiedDate
     private LocalDateTime updatedAt;
+
+    // null = activa / tiene fecha = eliminada
+    private LocalDateTime deletedAt;
 }
