@@ -92,10 +92,14 @@ public class ReserveService {
             reservation.setCheckOut(request.getCheckOut());
         }
         if (request.getClientId() != null) {
-            reservation.setClient(reservation.getClient());
+            Client client = clientRepository.findById(request.getClientId())
+                    .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Client not found"));
+            reservation.setClient(client);
         }
         if (request.getRoomId() != null) {
-            reservation.setRoom(reservation.getRoom());
+            Room room = roomRepository.findById(request.getRoomId())
+                    .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Room not found"));
+            reservation.setRoom(room);
         }
 
         return toResponse(reservationRepository.save(reservation));
