@@ -42,7 +42,7 @@ public class RoomController {
         return roomService.patchRoom(id, request);
     }
 
-    @DeleteMapping("{id")
+    @DeleteMapping("{id}")
     public RoomResponse softDeleteRoom(@PathVariable Long id) {
         return roomService.softDeleteRoom(id);
     }
