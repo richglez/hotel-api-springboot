@@ -31,14 +31,15 @@ API design following clean backend development practices.
 
 ## Technologies Used
 
-| **Tech**            | **Use** |
-|---------------------|---------|
-| Java 21             |         |
-| Spring Boot (4.0.6) |         |
-| Maven               |         |
-| Spring Web          |         |
-| Spring Data JPA     |         |
-| Lombok              |         |
+| **Tech**            | **Use**                                           |
+|---------------------|---------------------------------------------------|
+| Java 21             | Main programming language                         |
+| Spring Boot (4.0.6) | Backend framework for building the REST API       |
+| Maven               | Dependency management and project build tool      |
+| Spring Web          | REST controllers and HTTP request handling        |
+| Spring Data JPA     | Database abstraction and repository layer         |
+| Hibernate           | ORM for entity persistence and JPA implementation |
+| Lombok              | Reduces boilerplate code with annotations         |
 
 ---
 
@@ -47,12 +48,12 @@ API design following clean backend development practices.
 ```bash
 src/main/java/com/richglez/hotel
 │
-├── controller
-├── service
-├── repository
-├── dto
-├── model
-└── config
+├── controller  # Handles HTTP requests and API endpoints
+├── service     # Contains business logic and application rules
+├── repository  # Handles database access using Spring Data JPA
+├── dto         # Data Transfer Objects used for requests and responses
+├── model       # JPA entities and domain models
+└── config      # Application and custom configuration classes
 ```
 
 ---
@@ -161,9 +162,13 @@ public enum RoomType {
 | DELETE     | `/api/reservations/{id}/permanent` | Hard delete reservation    |
 
 --- 
+
 ## Example Requests
+
 ### Create Client
+
 #### POST `/api/clients`
+
 ```json
 {
   "name": "John Doe",
@@ -176,7 +181,9 @@ public enum RoomType {
 ---
 
 ### Create Room
+
 #### POST `/api/rooms`
+
 ```json
 {
   "roomNumber": "101",
@@ -189,7 +196,9 @@ public enum RoomType {
 ---
 
 ### Create Reservation
+
 #### POST `/api/reservations`
+
 ```json
 {
   "checkIn": "2026-05-12T20:41:33.440",
@@ -198,46 +207,58 @@ public enum RoomType {
   "roomId": 1
 }
 ```
+
 ---
 
 ## Future Improvements
+
 Planned features for future development:
 
-* MySQL database integration 
-* Spring Security + JWT authentication 
-* Role-based authorization 
-* Frontend integration 
-* Docker support 
-* Swagger/OpenAPI documentation 
-* Unit and integration testing 
-* Pagination and filtering 
+* MySQL database integration
+* Spring Security + JWT authentication
+* Role-based authorization
+* Frontend integration
+* Docker support
+* Swagger/OpenAPI documentation
+* Unit and integration testing
+* Pagination and filtering
 * Global exception handling
 
 ---
 
 ## Running the Project
+
 ### 1. Clone the repository
+
 ```bash
 git clone https://github.com/yourusername/hotel-api-springboot.git
 ```
+
 ### 2. Enter the project folder
+
 ```bash
 cd hotel-api-springboot
 ```
+
 ### 3. Run the application
+
 ```bash
 ./mvnw spring-boot:run
 ```
+
 > Or run directly from IntelliJ IDEA.
 
 ---
 
 ## Learning Goals
-This project was created to practice and improve backend development skills with Spring Boot, REST APIs, DTO architecture, and JPA relationships.
+
+This project was created to practice and improve backend development skills with Spring Boot, REST APIs, DTO
+architecture, and JPA relationships.
 
 ---
 
 ## Author
+
 Ricardo Gonzalez
 
 GitHub: github.com/richglez
