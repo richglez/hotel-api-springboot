@@ -17,7 +17,11 @@ public class Room {
     private Long id;
 
     private String roomNumber;
-    private String roomType;
+
+    @Enumerated(EnumType.STRING) // guarda un string enves de indices 0,1,2
+    @Column(length = 50) // Reducir el tamaño
+    private RoomType roomType;
+
     private Double price;
     private Boolean available;
 

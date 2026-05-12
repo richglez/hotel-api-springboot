@@ -1,5 +1,6 @@
 package com.richglez.hotel.dto;
 
+import com.richglez.hotel.model.RoomType;
 import lombok.Data;
 
 import java.time.LocalDateTime;
@@ -9,7 +10,7 @@ import java.time.LocalDateTime;
 public class RoomResponse {
     private Long id;
     private String roomNumber;
-    private String roomType;
+    private RoomType roomType;
     private Double price;
     private Boolean available;
     private LocalDateTime createdAt;
