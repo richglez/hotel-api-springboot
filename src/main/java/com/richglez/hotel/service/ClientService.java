@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.PathVariable;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -65,8 +66,19 @@ public class ClientService {
 
     }
 
-    // soft delete
-    // hard delete
+    public ClientResponse softDeleteClientById(Long id) {
+        Client client = findClientById(id);
+
+        client.setDeletedAt(LocalDateTime.now());
+        return toResponse(clientRepository.save(client));
+    }
+
+    public ClientResponse hardDeleteClientById(Long id) {
+        Client client = findClientById(id);
+
+        clientRepository.delete(client);
+        return toResponse(client);
+    }
 
     private ClientResponse toResponse(Client client) {
         ClientResponse response = new ClientResponse();

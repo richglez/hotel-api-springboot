@@ -29,6 +29,6 @@ public class Client {
     @LastModifiedDate // Spring actualiza la fecha al hacer .save()
     private LocalDateTime updatedAt;
 
-    // nunca lo mandará en un UPDATE.
+    private LocalDateTime deletedAt; // null = activo / con fecha = deleted
 
 }

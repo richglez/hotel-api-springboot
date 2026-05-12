@@ -22,7 +22,7 @@ public class RoomService {
     }
 
     public List<RoomResponse> getAllRooms() {
-        return roomRepository.findAll()
+        return roomRepository.findByDeletedAtIsNull()
                 .stream()
                 .map(this::toResponse)
                 .toList();
