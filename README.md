@@ -267,5 +267,5 @@ architecture, and JPA relationships.
 
 Ricardo Gonzalez
 
-* [GitHub](https://github.com)
-* [LinkedIn](https://linkedin.com)
+* [GitHub](https://github.com/richglez)
+* [LinkedIn](https://www.linkedin.com/in/richglez-dev/)
