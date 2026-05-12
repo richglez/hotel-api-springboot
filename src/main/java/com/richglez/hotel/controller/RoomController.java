@@ -47,7 +47,7 @@ public class RoomController {
         return roomService.softDeleteRoom(id);
     }
 
-    @DeleteMapping("{id}")
+    @DeleteMapping("{id}/permanent")
     public RoomResponse hardDeleteRoom(@PathVariable Long id) {
         return roomService.hardDeleteRoom(id);
     }
