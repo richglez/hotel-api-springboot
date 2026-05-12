@@ -1,12 +1,10 @@
 package com.richglez.hotel.controller;
 
-import com.richglez.hotel.dto.ClientPatchRequest;
 import com.richglez.hotel.dto.RoomRequest;
 import com.richglez.hotel.dto.RoomResponse;
 import com.richglez.hotel.model.Room;
 import com.richglez.hotel.service.RoomService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
