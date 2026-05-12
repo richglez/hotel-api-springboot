@@ -257,14 +257,9 @@ architecture, and JPA relationships.
 
 ---
 
-## Documentation
-[Architecture](docs/architecture/architecture.md)
-
----
-
 ## Author
 
 Ricardo Gonzalez
 
-*  **GitHub:** [@richglez](https://github.com/richglez)
-*  **LinkedIn:** [richglez-dev](https://www.linkedin.com/in/richglez-dev/)
+GitHub: github.com/richglez
+LinkedIn: in/richglez-dev
