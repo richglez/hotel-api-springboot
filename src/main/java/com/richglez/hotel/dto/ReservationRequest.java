@@ -1,9 +1,13 @@
 package com.richglez.hotel.dto;
 
-import java.time.LocalDate;
+import lombok.Data;
 
+import java.time.LocalDateTime;
+
+@Data
 public class ReservationRequest {
-    private LocalDate checkIn;
-    private LocalDate checkOut;
-    private Long room_id;
+    private LocalDateTime checkIn;
+    private LocalDateTime checkOut;
+    private Long clientId;
+    private Long roomId;
 }

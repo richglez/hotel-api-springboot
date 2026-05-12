@@ -1,13 +1,12 @@
 package com.richglez.hotel.service;
 
-import com.richglez.hotel.dto.ClientPatchRequest;
+import com.richglez.hotel.dto.ClientRequest;
 import com.richglez.hotel.dto.ClientResponse;
 import com.richglez.hotel.model.Client;
 import com.richglez.hotel.repository.ClientRepository;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.PathVariable;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -18,12 +17,20 @@ public class ClientService {
     @Autowired
     private ClientRepository clientRepository;
 
-    public ClientResponse createClient(Client client) {
+    public ClientResponse createClient(ClientRequest request) {
+
+        Client client = new Client();
+
+        client.setName(request.getName());
+        client.setEmail(request.getEmail());
+        client.setPassword(request.getPassword());
+        client.setPhone(request.getPhone());
+
         return toResponse(clientRepository.save(client));
     }
 
     public List<ClientResponse> getAllClients() {
-        return clientRepository.findAll()
+        return clientRepository.findAllByDeletedAtIsNull()
                 .stream()
                 .map(this::toResponse) // DTO response
                 .toList();
@@ -53,7 +60,7 @@ public class ClientService {
         return toResponse(clientRepository.save(client));
     }
 
-    public ClientResponse patchClient(Long id, ClientPatchRequest request) {
+    public ClientResponse patchClient(Long id, ClientRequest request) {
         Client client = findClientById(id);
 
         if (request.getName() != null) client.setName(request.getName());

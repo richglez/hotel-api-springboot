@@ -2,8 +2,11 @@ package com.richglez.hotel.model;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Entity
 @Data
@@ -14,8 +17,8 @@ public class Reservation {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private LocalDate checkIn;
-    private LocalDate checkOut;
+    private LocalDateTime checkIn;
+    private LocalDateTime checkOut;
 
     @ManyToOne
     @JoinColumn(name = "client_id")
@@ -24,5 +27,14 @@ public class Reservation {
     @ManyToOne
     @JoinColumn(name = "room_id")
     private Room room;
+
+    @CreatedDate
+    @Column(updatable = false) // pero la DB nunca lo sobreescribe en un UPDATE .save()
+    private LocalDateTime createAt;
+
+    @LastModifiedDate
+    private LocalDateTime updateAt;
+
+    private LocalDateTime deletedAt;
 
 }

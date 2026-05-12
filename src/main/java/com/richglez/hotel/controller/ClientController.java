@@ -1,6 +1,6 @@
 package com.richglez.hotel.controller;
 
-import com.richglez.hotel.dto.ClientPatchRequest;
+import com.richglez.hotel.dto.ClientRequest;
 import com.richglez.hotel.dto.ClientResponse;
 import com.richglez.hotel.model.Client;
 import com.richglez.hotel.service.ClientService;
@@ -28,7 +28,7 @@ public class ClientController {
     }
 
     @PostMapping
-    public ClientResponse createClient(@RequestBody Client client) {
+    public ClientResponse createClient(@RequestBody ClientRequest client) {
         return clientService.createClient(client);
     }
 
@@ -38,7 +38,7 @@ public class ClientController {
     }
 
     @PatchMapping("/{id}")
-    public ClientResponse patchClient(@PathVariable Long id, @RequestBody ClientPatchRequest request) {
+    public ClientResponse patchClient(@PathVariable Long id, @RequestBody ClientRequest request) {
         return clientService.patchClient(id, request);
     }
 

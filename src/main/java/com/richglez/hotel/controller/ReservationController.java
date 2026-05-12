@@ -1,7 +1,7 @@
 package com.richglez.hotel.controller;
 
+import com.richglez.hotel.dto.ReservationRequest;
 import com.richglez.hotel.dto.ReservationResponse;
-import com.richglez.hotel.model.Reservation;
 import com.richglez.hotel.service.ReserveService;
 import org.springframework.web.bind.annotation.*;
 
@@ -30,17 +30,27 @@ public class ReservationController {
     }
 
     @PostMapping
-    public ReservationResponse saveReservation(@RequestBody Reservation reservation) {
-        return service.saveReservation(reservation);
+    public ReservationResponse saveReservation(@RequestBody ReservationRequest request) {
+        return service.saveReservation(request);
     }
 
-//    @PutMapping("/{id}")
-//    public ReservationResponse updateReservation(@PathVariable Long id, @RequestBody Reservation reservation) {
-//        return service.updateReservation(id, reservation);
-//    }
-//
-//    @DeleteMapping
-//    public ReservationResponse deleteReservation(@PathVariable Long id) {
-//        service.deleteReservation(id);
-//    }
+    @PutMapping("/{id}")
+    public ReservationResponse updateReservation(@PathVariable Long id, @RequestBody ReservationRequest reservation) {
+        return service.updateReservation(id, reservation);
+    }
+
+    @PatchMapping("/{id}")
+    public ReservationResponse patchReservation(@PathVariable Long id, @RequestBody ReservationRequest reservation) {
+        return service.patchReservation(id, reservation);
+    }
+
+    @DeleteMapping("/{id}")
+    public ReservationResponse softDeleteReservation(@PathVariable Long id) {
+        return service.softDeleteReservation(id);
+    }
+
+    @DeleteMapping("/{id}/permanent")
+    public ReservationResponse hardDeleteReservation(@PathVariable Long id) {
+        return service.hardDeleteReservation(id);
+    }
 }
