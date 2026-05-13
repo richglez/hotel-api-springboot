@@ -214,15 +214,15 @@ public enum RoomType {
 
 Planned features for future development:
 
-* MySQL database integration
-* Spring Security + JWT authentication
-* Role-based authorization
-* Frontend integration
-* Docker support
-* Swagger/OpenAPI documentation
-* Unit and integration testing
-* Pagination and filtering
-* Global exception handling
+* [] PostgreSQL database integration
+* [] Spring Security + JWT authentication
+* [] Role-based authorization
+* [] Frontend integration
+* [] Docker support
+* [] Swagger/OpenAPI documentation
+* [] Unit and integration testing
+* [] Pagination and filtering
+* [] Global exception handling
 
 ---
 
