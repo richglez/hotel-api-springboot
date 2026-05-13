@@ -4,7 +4,10 @@ import com.richglez.hotel.dto.ClientRequest;
 import com.richglez.hotel.dto.ClientResponse;
 import com.richglez.hotel.model.Client;
 import com.richglez.hotel.service.ClientService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -28,12 +31,12 @@ public class ClientController {
     }
 
     @PostMapping
-    public ClientResponse createClient(@RequestBody ClientRequest client) {
-        return clientService.createClient(client);
+    public ResponseEntity<ClientResponse> createClient(@Valid @RequestBody ClientRequest client) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(clientService.createClient(client));
     }
 
     @PutMapping("/{id}")
-    public ClientResponse updateClient(@PathVariable Long id, @RequestBody Client clientData) {
+    public ClientResponse updateClient(@PathVariable Long id, @Valid @RequestBody Client clientData) {
         return clientService.updateClient(id, clientData);
     }
 

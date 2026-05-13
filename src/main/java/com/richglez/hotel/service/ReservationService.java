@@ -16,13 +16,13 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
-public class ReserveService {
+public class ReservationService {
 
     private final ReservationRepository reservationRepository;
     private final ClientRepository clientRepository;
     private final RoomRepository roomRepository;
 
-    public ReserveService(ReservationRepository reservationRepository, ClientRepository clientRepository, RoomRepository roomRepository) {
+    public ReservationService(ReservationRepository reservationRepository, ClientRepository clientRepository, RoomRepository roomRepository) {
         this.reservationRepository = reservationRepository;
         this.clientRepository = clientRepository;
         this.roomRepository = roomRepository;
@@ -124,6 +124,9 @@ public class ReserveService {
         response.setId(reservation.getId());
         response.setCheckIn(reservation.getCheckIn());
         response.setCheckOut(reservation.getCheckOut());
+        response.setCreateAt(reservation.getCreateAt());
+        response.setUpdateAt(reservation.getUpdateAt());
+        response.setDeletedAt(reservation.getDeletedAt());
 
         if (reservation.getClient() != null) {
             response.setClientId(reservation.getClient().getId());
@@ -131,6 +134,7 @@ public class ReserveService {
         if (reservation.getRoom() != null) {
             response.setRoomId(reservation.getRoom().getId());
         }
+
 
 
         return response;

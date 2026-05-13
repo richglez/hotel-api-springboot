@@ -4,6 +4,7 @@ import com.richglez.hotel.dto.RoomRequest;
 import com.richglez.hotel.dto.RoomResponse;
 import com.richglez.hotel.model.Room;
 import com.richglez.hotel.service.RoomService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -27,12 +28,12 @@ public class RoomController {
     }
 
     @PostMapping
-    public RoomResponse addRoom(@RequestBody Room room) {
+    public RoomResponse addRoom(@Valid @RequestBody Room room) {
         return roomService.addRoom(room);
     }
 
     @PutMapping("{id}")
-    public RoomResponse updateRoom(@PathVariable Long id, @RequestBody Room room) {
+    public RoomResponse updateRoom(@PathVariable Long id, @Valid @RequestBody Room room) {
         return roomService.updateRoom(id, room);
     }
 

@@ -2,8 +2,11 @@ package com.richglez.hotel.controller;
 
 import com.richglez.hotel.dto.ReservationRequest;
 import com.richglez.hotel.dto.ReservationResponse;
-import com.richglez.hotel.service.ReserveService;
+import com.richglez.hotel.service.ReservationService;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import jakarta.validation.Valid;
 
 import java.util.List;
 
@@ -12,9 +15,9 @@ import java.util.List;
 public class ReservationController {
 
     //    @Autowired
-    private final ReserveService service;
+    private final ReservationService service;
 
-    public ReservationController(ReserveService service) {
+    public ReservationController(ReservationService service) {
         this.service = service;
     }
 
@@ -25,17 +28,17 @@ public class ReservationController {
     }
 
     @GetMapping("/{id}")
-    public ReservationResponse getByID(@PathVariable Long id) {
+    public ReservationResponse getReservationById(@PathVariable Long id) {
         return service.getReservationById(id);
     }
 
     @PostMapping
-    public ReservationResponse saveReservation(@RequestBody ReservationRequest request) {
-        return service.saveReservation(request);
+    public ResponseEntity<ReservationResponse> saveReservation(@Valid @RequestBody ReservationRequest request) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(service.saveReservation(request));
     }
 
     @PutMapping("/{id}")
-    public ReservationResponse updateReservation(@PathVariable Long id, @RequestBody ReservationRequest reservation) {
+    public ReservationResponse updateReservation(@PathVariable Long id, @Valid @RequestBody ReservationRequest reservation) {
         return service.updateReservation(id, reservation);
     }
 
@@ -45,12 +48,13 @@ public class ReservationController {
     }
 
     @DeleteMapping("/{id}")
-    public ReservationResponse softDeleteReservation(@PathVariable Long id) {
-        return service.softDeleteReservation(id);
+    public ResponseEntity<ReservationResponse> softDeleteReservation(@PathVariable Long id) {
+        return ResponseEntity.ok(service.softDeleteReservation(id));
     }
 
     @DeleteMapping("/{id}/permanent")
-    public ReservationResponse hardDeleteReservation(@PathVariable Long id) {
-        return service.hardDeleteReservation(id);
+    public ResponseEntity<ReservationResponse> hardDeleteReservation(@PathVariable Long id) {
+        service.hardDeleteReservation(id);
+        return ResponseEntity.noContent().build();
     }
 }
