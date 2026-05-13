@@ -6,6 +6,8 @@ import com.richglez.hotel.model.Room;
 import com.richglez.hotel.service.RoomService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -17,38 +19,38 @@ public class RoomController {
     @Autowired
     private RoomService roomService;
 
+    @PostMapping
+    public ResponseEntity<RoomResponse> addRoom(@Valid @RequestBody RoomRequest request) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(roomService.addRoom(request));
+    }
+
     @GetMapping
-    public List<RoomResponse> getAllRooms() {
-        return roomService.getAllRooms();
+    public ResponseEntity<List<RoomResponse>> getAllRooms() {
+        return ResponseEntity.ok(roomService.getAllRooms());
     }
 
     @GetMapping("{id}")
-    public RoomResponse getRoomById(@PathVariable Long id) {
-        return roomService.getRoomById(id);
-    }
-
-    @PostMapping
-    public RoomResponse addRoom(@Valid @RequestBody Room room) {
-        return roomService.addRoom(room);
+    public ResponseEntity<RoomResponse> getRoomById(@PathVariable Long id) {
+        return ResponseEntity.ok(roomService.getRoomById(id));
     }
 
     @PutMapping("{id}")
-    public RoomResponse updateRoom(@PathVariable Long id, @Valid @RequestBody Room room) {
-        return roomService.updateRoom(id, room);
+    public ResponseEntity<RoomResponse> updateRoom(@PathVariable Long id, @Valid @RequestBody RoomRequest request) {
+        return ResponseEntity.ok(roomService.updateRoom(id, request));
     }
 
     @PatchMapping("{id}")
-    public RoomResponse patchRoom(@PathVariable Long id, @RequestBody RoomRequest request) {
-        return roomService.patchRoom(id, request);
+    public ResponseEntity<RoomResponse> patchRoom(@PathVariable Long id, @RequestBody RoomRequest request) {
+        return ResponseEntity.ok(roomService.patchRoom(id, request));
     }
 
     @DeleteMapping("{id}")
-    public RoomResponse softDeleteRoom(@PathVariable Long id) {
-        return roomService.softDeleteRoom(id);
+    public ResponseEntity<RoomResponse> softDeleteRoom(@PathVariable Long id) {
+        return ResponseEntity.ok(roomService.softDeleteRoom(id));
     }
 
     @DeleteMapping("{id}/permanent")
-    public RoomResponse hardDeleteRoom(@PathVariable Long id) {
-        return roomService.hardDeleteRoom(id);
+    public ResponseEntity<RoomResponse> hardDeleteRoom(@PathVariable Long id) {
+        return ResponseEntity.ok(roomService.hardDeleteRoom(id));
     }
 }

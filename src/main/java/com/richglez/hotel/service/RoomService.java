@@ -17,7 +17,14 @@ public class RoomService {
     @Autowired
     private RoomRepository roomRepository;
 
-    public RoomResponse addRoom(Room room) {
+    public RoomResponse addRoom(RoomRequest request) {
+        Room room = new Room();
+
+        room.setRoomType(request.getRoomType());
+        room.setRoomNumber(request.getRoomNumber());
+        room.setPrice(request.getPrice());
+        room.setAvailable(request.getAvailable());
+
         return toResponse(roomRepository.save(room));
     }
 
@@ -39,13 +46,13 @@ public class RoomService {
         return toResponse(findRoomById(id));
     }
 
-    public RoomResponse updateRoom(Long id, Room roomData) {
+    public RoomResponse updateRoom(Long id, RoomRequest request) {
         Room room = findRoomById(id);
 
-        room.setRoomNumber(roomData.getRoomNumber());
-        room.setRoomType(roomData.getRoomType());
-        room.setPrice(roomData.getPrice());
-        room.setAvailable(roomData.getAvailable());
+        room.setRoomNumber(request.getRoomNumber());
+        room.setRoomType(request.getRoomType());
+        room.setPrice(request.getPrice());
+        room.setAvailable(request.getAvailable());
 
         return toResponse(roomRepository.save(room));
     }
