@@ -243,7 +243,7 @@ cd hotel-api-springboot
 ### 3. Run the application
 
 ```bash
-./mvnw spring-boot:run
+./mvnw spring-boot:run -Dspring-boot.run.profiles=local
 ```
 
 > Or run directly from IntelliJ IDEA.
