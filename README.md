@@ -214,15 +214,15 @@ public enum RoomType {
 
 Planned features for future development:
 
-* MySQL database integration
-* Spring Security + JWT authentication
-* Role-based authorization
-* Frontend integration
-* Docker support
-* Swagger/OpenAPI documentation
-* Unit and integration testing
-* Pagination and filtering
-* Global exception handling
+* [ ] PostgreSQL database integration
+* [ ] Spring Security + JWT authentication
+* [ ] Role-based authorization
+* [ ] Frontend integration
+* [ ] Docker support
+* [ ] Swagger/OpenAPI documentation
+* [ ] Unit and integration testing
+* [ ] Pagination and filtering
+* [ ] Global exception handling
 
 ---
 
@@ -243,7 +243,7 @@ cd hotel-api-springboot
 ### 3. Run the application
 
 ```bash
-./mvnw spring-boot:run
+./mvnw spring-boot:run -Dspring-boot.run.profiles=local
 ```
 
 > Or run directly from IntelliJ IDEA.
