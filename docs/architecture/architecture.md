@@ -32,3 +32,18 @@ private LocalDateTime deletedAt;
 
 This allows future recovery and audit support.
 
+---
+
+```
+Client (React/Postman)
+        ↓
+   JWT Token
+        ↓
+Spring Security Filter
+        ↓
+ Controllers
+        ↓
+ Services
+        ↓
+ Database
+```
