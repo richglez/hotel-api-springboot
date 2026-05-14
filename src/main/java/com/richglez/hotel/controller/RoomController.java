@@ -2,7 +2,6 @@ package com.richglez.hotel.controller;
 
 import com.richglez.hotel.dto.RoomRequest;
 import com.richglez.hotel.dto.RoomResponse;
-import com.richglez.hotel.model.Room;
 import com.richglez.hotel.service.RoomService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+
 
 @RestController
 @RequestMapping("/api/rooms")
