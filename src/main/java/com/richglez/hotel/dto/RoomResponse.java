@@ -1,6 +1,6 @@
 package com.richglez.hotel.dto;
 
-import com.richglez.hotel.model.RoomType;
+import com.richglez.hotel.enums.RoomType;
 import lombok.Data;
 
 import java.time.LocalDateTime;

@@ -1,5 +1,6 @@
 package com.richglez.hotel.model;
 
+import com.richglez.hotel.enums.RoomType;
 import jakarta.persistence.*;
 import lombok.Data;
 import org.springframework.data.annotation.CreatedDate;

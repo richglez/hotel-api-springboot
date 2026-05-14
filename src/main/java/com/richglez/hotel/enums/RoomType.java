@@ -1,4 +1,4 @@
-package com.richglez.hotel.model;
+package com.richglez.hotel.enums;
 
 public enum RoomType {
     STANDARD,
