@@ -1,6 +1,6 @@
 package com.richglez.hotel.repository;
 
-import com.richglez.hotel.model.User;
+import com.richglez.hotel.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;

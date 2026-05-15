@@ -1,7 +1,6 @@
-package com.richglez.hotel.model;
+package com.richglez.hotel.entity;
 
 import com.richglez.hotel.enums.Roles;
-import jakarta.annotation.Nonnull;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
