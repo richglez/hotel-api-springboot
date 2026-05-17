@@ -1,4 +1,9 @@
+jwt:
+  secret: tu-clave-secreta-muy-larga-minimo-32-caracteres
+  expiration: 86400000
+
 spring:
   datasource:
     username: postgres
     password: postgrespassword
+
