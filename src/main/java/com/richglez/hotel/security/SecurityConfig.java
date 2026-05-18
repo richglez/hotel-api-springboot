@@ -56,3 +56,5 @@ public class SecurityConfig {
     }
 
 }
+
+// configurar: rutas públicas rutas protegidas filtros

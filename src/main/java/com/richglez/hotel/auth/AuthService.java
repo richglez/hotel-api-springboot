@@ -5,6 +5,7 @@ import com.richglez.hotel.repository.UserRepository;
 import com.richglez.hotel.security.JwtService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken; //Representa las credenciales del login.
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -30,4 +31,22 @@ public class AuthService {
         String token = jwtService.generateToken(user);
         return AuthResponse.builder().token(token).build();
     }
+
+    public AuthResponse login(LoginRequest request) {
+        authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(
+                        request.getEmail(),
+                        request.getPassword()
+                )
+        );
+
+        User user = userRepository.findByEmail(request.getEmail())
+                .orElseThrow();
+
+        String token = jwtService.generateToken(user);
+        return AuthResponse.builder().token(token).build();
+
+    }
+
+
 }

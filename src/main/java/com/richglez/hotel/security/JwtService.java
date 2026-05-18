@@ -28,7 +28,8 @@ public class JwtService {
     } // HMAC SHA
 
     // El metodo para generar una carta con un destinatario, informacion y sello/firma
-    public String generateToken(UserDetails userDetails) {
+    public String
+    generateToken(UserDetails userDetails) {
         Map<String, Object> claims = new HashMap<>();
         return Jwts.builder()
                 .setClaims(claims)
@@ -64,4 +65,4 @@ public class JwtService {
     }
 }
 
-// Token logistic
+// Token logistic, create, validate and extract info token

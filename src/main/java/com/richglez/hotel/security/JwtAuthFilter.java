@@ -52,4 +52,4 @@ public class JwtAuthFilter extends OncePerRequestFilter {
 }
 
 
-// Seguridad
+// Seguridad Para interceptar requests y validar tokens.
