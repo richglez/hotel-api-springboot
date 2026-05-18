@@ -215,7 +215,7 @@ public enum RoomType {
 Planned features for future development:
 
 * [x] PostgreSQL database integration
-* [ ] Spring Security + JWT authentication
+* [x] Spring Security + JWT authentication
 * [ ] Role-based authorization
 * [ ] Frontend integration
 * [ ] Docker support
