@@ -216,7 +216,7 @@ Planned features for future development:
 
 * [x] PostgreSQL database integration
 * [x] Spring Security + JWT authentication
-* [ ] Role-based authorization
+* [x] Role-based authorization
 * [ ] Frontend integration
 * [ ] Docker support
 * [ ] Swagger/OpenAPI documentation
