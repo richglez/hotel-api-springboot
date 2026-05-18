@@ -6,6 +6,7 @@ import com.richglez.hotel.model.Client;
 import com.richglez.hotel.repository.ClientRepository;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -17,13 +18,16 @@ public class ClientService {
     @Autowired
     private ClientRepository clientRepository;
 
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
     public ClientResponse createClient(ClientRequest request) {
 
         Client client = new Client();
 
         client.setName(request.getName());
         client.setEmail(request.getEmail());
-        client.setPassword(request.getPassword());
+        client.setPassword(passwordEncoder.encode(request.getPassword()));
         client.setPhone(request.getPhone());
 
         return toResponse(clientRepository.save(client));
@@ -49,13 +53,13 @@ public class ClientService {
     }
 
 
-    public ClientResponse updateClient(Long id, Client newClient) {
+    public ClientResponse updateClient(Long id, ClientRequest request) {
         Client client = findClientById(id);
 
-        client.setName(newClient.getName());
-        client.setEmail(newClient.getEmail());
-        client.setPassword(newClient.getPassword());
-        client.setPhone(newClient.getPhone());
+        client.setName(request.getName());
+        client.setEmail(request.getEmail());
+        client.setPassword(passwordEncoder.encode(request.getPassword()));
+        client.setPhone(request.getPhone());
 
         return toResponse(clientRepository.save(client));
     }
@@ -65,7 +69,7 @@ public class ClientService {
 
         if (request.getName() != null) client.setName(request.getName());
         if (request.getEmail() != null) client.setEmail(request.getEmail());
-        if (request.getPassword() != null) client.setPassword(request.getPassword());
+        if (request.getPassword() != null) client.setPassword(passwordEncoder.encode(request.getPassword()));
         if (request.getPhone() != null) client.setPhone(request.getPhone());
 
         Client saved = clientRepository.save(client);

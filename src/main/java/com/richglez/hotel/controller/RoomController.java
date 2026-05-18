@@ -7,6 +7,7 @@ import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -20,6 +21,7 @@ public class RoomController {
     private RoomService roomService;
 
     @PostMapping
+    @PreAuthorize("hasRole('ADMIN')") // solo ADMIN puede crear habitaciones
     public ResponseEntity<RoomResponse> addRoom(@Valid @RequestBody RoomRequest request) {
         return ResponseEntity.status(HttpStatus.CREATED).body(roomService.addRoom(request));
     }
@@ -35,21 +37,25 @@ public class RoomController {
     }
 
     @PutMapping("{id}")
+    @PreAuthorize("hasAnyRole('ADMIN', 'MANAGER', 'RECEPTIONIST')")
     public ResponseEntity<RoomResponse> updateRoom(@PathVariable Long id, @Valid @RequestBody RoomRequest request) {
         return ResponseEntity.ok(roomService.updateRoom(id, request));
     }
 
     @PatchMapping("{id}")
+    @PreAuthorize("hasAnyRole('ADMIN', 'MANAGER', 'RECEPTIONIST')")
     public ResponseEntity<RoomResponse> patchRoom(@PathVariable Long id, @RequestBody RoomRequest request) {
         return ResponseEntity.ok(roomService.patchRoom(id, request));
     }
 
     @DeleteMapping("{id}")
+    @PreAuthorize("hasAnyRole('ADMIN', 'MANAGER')")
     public ResponseEntity<RoomResponse> softDeleteRoom(@PathVariable Long id) {
         return ResponseEntity.ok(roomService.softDeleteRoom(id));
     }
 
     @DeleteMapping("{id}/permanent")
+    @PreAuthorize("hasAnyRole('ADMIN', 'MANAGER')")
     public ResponseEntity<RoomResponse> hardDeleteRoom(@PathVariable Long id) {
         return ResponseEntity.ok(roomService.hardDeleteRoom(id));
     }

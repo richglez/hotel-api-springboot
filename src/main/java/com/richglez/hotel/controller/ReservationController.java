@@ -5,6 +5,7 @@ import com.richglez.hotel.dto.ReservationResponse;
 import com.richglez.hotel.service.ReservationService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import jakarta.validation.Valid;
 
@@ -23,16 +24,19 @@ public class ReservationController {
 
     // Metodos
     @GetMapping
+    @PreAuthorize("hasAnyRole('ADMIN', 'MANAGER', 'RECEPTIONIST')")
     public List<ReservationResponse> getReservations() {
         return service.getReservations();
     }
 
     @GetMapping("/{id}")
+    @PreAuthorize("hasAnyRole('ADMIN', 'MANAGER', 'RECEPTIONIST')")
     public ReservationResponse getReservationById(@PathVariable Long id) {
         return service.getReservationById(id);
     }
 
     @PostMapping
+    @PreAuthorize("hasRole('ADMIN')") // solo ADMIN
     public ResponseEntity<ReservationResponse> saveReservation(@Valid @RequestBody ReservationRequest request) {
         return ResponseEntity.status(HttpStatus.CREATED).body(service.saveReservation(request));
     }
