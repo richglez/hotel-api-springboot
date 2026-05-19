@@ -1,41 +1,54 @@
+import type {Client} from "../types/Client.ts";
+
 const BASE_URL = "http://localhost:8080/api/clients" // url backend
+
+const getAuthHeaders = () => {
+    const token = sessionStorage.getItem("Authorization");
+
+    return {"Content-Type": "application/json", "Authorization": token || "",}
+}
 
 export const clientService = {
     getAll: async () => {
-        const res = await fetch(BASE_URL)
+        const res = await fetch(BASE_URL, {
+            headers: getAuthHeaders()
+        })
         if (!res.ok) throw new Error("Error al obtener clientes")
         return res.json()
     },
 
-    getById: async (id) => {
-        const res = await fetch(`${BASE_URL}/${id}`)
+    getById: async (id: number) => {
+        const res = await fetch(`${BASE_URL}/${id}`, {
+            headers: getAuthHeaders()
+        })
         if (!res.ok) throw new Error("Cliente no encontrado")
         return res.json()
     },
 
-    create: async (client) => {
+    create: async (client: Client) => {
         const res = await fetch(BASE_URL, {
             method: "POST",
-            headers: {"Content-Type": "application/json"}, // le dice al backend estoy enviando un json
+            headers: getAuthHeaders(),
             body: JSON.stringify(client),
         })
         if (!res.ok) throw new Error("Error al crear cliente")
         return res.json();
     },
 
-    update: async (id, client) => {
+    update: async (id: number, client: Client) => {
         const res = await fetch(`${BASE_URL}/${id}`, {
             method: "PUT",
-            headers: {"Content-Type": "aplication/json"},
+            headers: getAuthHeaders(),
             body: JSON.stringify(client)
         })
         if (!res.ok) throw new Error("Error al actualizar cliente")
         return res.json()
     },
 
-    remove: async (id) => {
+    remove: async (id: number) => {
         const res = await fetch(`${BASE_URL}/${id}`, {
-            method: "DELETE"
+            method: "DELETE",
+            headers: getAuthHeaders(),
         });
         if (!res.ok) throw new Error("Error al eliminar cliente");
     },

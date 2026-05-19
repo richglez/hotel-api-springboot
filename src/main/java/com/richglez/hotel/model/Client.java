@@ -11,7 +11,8 @@ import java.util.Date;
 
 @Data // (POJOs) generando automáticamente getters, setters, etc
 @Entity
-@EntityListeners(AuditingEntityListener.class) // activa la auditoria Activa el listener que detecta los eventos de persistencia
+@EntityListeners(AuditingEntityListener.class)
+// activa la auditoria Activa el listener que detecta los eventos de persistencia
 public class Client {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
