@@ -65,3 +65,22 @@
 .link:hover:after {
     width: 100%;
 }
+
+/*call to action*/
+.cta {
+    font-family: 'Jost', sans-serif;
+    font-size: 0.75rem;
+    font-weight: 400;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: #1c1710;
+    background: var(--color-gold, #c9a84c);
+    padding: 8px 20px;
+    text-decoration: none;
+    border-radius: 1px;
+    transition: background 0.2s;
+}
+
+.cta:hover {
+    background: var(--color-cream, #e8d8a0);
+}
