@@ -1,0 +1,14 @@
+:root {
+    --color-bg-dark: #1c1710;
+    --color-gold: #c9a84c;
+    --color-cream: #e8d8a0;
+    --color-muted: #c2b49a;
+}
+
+body {
+    margin: 0;
+}
+
+* {
+    box-sizing: border-box;
+}

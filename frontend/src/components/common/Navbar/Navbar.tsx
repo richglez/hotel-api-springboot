@@ -1,10 +1,25 @@
+import styles from './Navbar.module.css';
+import {NavLink} from 'react-router-dom';
+
 const Navbar = () => {
     return (
-        <nav className={}>
-            <div className="logo">Hotel-Reservations</div>
-            <ul>
-                <li><a href="/frontend/public">Home</a></li>
-                <li><a href="/rooms">Rooms</a></li>
+        <nav className={styles.nav}>
+            <NavLink to={"/"} className={styles.logo}>
+                Hotel-<span>Reservations</span>
+            </NavLink>
+            <ul className={styles.links}>
+                <li>
+                    <NavLink to="/" className={styles.link}>Home</NavLink>
+                </li>
+                <li>
+                    <NavLink to="/rooms" className={styles.link}>Rooms</NavLink>
+                </li>
+                <li>
+                    <NavLink to="/booking" className={styles.link}>Book now</NavLink>
+                </li>
+                <li>
+                    <NavLink to="/signin" className={styles.link}>Sign In</NavLink>
+                </li>
             </ul>
         </nav>
     )
