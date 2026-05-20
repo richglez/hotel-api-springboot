@@ -25,10 +25,10 @@ public class Room {
 
     private Double price;
     private Boolean available;
-    capacity
-    size
-    name
-    description
+    private Integer capacity; // cuántas personas caben
+    private Double size; // m²
+    private String name;
+    private String description;
 
     @CreatedDate // Fecha de creado al hacer .save()
     @Column(updatable = false) // pero la DB nunca lo sobreescribe en un UPDATE .save()

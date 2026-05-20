@@ -21,4 +21,18 @@ public class RoomRequest {
 
     @NotNull(message = "Availability is required")
     private Boolean available;
+
+    @NotNull(message = "Capacity is required")
+    @Positive(message = "Capacity must be positive")
+    private Integer capacity;
+
+    @NotNull(message = "Size is required")
+    @Positive(message = "Size must be positive")
+    private Double size;
+
+    @NotBlank(message = "Name is required")
+    private String name;
+
+    @NotBlank(message = "description is required")
+    private String description;
 }

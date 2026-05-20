@@ -3,12 +3,8 @@ package com.richglez.hotel.dto;
 import com.richglez.hotel.enums.RoomType;
 import lombok.Data;
 
-import java.time.LocalDateTime;
-
-// Datos enregados al usuario
 @Data
-public class RoomResponse {
-    private Long id;
+public class RoomPatchRequest {
     private String roomNumber;
     private RoomType roomType;
     private Double price;
@@ -17,7 +13,6 @@ public class RoomResponse {
     private Double size;
     private String name;
     private String description;
-    private LocalDateTime createdAt;
-    private LocalDateTime updatedAt;
-    private LocalDateTime deletedAt;
 }
+
+// Campos opcionales para patch

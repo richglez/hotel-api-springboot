@@ -1,5 +1,6 @@
 package com.richglez.hotel.service;
 
+import com.richglez.hotel.dto.RoomPatchRequest;
 import com.richglez.hotel.dto.RoomRequest;
 import com.richglez.hotel.dto.RoomResponse;
 import com.richglez.hotel.model.Room;
@@ -20,10 +21,14 @@ public class RoomService {
     public RoomResponse addRoom(RoomRequest request) {
         Room room = new Room();
 
-        room.setRoomType(request.getRoomType());
         room.setRoomNumber(request.getRoomNumber());
+        room.setRoomType(request.getRoomType());
         room.setPrice(request.getPrice());
         room.setAvailable(request.getAvailable());
+        room.setCapacity(request.getCapacity());
+        room.setSize(request.getSize());
+        room.setName(request.getName());
+        room.setDescription(request.getDescription());
 
         return toResponse(roomRepository.save(room));
     }
@@ -53,17 +58,25 @@ public class RoomService {
         room.setRoomType(request.getRoomType());
         room.setPrice(request.getPrice());
         room.setAvailable(request.getAvailable());
+        room.setCapacity(request.getCapacity());
+        room.setSize(request.getSize());
+        room.setName(request.getName());
+        room.setDescription(request.getDescription());
 
         return toResponse(roomRepository.save(room));
     }
 
-    public RoomResponse patchRoom(Long id, RoomRequest roomRequest) {
+    public RoomResponse patchRoom(Long id, RoomPatchRequest roomRequest) {
         Room room = findRoomById(id);
 
         if (roomRequest.getRoomNumber() != null) room.setRoomNumber(roomRequest.getRoomNumber());
         if (roomRequest.getRoomType() != null) room.setRoomType(roomRequest.getRoomType());
         if (roomRequest.getPrice() != null) room.setPrice(roomRequest.getPrice());
         if (roomRequest.getAvailable() != null) room.setAvailable(roomRequest.getAvailable());
+        if (roomRequest.getCapacity() != null) room.setCapacity(roomRequest.getCapacity());
+        if (roomRequest.getSize() != null) room.setSize(roomRequest.getSize());
+        if (roomRequest.getName() != null) room.setName(roomRequest.getName());
+        if (roomRequest.getDescription() != null) room.setDescription(roomRequest.getDescription());
 
         return toResponse(roomRepository.save(room));
     }
@@ -92,9 +105,13 @@ public class RoomService {
 
         response.setId(room.getId());
         response.setRoomNumber(room.getRoomNumber());
-        response.setAvailable(room.getAvailable());
-        response.setPrice(room.getPrice());
         response.setRoomType(room.getRoomType());
+        response.setPrice(room.getPrice());
+        response.setAvailable(room.getAvailable());
+        response.setCapacity(room.getCapacity());
+        response.setSize(room.getSize());
+        response.setName(room.getName());
+        response.setDescription(room.getDescription());
         response.setCreatedAt(room.getCreatedAt());
         response.setUpdatedAt(room.getUpdatedAt());
         response.setDeletedAt(room.getDeletedAt());

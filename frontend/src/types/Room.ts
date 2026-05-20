@@ -10,11 +10,12 @@ export type RoomTypes = typeof ROOM_TYPES[keyof typeof ROOM_TYPES]
 
 export interface IRoom {
     id: string,
-    name: string,
-    description: string,
-    guest: number,
     roomNumber: number,
     roomType: RoomTypes,
     price: number,
     available: boolean
+    capacity: number,
+    size: number,
+    name: string,
+    description: string,
 }
