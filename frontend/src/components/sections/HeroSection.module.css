@@ -1,0 +1,124 @@
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600&family=Jost:wght@300;400;500&display=swap');
+
+.hero {
+    background: var(--color-bg-dark, #1c1710);
+    padding: 90px 2.5rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+}
+
+.tag {
+    font-family: 'Jost', sans-serif;
+    font-size: 11px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--color-gold, #c9a84c);
+}
+
+.divider {
+    width: 36px;
+    height: 1px;
+    background: var(--color-gold, #c9a84c);
+    margin: 0 auto 1.5rem;
+}
+
+.title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 54px;
+    font-weight: 600;
+    color: var(--color-cream, #e8d8a0);
+    line-height: 1.12;
+    margin-bottom: 1.25rem;
+}
+
+.title em {
+    color: var(--color-gold, #c9a84c);
+}
+
+.subtitle {
+    font-family: 'Jost', sans-serif;
+    font-size: 13px;
+    font-weight: 300;
+    color: var(--color-muted, #9a8e7a);
+    letter-spacing: 0.06em;
+    line-height: 1.8;
+    max-width: 380px;
+    margin-bottom: 2.75rem;
+}
+
+.actions {
+    display: flex;
+    gap: 16px;
+    align-items: center;
+}
+
+.btnPrimary {
+    font-family: 'Jost', sans-serif;
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    background: var(--color-gold, #c9a84c);
+    color: #1c1710;
+    padding: 13px 32px;
+    border-radius: 1px;
+    text-decoration: none;
+    transition: background 0.2s;
+    cursor: pointer;
+}
+
+.btnPrimary:hover {
+    background: var(--color-cream, #e8d8a0);
+}
+
+.btnSecondary {
+    font-family: 'Jost', sans-serif;
+    font-size: 12px;
+    font-weight: 300;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    background: transparent;
+    border: none;
+    padding: 13px 32px;
+    color: var(--color-muted, #9a8e7a);
+    text-decoration: underline;
+    text-decoration-thickness: 0.10rem;
+    text-underline-offset: 1em;
+    transition: background 0.2s;
+    cursor: pointer;
+}
+
+.btnSecondary:hover {
+    color: var(--color-cream, #e8d8a0);
+}
+
+.stats {
+    display: flex;
+    gap: 40px;
+    margin-top: 56px;
+    padding-top: 40px;
+    border-top: 0.5px solid #2e2718;
+}
+
+.stat {
+    text-align: center;
+}
+
+.statNumber {
+    font-size: 28px;
+    font-weight: 600;
+    color: var(--color-gold, #c9a84c);
+    line-height: 1;
+}
+
+.statLabel {
+    font-family: 'Jost', sans-serif;
+    font-size: 11px;
+    font-weight: 400;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: #5a5040;
+    margin-top: 6px;
+}
