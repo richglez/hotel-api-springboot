@@ -1,5 +1,6 @@
 package com.richglez.hotel.service;
 
+import com.richglez.hotel.dto.ClientPatchRequest;
 import com.richglez.hotel.dto.ClientRequest;
 import com.richglez.hotel.dto.ClientResponse;
 import com.richglez.hotel.model.Client;
@@ -64,7 +65,7 @@ public class ClientService {
         return toResponse(clientRepository.save(client));
     }
 
-    public ClientResponse patchClient(Long id, ClientRequest request) {
+    public ClientResponse patchClient(Long id, ClientPatchRequest request) {
         Client client = findClientById(id);
 
         if (request.getName() != null) client.setName(request.getName());
