@@ -1,4 +1,4 @@
-import type {Client} from "../types/Client.ts";
+import type {IClient} from "../types/Client.ts";
 
 const BASE_URL = "http://localhost:8080/api/clients" // url backend
 
@@ -8,7 +8,7 @@ const getAuthHeaders = () => {
     return {"Content-Type": "application/json", "Authorization": token || "",}
 }
 
-export const clientService = {
+const clientService = {
     getAll: async () => {
         const res = await fetch(BASE_URL, {
             headers: getAuthHeaders()
@@ -25,7 +25,7 @@ export const clientService = {
         return res.json()
     },
 
-    create: async (client: Client) => {
+    create: async (client: IClient) => {
         const res = await fetch(BASE_URL, {
             method: "POST",
             headers: getAuthHeaders(),
@@ -35,7 +35,7 @@ export const clientService = {
         return res.json();
     },
 
-    update: async (id: number, client: Client) => {
+    update: async (id: number, client: IClient) => {
         const res = await fetch(`${BASE_URL}/${id}`, {
             method: "PUT",
             headers: getAuthHeaders(),
@@ -53,3 +53,5 @@ export const clientService = {
         if (!res.ok) throw new Error("Error al eliminar cliente");
     },
 }
+
+export default clientService;

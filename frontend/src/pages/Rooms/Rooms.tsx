@@ -1,7 +1,9 @@
+import RoomsPreview from "../../components/sections/RoomsPreview.tsx";
+
 const Rooms = () => {
     return (
         <div>
-            ROOMS
+            <RoomsPreview/>
         </div>
     )
 }

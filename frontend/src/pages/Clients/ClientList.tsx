@@ -1,10 +1,10 @@
 import {useEffect, useState} from "react";
-import {clientService} from "../services/clientService";
-import type {Client} from "../types/Client.ts";
+import clientService from "../../services/clientService.ts";
+import type {IClient} from "../../types/Client.ts";
 
 
 function ClientList() {
-    const [clients, setClients] = useState<Client[]>([]);
+    const [clients, setClients] = useState<IClient[]>([]);
     const [error, setError] = useState<string | null>(null);
     const [loading, setLoading] = useState<boolean>(true);
 
