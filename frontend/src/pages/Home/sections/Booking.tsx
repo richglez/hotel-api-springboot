@@ -1,8 +1,8 @@
 const Booking = () => {
     return(
-        <>
-            Booking now!
-        </>
+        <div>
+            booking now!
+        </div>
     )
 }
 
