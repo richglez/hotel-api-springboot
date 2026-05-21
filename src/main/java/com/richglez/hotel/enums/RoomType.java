@@ -4,6 +4,6 @@ public enum RoomType {
     STANDARD,
     STANDARD_DOUBLE,
     SUITE,
-    JUINIOR_SUITE,
-    PRESIDENTAL
+    JUNIOR_SUITE,
+    PRESIDENTIAL
 }

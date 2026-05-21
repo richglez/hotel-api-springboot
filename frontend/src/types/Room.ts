@@ -2,8 +2,8 @@ const ROOM_TYPES = {
     Standard: "STANDARD",
     StandardDouble: "STANDARD_DOUBLE",
     Suite: "SUITE",
-    JuniorSuite: "JUINIOR_SUITE",
-    Presidental: "PRESIDENTAL"
+    JuniorSuite: "JUNIOR_SUITE",
+    Presidential: "PRESIDENTIAL"
 } as const;
 
 export type RoomTypes = typeof ROOM_TYPES[keyof typeof ROOM_TYPES]

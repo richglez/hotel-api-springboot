@@ -1,5 +1,6 @@
 package com.richglez.hotel.controller;
 
+import com.richglez.hotel.dto.RoomPatchRequest;
 import com.richglez.hotel.dto.RoomRequest;
 import com.richglez.hotel.dto.RoomResponse;
 import com.richglez.hotel.service.RoomService;
@@ -44,7 +45,7 @@ public class RoomController {
 
     @PatchMapping("{id}")
     @PreAuthorize("hasAnyRole('ADMIN', 'MANAGER', 'RECEPTIONIST')")
-    public ResponseEntity<RoomResponse> patchRoom(@PathVariable Long id, @RequestBody RoomRequest request) {
+    public ResponseEntity<RoomResponse> patchRoom(@PathVariable Long id, @RequestBody RoomPatchRequest request) {
         return ResponseEntity.ok(roomService.patchRoom(id, request));
     }
 

@@ -27,8 +27,8 @@ public class Room {
     private Boolean available;
     private Integer capacity; // cuántas personas caben
     private Double size; // m²
-    private String name;
-    private String description;
+    private String name; // titulo de la recamara
+    private String description; // // descripción visible al cliente
 
     @CreatedDate // Fecha de creado al hacer .save()
     @Column(updatable = false) // pero la DB nunca lo sobreescribe en un UPDATE .save()

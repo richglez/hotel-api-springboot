@@ -1,5 +1,6 @@
 package com.richglez.hotel.controller;
 
+import com.richglez.hotel.dto.ClientPatchRequest;
 import com.richglez.hotel.dto.ClientRequest;
 import com.richglez.hotel.dto.ClientResponse;
 import com.richglez.hotel.model.Client;
@@ -47,7 +48,7 @@ public class ClientController {
 
     @PatchMapping("/{id}")
     @PreAuthorize("hasAnyRole('ADMIN', 'RECEPTIONIST')")
-    public ClientResponse patchClient(@PathVariable Long id, @RequestBody ClientRequest request) {
+    public ClientResponse patchClient(@PathVariable Long id, @RequestBody ClientPatchRequest request) {
         return clientService.patchClient(id, request);
     }
 

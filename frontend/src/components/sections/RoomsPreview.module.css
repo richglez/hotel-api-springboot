@@ -152,10 +152,17 @@
     letter-spacing: 0.1em;
     text-transform: uppercase;
     color: var(--color-gold, #c9a84c);
-    text-decoration: none;
-    border-bottom: 1px solid #e0d8cc;
+    border: none;
+    background: none;
     padding-bottom: 1px;
+    text-decoration: underline;
+    text-underline-offset: 0.5em;
 }
+
+.cardLink:hover {
+    cursor: pointer;
+}
+
 
 .footer {
     text-align: center;
@@ -180,4 +187,5 @@
 .allRoomsBtn:hover {
     background: var(--color-gold, #c9a84c);
     color: #1c1710;
+    cursor: pointer;
 }

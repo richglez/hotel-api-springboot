@@ -29,50 +29,19 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http
                 .csrf(csrf -> csrf.disable())
-                .cors(cors -> {})
+                .cors(cors -> {
+                })
                 .sessionManagement(session ->
                         session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 
                 .authorizeHttpRequests(auth -> auth
-
-                        // OPTIONS para CORS
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
-
-                        // AUTH público
                         .requestMatchers("/api/auth/**").permitAll()
-
-                        // =========================
-                        // ROOMS
-                        // =========================
-
-                        // TODOS los GET públicos
                         .requestMatchers(HttpMethod.GET, "/api/rooms/**").permitAll()
-
-                        // Crear room -> ADMIN o MANAGER
-                        .requestMatchers(HttpMethod.POST, "/api/rooms/**")
-                        .hasAnyRole("ADMIN", "MANAGER")
-
-                        // Actualizar room
-                        .requestMatchers(HttpMethod.PUT, "/api/rooms/**")
-                        .hasAnyRole("ADMIN", "MANAGER")
-
-                        // PATCH room
-                        .requestMatchers(HttpMethod.PATCH, "/api/rooms/**")
-                        .hasAnyRole("ADMIN", "MANAGER")
-
-                        // DELETE room
-                        .requestMatchers(HttpMethod.DELETE, "/api/rooms/**")
-                        .hasRole("ADMIN")
-
-                        // Otras rutas
+                        // ← quita todas las reglas específicas de rooms
                         .requestMatchers("/api/admin/**").hasRole("ADMIN")
-                        .requestMatchers("/api/manager/**")
-                        .hasAnyRole("ADMIN", "MANAGER")
-
-                        .requestMatchers("/api/reception/**")
-                        .hasAnyRole("ADMIN", "MANAGER", "RECEPTIONIST")
-
-                        // cualquier otra petición requiere login
+                        .requestMatchers("/api/manager/**").hasAnyRole("ADMIN", "MANAGER")
+                        .requestMatchers("/api/reception/**").hasAnyRole("ADMIN", "MANAGER", "RECEPTIONIST")
                         .anyRequest().authenticated()
                 )
 
