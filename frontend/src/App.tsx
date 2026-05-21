@@ -3,7 +3,7 @@ import {Route, Routes} from "react-router-dom";
 import Home from "./pages/Home/Home.tsx";
 import SignIn from "./pages/auth/SignIn.tsx";
 import RoomsPreview from "./pages/Home/sections/RoomsPreview.tsx";
-import Booking from "./pages/Home/sections/Booking.tsx";
+import Booking from "./pages/Book/Booking.tsx";
 
 function App() {
     return (

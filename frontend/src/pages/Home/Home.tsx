@@ -1,6 +1,7 @@
 import HeroSection from "./sections/HeroSection.tsx";
 import RoomsPreview from "./sections/RoomsPreview.tsx";
 import AmenitiesSection from "./sections/AmenitiesSection.tsx";
+import CtaSection from "./sections/CtaSection.tsx";
 
 
 const Home = () => {
@@ -10,7 +11,7 @@ const Home = () => {
             <HeroSection />
             <RoomsPreview />
             <AmenitiesSection />
-            {/*<CtaSection />*/}
+            <CtaSection />
         </main>
     )
 }
