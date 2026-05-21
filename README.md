@@ -36,6 +36,7 @@ API design following clean backend development practices.
 | Java 21             | Main programming language                         |
 | Spring Boot (4.0.6) | Backend framework for building the REST API       |
 | Maven               | Dependency management and project build tool      |
+| React               | Frontend framework for building UI                |
 | Spring Web          | REST controllers and HTTP request handling        |
 | Spring Data JPA     | Database abstraction and repository layer         |
 | Hibernate           | ORM for entity persistence and JPA implementation |
