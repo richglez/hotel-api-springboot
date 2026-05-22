@@ -9,8 +9,8 @@ const ROOM_TYPES = {
 export type RoomTypes = typeof ROOM_TYPES[keyof typeof ROOM_TYPES]
 
 export interface IRoom {
-    id: string,
-    roomNumber: number,
+    id: number,
+    roomNumber: string,
     roomType: RoomTypes,
     price: number,
     available: boolean
