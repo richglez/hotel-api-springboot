@@ -1,0 +1,344 @@
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Jost:wght@300;400&display=swap');
+
+/* ── Layout ── */
+.page {
+    display: grid;
+    grid-template-columns: 1fr 380px;
+    min-height: 100vh;
+    max-width: 1100px;
+    margin: 0 auto;
+    background: #1c1710;
+}
+
+/* ── Form side ── */
+.formSide {
+    padding: 4rem 3rem 4rem 2rem;
+}
+
+.eyebrow {
+    font-size: 0.7rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: #c9a84c;
+    margin-bottom: 0.75rem;
+}
+
+.title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 2.8rem;
+    font-weight: 500;
+    color: #e8d8a0;
+    line-height: 1.1;
+    margin-bottom: 0.4rem;
+}
+
+.title em {
+    font-style: italic;
+    color: #c9a84c;
+}
+
+.subtitle {
+    font-size: 0.8rem;
+    font-weight: 300;
+    color: #c2b49a;
+    letter-spacing: 0.04em;
+    margin-bottom: 2.5rem;
+}
+
+.divider {
+    width: 40px;
+    height: 1px;
+    background: #c9a84c;
+    opacity: 0.5;
+    margin-bottom: 2.5rem;
+}
+
+.sectionLabel {
+    font-size: 0.65rem;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: #c9a84c;
+    opacity: 0.8;
+    margin-bottom: 1.2rem;
+}
+
+/* ── Fields ── */
+.fieldRow {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    margin-bottom: 1.2rem;
+}
+
+.field {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+    margin-bottom: 1.2rem;
+}
+
+.field label {
+    font-size: 0.68rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: #c2b49a;
+}
+
+.field input,
+.field select,
+.field textarea {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(201, 168, 76, 0.18);
+    color: #e8d8a0;
+    font-family: 'Jost', sans-serif;
+    font-size: 0.85rem;
+    font-weight: 300;
+    padding: 0.7rem 1rem;
+    outline: none;
+    border-radius: 1px;
+    transition: border-color 0.2s;
+    width: 100%;
+    appearance: none;
+}
+
+.field input:focus,
+.field select:focus,
+.field textarea:focus {
+    border-color: #c9a84c;
+}
+
+.field input::placeholder,
+.field textarea::placeholder {
+    color: rgba(194, 180, 154, 0.35);
+}
+
+.field select option {
+    background: #221e12;
+    color: #e8d8a0;
+}
+
+.field textarea {
+    resize: none;
+}
+
+.selectWrap {
+    position: relative;
+}
+
+.selectWrap::after {
+    content: '›';
+    position: absolute;
+    right: 1rem;
+    top: 50%;
+    transform: translateY(-50%) rotate(90deg);
+    color: #c9a84c;
+    pointer-events: none;
+    font-size: 1rem;
+}
+
+.sep {
+    border: none;
+    border-top: 1px solid rgba(201, 168, 76, 0.18);
+    margin: 1.8rem 0;
+}
+
+/* ── Guests counter ── */
+.guestsRow {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    margin-bottom: 1.2rem;
+}
+
+.guestControl {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+}
+
+.guestLabel {
+    font-size: 0.68rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: #c2b49a;
+    min-width: 60px;
+}
+
+.counter {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.counter button {
+    width: 28px;
+    height: 28px;
+    border: 1px solid rgba(201, 168, 76, 0.18);
+    background: transparent;
+    color: #c9a84c;
+    font-size: 1.1rem;
+    cursor: pointer;
+    border-radius: 1px;
+    transition: border-color 0.2s, background 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.counter button:hover {
+    border-color: #c9a84c;
+    background: rgba(201, 168, 76, 0.08);
+}
+
+.counter span {
+    font-size: 0.9rem;
+    color: #e8d8a0;
+    min-width: 18px;
+    text-align: center;
+}
+
+/* ── Submit ── */
+.submitBtn {
+    margin-top: 2rem;
+    background: #c9a84c;
+    color: #1c1710;
+    font-family: 'Jost', sans-serif;
+    font-size: 0.75rem;
+    font-weight: 400;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    padding: 1rem 2.5rem;
+    border: none;
+    cursor: pointer;
+    border-radius: 1px;
+    transition: background 0.2s;
+}
+
+.submitBtn:hover {
+    background: #e8d8a0;
+}
+
+/* ── Summary side ── */
+.summarySide {
+    background: #221e12;
+    border-left: 1px solid rgba(201, 168, 76, 0.18);
+    padding: 4rem 2rem;
+    display: flex;
+    flex-direction: column;
+}
+
+.summaryEyebrow {
+    font-size: 0.65rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: #c9a84c;
+    opacity: 0.8;
+    margin-bottom: 2rem;
+}
+
+.roomCard {
+    border: 1px solid rgba(201, 168, 76, 0.18);
+    padding: 1.4rem;
+    margin-bottom: 2rem;
+    border-radius: 1px;
+}
+
+.roomBadge {
+    font-size: 0.6rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: #c9a84c;
+    margin-bottom: 0.5rem;
+}
+
+.roomName {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.3rem;
+    color: #e8d8a0;
+    font-weight: 500;
+    margin-bottom: 0.3rem;
+}
+
+.roomDesc {
+    font-size: 0.75rem;
+    font-weight: 300;
+    color: #c2b49a;
+    line-height: 1.6;
+}
+
+.amenities {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    margin-top: 0.9rem;
+}
+
+.tag {
+    font-size: 0.6rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    border: 1px solid rgba(201, 168, 76, 0.18);
+    color: #c2b49a;
+    padding: 3px 8px;
+    border-radius: 1px;
+}
+
+/* ── Summary rows ── */
+.summaryRow {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.7rem 0;
+    border-bottom: 1px solid rgba(201, 168, 76, 0.18);
+}
+
+.summaryRow:last-of-type {
+    border-bottom: none;
+}
+
+.summaryKey {
+    font-size: 0.7rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: #c2b49a;
+}
+
+.summaryVal {
+    font-size: 0.82rem;
+    color: #e8d8a0;
+}
+
+.summaryEmpty {
+    font-size: 0.75rem;
+    color: rgba(194, 180, 154, 0.3);
+    font-style: italic;
+}
+
+/* ── Price total ── */
+.priceTotal {
+    margin-top: auto;
+    padding-top: 2rem;
+    border-top: 1px solid rgba(201, 168, 76, 0.18);
+}
+
+.priceLabel {
+    font-size: 0.65rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: #c2b49a;
+    margin-bottom: 0.3rem;
+}
+
+.priceAmount {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 2.2rem;
+    color: #c9a84c;
+    font-weight: 500;
+}
+
+.priceNote {
+    font-size: 0.68rem;
+    color: #c2b49a;
+    font-weight: 300;
+    margin-top: 0.2rem;
+}
