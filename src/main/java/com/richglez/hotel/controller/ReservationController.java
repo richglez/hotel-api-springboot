@@ -57,7 +57,7 @@ public class ReservationController {
     }
 
     @DeleteMapping("/{id}/permanent")
-    public ResponseEntity<ReservationResponse> hardDeleteReservation(@PathVariable Long id) {
+    public ResponseEntity<Void> hardDeleteReservation(@PathVariable Long id) {
         service.hardDeleteReservation(id);
         return ResponseEntity.noContent().build();
     }

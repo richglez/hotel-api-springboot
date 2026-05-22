@@ -36,6 +36,9 @@ public class ReservationService {
         Room room = roomRepository.findById(request.getRoomId())
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Room not found"));
 
+        if (request.getCheckOut().isBefore(request.getCheckIn()))
+            throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_CONTENT, "Check-in must be before check-out");
+
         // Next create a new reservation
         Reservation reservation = new Reservation();
         reservation.setCheckIn(request.getCheckIn());
@@ -65,7 +68,7 @@ public class ReservationService {
     }
 
 
-    public ReservationResponse updateReservation(long id, ReservationRequest request) {
+    public ReservationResponse updateReservation(Long id, ReservationRequest request) {
         Reservation reservation = findReservationById(id);
 
         Client client = clientRepository.findById(request.getClientId())
@@ -73,6 +76,9 @@ public class ReservationService {
 
         Room room = roomRepository.findById(request.getRoomId())
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Room not found"));
+
+        if (request.getCheckOut().isBefore(request.getCheckIn()))
+            throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_CONTENT, "Check-in must be before check-out");
 
         reservation.setCheckIn(request.getCheckIn());
         reservation.setCheckOut(request.getCheckOut());
@@ -82,8 +88,11 @@ public class ReservationService {
         return toResponse(reservationRepository.save(reservation));
     }
 
-    public ReservationResponse patchReservation(long id, ReservationRequest request) {
+    public ReservationResponse patchReservation(Long id, ReservationRequest request) {
         Reservation reservation = findReservationById(id);
+
+        if (request.getCheckOut().isBefore(request.getCheckIn()))
+            throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_CONTENT, "Check-in must be before check-out");
 
         if (request.getCheckIn() != null) {
             reservation.setCheckIn(request.getCheckIn());
@@ -105,18 +114,17 @@ public class ReservationService {
         return toResponse(reservationRepository.save(reservation));
     }
 
-    public ReservationResponse softDeleteReservation(long id) {
+    public ReservationResponse softDeleteReservation(Long id) {
         Reservation reservation = findReservationById(id);
 
         reservation.setDeletedAt(LocalDateTime.now());
         return toResponse(reservationRepository.save(reservation));
     }
 
-    public ReservationResponse hardDeleteReservation(long id) {
+    public void hardDeleteReservation(long id) {
         Reservation reservation = findReservationById(id);
 
         reservationRepository.delete(reservation);
-        return toResponse(reservation);
     }
 
     public ReservationResponse toResponse(Reservation reservation) {
@@ -134,7 +142,6 @@ public class ReservationService {
         if (reservation.getRoom() != null) {
             response.setRoomId(reservation.getRoom().getId());
         }
-
 
 
         return response;
