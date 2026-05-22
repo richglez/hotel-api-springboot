@@ -1,9 +1,14 @@
 import styles from "./Booking.module.css"
 import {useState} from "react";
+import type {IRoom} from "../../types/Room.ts";
+import type {IClient} from "../../types/Client.ts";
 
 const Booking = () => {
     const [adults, setAdults] = useState(1);
     const [children, setChildren] = useState(0);
+    const [rooms, setRooms] = useState<IRoom[]>([]);
+    const [clients, setRooms] = useState<IClient[]>([]);
+    // const [reservation,]
 
     return (
         <div className={styles.page}>
@@ -87,7 +92,16 @@ const Booking = () => {
                 <button className={styles.submitBtn}>Confirm Reservations</button>
             </div>
 
+            {/* ── SUMMARY ── */}
+            <div className={styles.summarySide}>
+                <p className={styles.summaryEyebrow}>Reservations Summary</p>
 
+                <div className={styles.roomCard}>
+                    <p className={styles.roomBadge}>Selected Room</p>
+                    <p className={styles.roomName}>Room</p>
+                    <p className={styles.roomDesc}>Desc</p>
+                </div>
+            </div>
 
         </div>
     )
