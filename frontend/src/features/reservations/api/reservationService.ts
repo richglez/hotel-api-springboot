@@ -32,7 +32,7 @@ const reservationService = {
 
     update: async (id: number, reservation: IReservation) => {
         const res = await fetch(`${BASE_URL}/${id}`, {
-            method: "POST",
+            method: "PUT",
             headers: getAuthHeaders(),
             body: JSON.stringify(reservation)
         })

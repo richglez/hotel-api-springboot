@@ -33,7 +33,7 @@ const roomsService = {
 
     update: async (id: number, room: IRoom) => {
         const res = await fetch(`${BASE_URL}/${id}`, {
-            method: "UPDATE",
+            method: "PUT",
             headers: getAuthHeaders(),
             body: JSON.stringify(room)
         })

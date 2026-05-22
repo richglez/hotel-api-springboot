@@ -1,19 +1,39 @@
 import styles from "./Booking.module.css"
 import {useEffect, useState} from "react";
 import type {IRoom} from "../../rooms/types/models/Room.ts";
-import type {IClient} from "../../clients/types/models/Client.ts";
-import type {IReservation} from "../types/models/Reservation.ts";
+import roomsService from "../../rooms/api/roomService.ts";
 
 const Booking = () => {
     const [adults, setAdults] = useState(1);
     const [children, setChildren] = useState(0);
-    const [rooms, setRooms] = useState<IRoom[]>([]);
-    const [clients, setClients] = useState<IClient[]>([]);
-    const [reservation, setReservation] = useState<IReservation[]>([]);
+    const [checkIn, setCheckIn] = useState("");
+    const [checkOut, setCheckOut] = useState("");
+    const [error, setError] = useState<string | null>(null);
+
+    const [rooms, setRooms] = useState<IRoom[]>([])
+    const [selectedRoom, setSelectedRoom] = useState<number | null>(null);
+
+    const [client, setClient] = useState({
+        name: "",
+        email: "",
+        phone: ""
+    })
+
 
     useEffect(() => {
 
-    })
+        const fetchRooms = async () => {
+            try {
+                const data = await roomsService.getAll()
+                setRooms(data);
+            } catch (err) {
+                console.log(err)
+            }
+        };
+
+        fetchRooms()
+        
+    }, []);
 
     return (
         <div className={styles.page}>
@@ -28,19 +48,21 @@ const Booking = () => {
                 <div className={styles.fieldRow}>
                     <div className={styles.field}>
                         <label>Check-in</label>
-                        <input type="date"/>
+                        <input type="date" value={checkIn} onChange={e => setCheckIn(e.target.value)}/>
                     </div>
                     <div className={styles.field}>
                         <label>Check-out</label>
-                        <input type="date"/>
+                        <input type="date" value={checkOut} onChange={e => setCheckOut(e.target.value)}/>
                     </div>
                 </div>
 
                 <div className={styles.field}>
                     <label>Room type</label>
                     <div className={styles.selectWrap}>
-                        <select>
+                        <select value={selectedRoom || ""} onChange={e => setSelectedRoom(Number(e.target.value))}>
                             <option value="">Select a room</option>
+
+                            {rooms}
                             <option value="standard">Standard Room — $120/night</option>
                             <option value="deluxe">Deluxe Room — $180/night</option>
                             <option value="suite">Junior Suite — $260/night</option>
