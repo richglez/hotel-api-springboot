@@ -1,14 +1,14 @@
 import styles from "./Booking.module.css"
 import {useEffect, useState} from "react";
-import type {IRoom} from "../../types/Room.ts";
-import type {IClient} from "../../types/Client.ts";
-import type {IReservation} from "../../types/Reservation.ts";
+import type {IRoom} from "../../rooms/types/models/Room.ts";
+import type {IClient} from "../../clients/types/models/Client.ts";
+import type {IReservation} from "../types/models/Reservation.ts";
 
 const Booking = () => {
     const [adults, setAdults] = useState(1);
     const [children, setChildren] = useState(0);
     const [rooms, setRooms] = useState<IRoom[]>([]);
-    const [clients, setRooms] = useState<IClient[]>([]);
+    const [clients, setClients] = useState<IClient[]>([]);
     const [reservation, setReservation] = useState<IReservation[]>([]);
 
     useEffect(() => {

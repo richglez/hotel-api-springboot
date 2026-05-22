@@ -1,4 +1,4 @@
-import type {IClient} from "../types/Client.ts";
+import type {IClient} from "../types/models/Client.ts";
 
 const BASE_URL = "http://localhost:8080/api/clients" // url backend
 

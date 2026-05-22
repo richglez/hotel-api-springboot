@@ -1,4 +1,4 @@
-import type {IReservation} from "../types/Reservation.ts";
+import type {IReservation} from "../types/models/Reservation.ts";
 
 const BASE_URL = "http://localhost:8080/api/reservations" // url backend
 

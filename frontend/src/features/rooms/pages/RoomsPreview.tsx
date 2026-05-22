@@ -1,8 +1,8 @@
 import {useState, useEffect} from "react";
-import type {IRoom} from "../../../types/Room.ts";
-import roomsService from "../../../services/roomService.ts";
+import type {IRoom} from "../types/models/Room.ts";
+import roomsService from "../api/roomService.ts";
 import styles from "./RoomsPreview.module.css"
-import {ROOM_TYPE_META} from "../../../utils/roomTypeMapper.ts"
+import {ROOM_TYPE_META} from "../utils/roomTypeMapper.ts"
 import {useNavigate} from "react-router-dom";
 
 const RoomsPreview = () => {

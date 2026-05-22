@@ -1,5 +1,5 @@
 import HeroSection from "./sections/HeroSection.tsx";
-import RoomsPreview from "./sections/RoomsPreview.tsx";
+import RoomsPreview from "../../features/rooms/pages/RoomsPreview.tsx";
 import AmenitiesSection from "./sections/AmenitiesSection.tsx";
 import CtaSection from "./sections/CtaSection.tsx";
 

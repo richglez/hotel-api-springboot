@@ -1,6 +1,6 @@
 import {useEffect, useState} from "react";
-import clientService from "../../services/clientService.ts";
-import type {IClient} from "../../types/Client.ts";
+import clientService from "../api/clientService.ts";
+import type {IClient} from "../types/models/Client.ts";
 
 
 function ClientList() {
