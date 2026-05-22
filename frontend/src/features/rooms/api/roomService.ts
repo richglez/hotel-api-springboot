@@ -5,7 +5,7 @@ const BASE_URL = "http://localhost:8080/api/rooms";
 const getAuthHeaders = () => {
     const token = sessionStorage.getItem("Authorization");
 
-    return {"Content-Type": "application/json", "Authorization": token || "",}
+    return {"Content-Type": "application/json", "Authorization": `Bearer${token}` || "",}
 }
 
 const roomsService = {

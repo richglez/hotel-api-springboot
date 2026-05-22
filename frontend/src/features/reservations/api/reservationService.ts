@@ -4,7 +4,7 @@ const BASE_URL = "http://localhost:8080/api/reservations" // url backend
 
 const getAuthHeaders = () => {
     const token = sessionStorage.getItem("Authorization");
-    return {"Content-Type": "application/json", "Authorization": token || ""};
+    return {"Content-Type": "application/json", "Authorization": `Bearer${token}` || ""};
 }
 
 const reservationService = {
@@ -45,7 +45,7 @@ const reservationService = {
             method: 'DELETE',
             headers: getAuthHeaders()
         })
-        if(!res.ok) throw new Error('Failed deleting reservation')
+        if (!res.ok) throw new Error('Failed deleting reservation')
         return res.json();
     }
 

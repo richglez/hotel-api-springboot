@@ -1,8 +1,13 @@
+import styles from "./SignIn.module.css"
+
 const SignIn = () => {
     return(
-        <>
-            Signin
-        </>
+        <div className={styles.container}>
+            <div className={styles.card}>
+
+                <p className={styles.eyebrow}>Welcome back again!</p>
+            </div>
+        </div>
     )
 }
 
