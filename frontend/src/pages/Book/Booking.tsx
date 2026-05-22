@@ -53,10 +53,41 @@ const Booking = () => {
                                 <button onClick={() => set(v => v + 1)}>+</button>
                             </div>
                         </div>
-                    ))
-                    }
+                    ))}
                 </div>
+
+                <hr className={styles.sep}/>
+
+                <p className={styles.sectionLabel}>Your details</p>
+                <div className={styles.fieldRow}>
+                    <div className={styles.field}>
+                        <label>First name</label>
+                        <input type="text" placeholder={"John"}/>
+                    </div>
+                    <div className={styles.field}>
+                        <label>Last name</label>
+                        <input type="text" placeholder={"Doe"}/>
+                    </div>
+                </div>
+                <div className={styles.fieldRow}>
+                    <div className={styles.field}>
+                        <label>Email</label>
+                        <input type="email" placeholder={"john@email.com"}/>
+                    </div>
+                    <div className={styles.field}>
+                        <label>Phone</label>
+                        <input type="tel" placeholder={"+1 (555) 000-0000"}/>
+                    </div>
+                </div>
+                <div className={styles.field}>
+                    <label>Special request</label>
+                    <textarea rows={3} placeholder={"Early check-in, dietary needs, celebrations..."}></textarea>
+                </div>
+
+                <button className={styles.submitBtn}>Confirm Reservations</button>
             </div>
+
+
 
         </div>
     )
