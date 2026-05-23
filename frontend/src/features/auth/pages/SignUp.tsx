@@ -28,7 +28,7 @@ const SignUp = () => {
         try {
             const response = await authService.register(form);
             localStorage.setItem("token", response.token);
-            navigate("/dashboard"); // ajusta la ruta según tu app
+            navigate("/"); // ajusta la ruta según tu app
         } catch (err) {
             setError("Registration failed. Please try again.");
         } finally {
