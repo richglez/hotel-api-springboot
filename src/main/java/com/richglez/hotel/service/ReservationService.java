@@ -2,7 +2,6 @@ package com.richglez.hotel.service;
 
 import com.richglez.hotel.dto.ReservationRequest;
 import com.richglez.hotel.dto.ReservationResponse;
-import com.richglez.hotel.model.Client;
 import com.richglez.hotel.model.Reservation;
 import com.richglez.hotel.model.Room;
 import com.richglez.hotel.repository.ClientRepository;

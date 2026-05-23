@@ -11,6 +11,7 @@ public class ClientRequest {
     @NotBlank(message = "Email is required")
     private String email;
 
+    @Size(min = 8)
     @NotBlank(message = "Password is required")
     private String password;
 

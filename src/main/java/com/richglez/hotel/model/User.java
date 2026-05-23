@@ -1,4 +1,4 @@
-package com.richglez.hotel.entity;
+package com.richglez.hotel.model;
 
 import com.richglez.hotel.enums.Roles;
 import jakarta.persistence.*;
@@ -26,17 +26,17 @@ public class User implements UserDetails {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false, unique = true) // not null & unique
-    private String email;
-
-    @Column(nullable = false) // not null
-    private String password;
-
     @Column(nullable = false) // not null
     private String name;
 
     @Column(nullable = false)  // not null
     private String lastName;
+
+    @Column(nullable = false, unique = true) // not null & unique
+    private String email;
+
+    @Column(nullable = false) // not null
+    private String password;
 
     private String phone; // null value
 

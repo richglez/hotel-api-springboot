@@ -1,6 +1,6 @@
 package com.richglez.hotel.auth;
 
-import com.richglez.hotel.entity.User;
+import com.richglez.hotel.model.User;
 import com.richglez.hotel.enums.Roles;
 import com.richglez.hotel.repository.UserRepository;
 import com.richglez.hotel.security.JwtService;
@@ -46,8 +46,5 @@ public class AuthService {
 
         String token = jwtService.generateToken(user);
         return AuthResponse.builder().token(token).build();
-
     }
-
-
 }

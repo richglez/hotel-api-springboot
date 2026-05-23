@@ -9,5 +9,6 @@ public class RegisterRequest {
     private String lastName;
     private String email;
     private String password;
+    private String phone;
     // role no se expone — el backend asigna GUEST por defecto
 }
