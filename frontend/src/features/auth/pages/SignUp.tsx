@@ -67,11 +67,23 @@ const SignUp = () => {
                 <div className={styles.row}>
                     <div className={styles.fieldWrap}>
                         <label className={styles.label}>Name</label>
-                        <input type="text" className={styles.input} placeholder="John"/>
+                        <input
+                            type="text"
+                            className={styles.input}
+                            placeholder="John"
+                            value={form.name}
+                            onChange={handleChange}
+                        />
                     </div>
                     <div className={styles.fieldWrap}>
                         <label className={styles.label}>Last name</label>
-                        <input type="text" className={styles.input} placeholder="Doe"/>
+                        <input
+                            type="text"
+                            className={styles.input}
+                            placeholder="Doe"
+                            value={form.lastName}
+                            onChange={handleChange}
+                        />
                     </div>
                 </div>
 
