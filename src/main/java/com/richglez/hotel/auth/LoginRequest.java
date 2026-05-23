@@ -1,13 +1,13 @@
 package com.richglez.hotel.auth;
 
-import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
 
 @Data
 public class LoginRequest {
-    @NotNull(message = "Email is required")
+    @NotBlank(message = "Email is required")
     private String email;
 
-    @NotNull(message = "Password is required")
+    @NotBlank(message = "Password is required")
     private String password;
 }
