@@ -16,10 +16,24 @@ const SignUp = () => {
     })
 
     const [error, setError] = useState<string | null>(null);
-    cosnt [loading, setLoading] = useState<boolean>(false);
+    const [loading, setLoading] = useState<boolean>(false);
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setForm(prev => ({...prev, [e.target.name]: e.target.value}));
+    }
+
+    const handleSubmit = async () => {
+        setError(null); // Limpiar error
+        setLoading(true) // esta cargando
+        try {
+            const response = await authService.register(form);
+            localStorage.setItem("token", response.token)
+            navigate("/") // home
+        } catch (err) {
+            setError("Registration failed. Please try again.");
+        } finally {
+            setLoading(false); // termina la carga
+        }
     }
 
     return (
