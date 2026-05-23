@@ -81,7 +81,6 @@ const SignUp = () => {
                     <div className={styles.fieldWrap}>
                         <label className={styles.label}>Email</label>
                         <input
-                            required
                             type="email"
                             name="email"
                             className={styles.input}
@@ -95,7 +94,6 @@ const SignUp = () => {
                         <div className={styles.fieldWrap}>
                             <label className={styles.label}>Name</label>
                             <input
-                                required
                                 type="text"
                                 name="name"
                                 className={styles.input}
@@ -107,7 +105,6 @@ const SignUp = () => {
                         <div className={styles.fieldWrap}>
                             <label className={styles.label}>Last name</label>
                             <input
-                                required
                                 type="text"
                                 name="lastName"
                                 className={styles.input}
@@ -121,7 +118,6 @@ const SignUp = () => {
                     <div className={styles.fieldWrap}>
                         <label className={styles.label}>Password</label>
                         <input
-                            required
                             minLength={8}
                             type="password"
                             name="password"
