@@ -1,6 +1,7 @@
 package com.richglez.hotel.auth;
 
 import com.richglez.hotel.entity.User;
+import com.richglez.hotel.enums.Roles;
 import com.richglez.hotel.repository.UserRepository;
 import com.richglez.hotel.security.JwtService;
 import lombok.RequiredArgsConstructor;
@@ -23,7 +24,7 @@ public class AuthService {
                 .name(request.getName())
                 .email(request.getEmail())
                 .password(passwordEncoder.encode(request.getPassword()))
-                .role(request.getRole())
+                .role(Roles.GUEST) // <- siempre GUEST, el cliente nunca lo controla
                 .build();
 
         userRepository.save(user);
