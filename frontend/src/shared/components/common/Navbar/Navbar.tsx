@@ -19,7 +19,7 @@ const Navbar = () => {
                         <NavLink to="/booking" className={styles.cta}>Book now</NavLink>
                     </li>
                     <li>
-                        <NavLink to="/signin" className={styles.cta}>Sign In</NavLink>
+                        <NavLink to="/login" className={styles.cta}>Sign In</NavLink>
                     </li>
                 </ul>
             </nav>

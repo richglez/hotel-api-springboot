@@ -1,4 +1,5 @@
 import styles from "./SignIn.module.css"
+import {Link} from "react-router-dom";
 
 const SignIn = () => {
     return (
@@ -38,7 +39,7 @@ const SignIn = () => {
 
                 <div className={styles.footer}>
                     <span>Don't have an account?</span>
-                    <a href="/register">Signup here</a>
+                    <Link to="/register">Signup here</Link>
                 </div>
             </div>
         </div>
