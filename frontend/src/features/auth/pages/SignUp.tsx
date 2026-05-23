@@ -23,12 +23,12 @@ const SignUp = () => {
     }
 
     const handleSubmit = async () => {
-        setError(null); // Limpiar error
+        setError(null); // Limpiar errores previos
         setLoading(true) // esta cargando
         try {
             const response = await authService.register(form);
-            localStorage.setItem("token", response.token)
-            navigate("/") // home
+            localStorage.setItem("token", response.token) // esto permite que el navegador recuerde que el usuario ya inicio sesion incluso si refresca la pagina
+            navigate("/") // envia a home si todo fue bien
         } catch (err) {
             setError("Registration failed. Please try again.");
         } finally {
