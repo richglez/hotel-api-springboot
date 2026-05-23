@@ -40,6 +40,11 @@ const SignUp = () => {
                     <p className={styles.hint}>Minimum 8 characters</p>
                 </div>
 
+                <div className={styles.fieldWrap}>
+                    <label className={styles.label}>Phone</label>
+                    <input type="tel" className={styles.input} placeholder="+555 0000 000"/>
+                </div>
+
                 <button className={styles.btn}>Create account</button>
 
                 <div className={styles.divider}>
