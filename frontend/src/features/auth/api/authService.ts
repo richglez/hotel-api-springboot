@@ -8,19 +8,25 @@ const authService = {
     register: async (data: RegisterRequest): Promise<AuthResponse> => {
         const res = await fetch(`${BASE_URL}/register`, {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
+            headers: {'Content-Type': 'application/json'},
             body: JSON.stringify(data)
         });
-        if (!res.ok) throw new Error('Failed register user');
+        if (!res.ok) {
+            const message = await res.text();
+            throw new Error(message);
+        }
         return res.json();
     },
     login: async (data: LoginRequest): Promise<AuthResponse> => {
         const res = await fetch(`${BASE_URL}/login`, {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
+            headers: {'Content-Type': 'application/json'},
             body: JSON.stringify(data)
         });
-        if (!res.ok) throw new Error('Failed login user');
+        if (!res.ok) {
+            const message = await res.text();
+            throw new Error(message);
+        }
         return res.json();
     }
 }

@@ -20,6 +20,11 @@ public class AuthService {
     private final AuthenticationManager authenticationManager;
 
     public AuthResponse register(RegisterRequest request) {
+
+        if (userRepository.findByEmail(request.getEmail()).isPresent()) {
+            throw new RuntimeException("Email already exists");
+        }
+
         User user = User.builder()
                 .name(request.getName())
                 .lastName(request.getLastName())
