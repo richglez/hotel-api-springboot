@@ -1,8 +1,8 @@
-import { useState } from "react";
+import {useState} from "react";
 import styles from "./SignUp.module.css";
-import { Link, useNavigate } from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 import authService from "../api/authService";
-import type { RegisterRequest } from "../types/RegisterRequest";
+import type {RegisterRequest} from "../types/RegisterRequest";
 
 const SignUp = () => {
     const navigate = useNavigate();
@@ -16,23 +16,40 @@ const SignUp = () => {
     });
 
     const [error, setError] = useState<string | null>(null);
-    const [loading, setLoading] = useState(false);
+    const [loading, setLoading] = useState(false); // inicialmente no se esta mandando nada -> false
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setForm(prev => ({ ...prev, [e.target.name]: e.target.value }));
+        setForm(prev => ({...prev, [e.target.name]: e.target.value}));
     };
 
+    const validate = (): string | null => {
+        if (!form.email.trim()) return "Email is required";
+        if (!/\S+@\S+\.\S+/.test(form.email)) return "Invalid email format"
+        if (!form.name.trim()) return "Name is required";
+        if (!form.lastName.trim()) return "Last name is required";
+        if (form.password.length < 8) return "Password must be at least 8 characters";
+        return null
+    }
+
     const handleSubmit = async () => {
-        setError(null);
-        setLoading(true);
+
+        const validationError = validate();
+        if (validationError) {
+            setError(validationError)
+            return; // ← corta antes de llamar al servicio
+        }
+
+
+        setError(null); // si pasa la prueba de arriba -> no hay un error
+        setLoading(true); // pasara a un loading -> send
         try {
             const response = await authService.register(form);
             localStorage.setItem("token", response.token);
-            navigate("/"); // ajusta la ruta según tu app
+            navigate("/"); // despues del registro rederige al usuario al home
         } catch (err) {
             setError("Registration failed. Please try again.");
         } finally {
-            setLoading(false);
+            setLoading(false); // termina la carga si hubo un exito o un error
         }
     };
 
