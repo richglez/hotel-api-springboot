@@ -22,8 +22,10 @@ public class AuthService {
     public AuthResponse register(RegisterRequest request) {
         User user = User.builder()
                 .name(request.getName())
+                .lastName(request.getLastName())
                 .email(request.getEmail())
                 .password(passwordEncoder.encode(request.getPassword()))
+                .phone(request.getPhone())
                 .role(Roles.GUEST) // <- siempre GUEST, el cliente nunca lo controla
                 .build();
 

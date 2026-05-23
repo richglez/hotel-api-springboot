@@ -1,40 +1,40 @@
-import styles from "./SignUp.module.css"
-import {Link, useNavigate} from "react-router-dom";
-import authService from "../api/authService.ts";
-import {useState} from "react";
-import type {RegisterRequest} from "../types/RegisterRequest.ts";
+import { useState } from "react";
+import styles from "./SignUp.module.css";
+import { Link, useNavigate } from "react-router-dom";
+import authService from "../api/authService";
+import type { RegisterRequest } from "../types/RegisterRequest";
 
 const SignUp = () => {
-    const navigate = useNavigate()
+    const navigate = useNavigate();
 
     const [form, setForm] = useState<RegisterRequest>({
         name: "",
         lastName: "",
         email: "",
         password: "",
-        phone: ""
-    })
+        phone: "",
+    });
 
     const [error, setError] = useState<string | null>(null);
-    const [loading, setLoading] = useState<boolean>(false);
+    const [loading, setLoading] = useState(false);
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setForm(prev => ({...prev, [e.target.name]: e.target.value}));
-    }
+        setForm(prev => ({ ...prev, [e.target.name]: e.target.value }));
+    };
 
     const handleSubmit = async () => {
-        setError(null); // Limpiar errores previos
-        setLoading(true) // esta cargando
+        setError(null);
+        setLoading(true);
         try {
             const response = await authService.register(form);
-            localStorage.setItem("token", response.token) // esto permite que el navegador recuerde que el usuario ya inicio sesion incluso si refresca la pagina
-            navigate("/") // envia a home si todo fue bien
+            localStorage.setItem("token", response.token);
+            navigate("/dashboard"); // ajusta la ruta según tu app
         } catch (err) {
             setError("Registration failed. Please try again.");
         } finally {
-            setLoading(false); // termina la carga
+            setLoading(false);
         }
-    }
+    };
 
     return (
         <div className={styles.container}>
@@ -51,6 +51,8 @@ const SignUp = () => {
                 <h1 className={styles.brand}>Grand Palacio</h1>
                 <p className={styles.sub}>Hotel &amp; Reservations</p>
 
+                {error && <p className={styles.error}>{error}</p>}
+
                 <div className={styles.fieldWrap}>
                     <label className={styles.label}>Email</label>
                     <input
@@ -63,12 +65,12 @@ const SignUp = () => {
                     />
                 </div>
 
-                {/* Name y LastName en grid de dos columnas */}
                 <div className={styles.row}>
                     <div className={styles.fieldWrap}>
                         <label className={styles.label}>Name</label>
                         <input
                             type="text"
+                            name="name"
                             className={styles.input}
                             placeholder="John"
                             value={form.name}
@@ -79,6 +81,7 @@ const SignUp = () => {
                         <label className={styles.label}>Last name</label>
                         <input
                             type="text"
+                            name="lastName"
                             className={styles.input}
                             placeholder="Doe"
                             value={form.lastName}
@@ -91,6 +94,7 @@ const SignUp = () => {
                     <label className={styles.label}>Password</label>
                     <input
                         type="password"
+                        name="password"
                         className={styles.input}
                         placeholder="••••••••••••"
                         value={form.password}
@@ -103,6 +107,7 @@ const SignUp = () => {
                     <label className={styles.label}>Phone</label>
                     <input
                         type="tel"
+                        name="phone"
                         className={styles.input}
                         placeholder="+555 0000 000"
                         value={form.phone}
@@ -110,7 +115,13 @@ const SignUp = () => {
                     />
                 </div>
 
-                <button className={styles.btn}>Create account</button>
+                <button
+                    className={styles.btn}
+                    onClick={handleSubmit}
+                    disabled={loading}
+                >
+                    {loading ? "Creating account..." : "Create account"}
+                </button>
 
                 <div className={styles.divider}>
                     <span>o</span>
@@ -122,7 +133,7 @@ const SignUp = () => {
                 </div>
             </div>
         </div>
-    )
-}
+    );
+};
 
-export default SignUp
+export default SignUp;

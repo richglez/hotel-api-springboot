@@ -46,7 +46,7 @@ public class User implements UserDetails {
 
     @CreatedDate
     @Column(updatable = false)
-    private LocalDateTime createdDate; // auditory
+    private LocalDateTime createdAt; // auditory
 
     @LastModifiedDate
     private LocalDateTime updatedAt; // auditory

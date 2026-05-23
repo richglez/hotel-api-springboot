@@ -4,9 +4,10 @@ import com.richglez.hotel.dto.ReservationRequest;
 import com.richglez.hotel.dto.ReservationResponse;
 import com.richglez.hotel.model.Reservation;
 import com.richglez.hotel.model.Room;
-import com.richglez.hotel.repository.ClientRepository;
+import com.richglez.hotel.model.User;
 import com.richglez.hotel.repository.ReservationRepository;
 import com.richglez.hotel.repository.RoomRepository;
+import com.richglez.hotel.repository.UserRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 import org.springframework.http.HttpStatus;
@@ -18,19 +19,19 @@ import java.util.List;
 public class ReservationService {
 
     private final ReservationRepository reservationRepository;
-    private final ClientRepository clientRepository;
+    private final UserRepository userRepository;
     private final RoomRepository roomRepository;
 
-    public ReservationService(ReservationRepository reservationRepository, ClientRepository clientRepository, RoomRepository roomRepository) {
+    public ReservationService(ReservationRepository reservationRepository, UserRepository userRepository, RoomRepository roomRepository) {
         this.reservationRepository = reservationRepository;
-        this.clientRepository = clientRepository;
+        this.userRepository = userRepository;
         this.roomRepository = roomRepository;
     }
 
     // Metodos
     public ReservationResponse saveReservation(ReservationRequest request) {
         // Validate a client and a room and asing to a variable the object
-        Client client = clientRepository.findById(request.getClientId())
+        User user = userRepository.findById(request.getClientId())
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Client not found"));
         Room room = roomRepository.findById(request.getRoomId())
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Room not found"));
@@ -42,7 +43,7 @@ public class ReservationService {
         Reservation reservation = new Reservation();
         reservation.setCheckIn(request.getCheckIn());
         reservation.setCheckOut(request.getCheckOut());
-        reservation.setClient(client);
+        reservation.setUser(user);
         reservation.setRoom(room);
 
         return toResponse(reservationRepository.save(reservation));
@@ -70,7 +71,7 @@ public class ReservationService {
     public ReservationResponse updateReservation(Long id, ReservationRequest request) {
         Reservation reservation = findReservationById(id);
 
-        Client client = clientRepository.findById(request.getClientId())
+        User user = userRepository.findById(request.getClientId())
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Client not found"));
 
         Room room = roomRepository.findById(request.getRoomId())
@@ -81,7 +82,7 @@ public class ReservationService {
 
         reservation.setCheckIn(request.getCheckIn());
         reservation.setCheckOut(request.getCheckOut());
-        reservation.setClient(client);
+        reservation.setUser(user);
         reservation.setRoom(room);
 
         return toResponse(reservationRepository.save(reservation));
@@ -100,9 +101,9 @@ public class ReservationService {
             reservation.setCheckOut(request.getCheckOut());
         }
         if (request.getClientId() != null) {
-            Client client = clientRepository.findById(request.getClientId())
+            User user = userRepository.findById(request.getClientId())
                     .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Client not found"));
-            reservation.setClient(client);
+            reservation.setUser(user);
         }
         if (request.getRoomId() != null) {
             Room room = roomRepository.findById(request.getRoomId())
@@ -135,8 +136,8 @@ public class ReservationService {
         response.setUpdateAt(reservation.getUpdateAt());
         response.setDeletedAt(reservation.getDeletedAt());
 
-        if (reservation.getClient() != null) {
-            response.setClientId(reservation.getClient().getId());
+        if (reservation.getUser() != null) {
+            response.setClientId(reservation.getUser().getId());
         }
         if (reservation.getRoom() != null) {
             response.setRoomId(reservation.getRoom().getId());
