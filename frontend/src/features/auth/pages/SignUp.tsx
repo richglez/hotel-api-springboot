@@ -1,7 +1,27 @@
 import styles from "./SignUp.module.css"
-import {Link} from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
+import authService from "../api/authService.ts";
+import {useState} from "react";
+import type {RegisterRequest} from "../types/RegisterRequest.ts";
 
 const SignUp = () => {
+    const navigate = useNavigate()
+
+    const [form, setForm] = useState<RegisterRequest>({
+        name: "",
+        lastName: "",
+        email: "",
+        password: "",
+        phone: ""
+    })
+
+    const [error, setError] = useState<string | null>(null);
+    cosnt [loading, setLoading] = useState<boolean>(false);
+
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setForm(prev => ({...prev, [e.target.name]: e.target.value}));
+    }
+
     return (
         <div className={styles.container}>
             <div className={styles.card}>
