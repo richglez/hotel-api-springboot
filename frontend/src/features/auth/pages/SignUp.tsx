@@ -53,7 +53,14 @@ const SignUp = () => {
 
                 <div className={styles.fieldWrap}>
                     <label className={styles.label}>Email</label>
-                    <input type="email" className={styles.input} placeholder="email@domain.com"/>
+                    <input
+                        type="email"
+                        name="email"
+                        className={styles.input}
+                        placeholder="email@domain.com"
+                        value={form.email}
+                        onChange={handleChange}
+                    />
                 </div>
 
                 {/* Name y LastName en grid de dos columnas */}
