@@ -3,7 +3,6 @@ import styles from "./SignUp.module.css";
 import {Link, useNavigate} from "react-router-dom";
 import authService from "../api/authService";
 import type {RegisterRequest} from "../types/RegisterRequest";
-import * as React from "react";
 
 const SignUp = () => {
     const navigate = useNavigate();
