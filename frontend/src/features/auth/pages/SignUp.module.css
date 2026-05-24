@@ -247,6 +247,37 @@
     transition: background 0.35s ease;
 }
 
-.error:hover{
+.error:hover {
     background-color: rgba(220, 80, 80, 0.16);
+}
+
+.inputWrap {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.inputWrap .input {
+    width: 100%;
+    padding-right: 32px; /* espacio para el ícono */
+}
+
+.checkIcon {
+    position: absolute;
+    right: 0;
+    display: flex;
+    align-items: center;
+    color: rgba(193, 155, 80, 0.75);
+    transition: opacity 0.3s, transform 0.3s;
+    animation: popIn 0.2s ease;
+}
+
+.checkIcon svg {
+    width: 18px;
+    height: 18px;
+}
+
+@keyframes popIn {
+    from { opacity: 0; transform: scale(0.7); }
+    to   { opacity: 1; transform: scale(1); }
 }

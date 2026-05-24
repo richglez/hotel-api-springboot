@@ -3,6 +3,7 @@ import styles from "./SignUp.module.css";
 import {Link, useNavigate} from "react-router-dom";
 import authService from "../api/authService";
 import type {RegisterRequest} from "../types/RegisterRequest";
+import type {ChangeEvent, SyntheticEvent} from "react";
 
 const SignUp = () => {
     const navigate = useNavigate();
@@ -15,10 +16,31 @@ const SignUp = () => {
         phone: "",
     });
 
+    const [touched, setTouched] = useState<Record<string, boolean>>({})
     const [error, setError] = useState<string | null>(null);
     const [loading, setLoading] = useState(false); // inicialmente no se esta mandando nada -> false
 
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const handleBlur = (e: ChangeEvent<HTMLInputElement>) => {
+        setTouched(prev => ({...prev, [e.target.name]: true}))
+    }
+
+    const isFieldValid =
+        (field: keyof RegisterRequest): boolean => {
+            switch (field) {
+                case "email":
+                    return /\S+@\S+\.\S+/.test(form.email);
+                case "name":
+                    return form.name.trim().length > 0;
+                case "lastName":
+                    return form.lastName.trim().length > 0;
+                case "password":
+                    return form.password.length >= 8;
+                default:
+                    return true;
+            }
+        }
+
+    const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
         setForm(prev => ({...prev, [e.target.name]: e.target.value}));
     };
 
@@ -31,28 +53,28 @@ const SignUp = () => {
         return null
     }
 
-    const handleSubmit = async (e: React.SyntheticEvent<HTMLFormElement>) => {
+    const handleSubmit = async (e: SyntheticEvent<HTMLFormElement>) => {
 
-        e.preventDefault();
+        e.preventDefault();  // 1. evita reload del navegador
 
         const validationError = validate();
         if (validationError) {
             setError(validationError)
-            return; // ← corta antes de llamar al servicio
+            return; // ← 2. corta antes de llamar al servicio (fetch)
         }
 
 
         setError(null); // si pasa la prueba de arriba -> no hay un error
         setLoading(true); // pasara a un loading -> send
         try {
-            const response = await authService.register(form);
-            localStorage.setItem("token", response.token);
-            navigate("/"); // despues del registro rederige al usuario al home
+            const response = await authService.register(form); // 3. llama al backend
+            localStorage.setItem("token", response.token); // 4. guarda el token
+            navigate("/"); // 5. redirige a HOME
         } catch (err) {
             if (err instanceof Error) {
-                setError(err.message)
+                setError(err.message) // 6a. error conocido
             } else {
-                setError("Registration failed")
+                setError("Registration failed") // 6b. error desconocido
             }
         } finally {
             setLoading(false); // termina la carga si hubo un exito o un error
@@ -79,52 +101,101 @@ const SignUp = () => {
 
                     <div className={styles.fieldWrap}>
                         <label className={styles.label}>Email</label>
-                        <input
-                            type="email"
-                            name="email"
-                            className={styles.input}
-                            placeholder="email@domain.com"
-                            value={form.email}
-                            onChange={handleChange}
-                        />
+                        <div className={styles.inputWrap}>
+                            <input
+                                type="email"
+                                name="email"
+                                className={styles.input}
+                                placeholder="email@domain.com"
+                                value={form.email}
+                                onChange={handleChange}
+                                onBlur={handleBlur}
+                            />
+                            {touched.email && isFieldValid("email") && (
+                                <span className={styles.checkIcon}>
+                <svg viewBox="0 0 20 20" fill="none">
+                    <circle cx="10" cy="10" r="9" stroke="currentColor" strokeWidth="1.5"/>
+                    <path d="M6 10l3 3 5-5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"
+                          strokeLinejoin="round"/>
+                </svg>
+            </span>
+                            )}
+                        </div>
                     </div>
 
                     <div className={styles.row}>
                         <div className={styles.fieldWrap}>
                             <label className={styles.label}>Name</label>
-                            <input
-                                type="text"
-                                name="name"
-                                className={styles.input}
-                                placeholder="John"
-                                value={form.name}
-                                onChange={handleChange}
-                            />
+                            <div className={styles.inputWrap}>
+                                <input
+                                    type="text"
+                                    name="name"
+                                    className={styles.input}
+                                    placeholder="John"
+                                    value={form.name}
+                                    onChange={handleChange}
+                                    onBlur={handleBlur}
+                                />
+                                {touched.name && isFieldValid("name") && (
+                                    <span className={styles.checkIcon}>
+                                        <svg viewBox="0 0 20 20" fill="none">
+                                            <circle cx="10" cy="10" r="9" stroke="currentColor" strokeWidth="1.5"/>
+                                            <path d="M6 10l3 3 5-5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"
+                                            strokeLinejoin="round"/>
+                                        </svg>
+                                    </span>
+                                )}
+                            </div>
+
                         </div>
                         <div className={styles.fieldWrap}>
                             <label className={styles.label}>Last name</label>
-                            <input
-                                type="text"
-                                name="lastName"
-                                className={styles.input}
-                                placeholder="Doe"
-                                value={form.lastName}
-                                onChange={handleChange}
-                            />
+                            <div className={styles.inputWrap}>
+                                <input
+                                    type="text"
+                                    name="lastName"
+                                    className={styles.input}
+                                    placeholder="Doe"
+                                    value={form.lastName}
+                                    onChange={handleChange}
+                                    onBlur={handleBlur}
+                                />
+                                {touched.lastName && isFieldValid("lastName") && (
+                                    <span className={styles.checkIcon}>
+                                        <svg viewBox="0 0 20 20" fill="none">
+                                           <circle cx="10" cy="10" r="9" stroke="currentColor" strokeWidth="1.5"/>
+                                         <path d="M6 10l3 3 5-5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"
+                                           strokeLinejoin="round"/>
+                                       </svg>
+                                  </span>
+                                )}
+                            </div>
                         </div>
                     </div>
 
                     <div className={styles.fieldWrap}>
                         <label className={styles.label}>Password</label>
-                        <input
-                            minLength={8}
-                            type="password"
-                            name="password"
-                            className={styles.input}
-                            placeholder="••••••••••••"
-                            value={form.password}
-                            onChange={handleChange}
-                        />
+                        <div className={styles.inputWrap}>
+                            <input
+                                minLength={8}
+                                type="password"
+                                name="password"
+                                className={styles.input}
+                                placeholder="••••••••••••"
+                                value={form.password}
+                                onChange={handleChange}
+                                onBlur={handleBlur}
+                            />
+                            {touched.password && isFieldValid("password") && (
+                                <span className={styles.checkIcon}>
+                                        <svg viewBox="0 0 20 20" fill="none">
+                                            <circle cx="10" cy="10" r="9" stroke="currentColor" strokeWidth="1.5"/>
+                                            <path d="M6 10l3 3 5-5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"
+                                                  strokeLinejoin="round"/>
+                                        </svg>
+                                    </span>
+                            )}
+                        </div>
                         <p className={styles.hint}>Minimum 8 characters</p>
                     </div>
 
