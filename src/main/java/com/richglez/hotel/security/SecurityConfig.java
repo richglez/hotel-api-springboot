@@ -1,5 +1,6 @@
 package com.richglez.hotel.security;
 
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -33,6 +34,15 @@ public class SecurityConfig {
                 })
                 .sessionManagement(session ->
                         session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+
+                .exceptionHandling(ex -> ex
+                        .authenticationEntryPoint((req, res, authException) -> {
+                            res.setStatus(HttpServletResponse.SC_UNAUTHORIZED); // 401
+                            res.setContentType("application/json");
+                            res.getWriter().write("\"message\": \"Invalid email or password\"");
+                        })
+                )
+                // Esto hace que cualquier fallo de autenticación devuelva 401 con el mensaje genérico 
 
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()

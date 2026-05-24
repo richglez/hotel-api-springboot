@@ -136,7 +136,7 @@ const SignIn = () => {
                                 type="password"
                                 name={"password"}
                                 value={form.password}
-                                className={`${styles.input} ${fieldErrors?.email ? styles.inputError : ""}`}
+                                className={`${styles.input} ${fieldErrors?.password ? styles.inputError : ""}`}
                                 onChange={handleChange}
                                 onBlur={handleBlur}
                                 placeholder={"*************"}/>

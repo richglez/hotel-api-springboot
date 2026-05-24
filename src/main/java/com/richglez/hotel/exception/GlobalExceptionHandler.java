@@ -1,4 +1,4 @@
-package com.richglez.hotel.common.exception;
+package com.richglez.hotel.exception;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

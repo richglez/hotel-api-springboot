@@ -26,7 +26,7 @@ const authService = {
         if (!res.ok) {
             // intenta leer el mensaje de error que manda Spring
             const body = await res.json().catch(() => null)
-            const message = await body?.message ?? getLoginError(res.status)
+            const message = body?.message ?? getLoginError(res.status)
             throw new Error(message);
         }
 
