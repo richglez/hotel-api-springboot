@@ -1,6 +1,6 @@
 package com.richglez.hotel.security;
 
-import com.richglez.hotel.repository.UserRepository;
+import com.richglez.hotel.users.repository.UserRepository;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.*;

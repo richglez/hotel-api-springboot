@@ -1,8 +1,8 @@
 package com.richglez.hotel.auth;
 
-import com.richglez.hotel.model.User;
-import com.richglez.hotel.enums.Roles;
-import com.richglez.hotel.repository.UserRepository;
+import com.richglez.hotel.users.model.User;
+import com.richglez.hotel.common.enums.Roles;
+import com.richglez.hotel.users.repository.UserRepository;
 import com.richglez.hotel.security.JwtService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
