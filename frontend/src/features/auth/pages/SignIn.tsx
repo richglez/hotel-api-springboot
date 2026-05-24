@@ -69,7 +69,7 @@ const SignIn = () => {
 
     return (
         <div className={styles.container}>
-            <form method={"POST"} onSubmit={handleSubmit}>
+            <form className={styles.form} method={"POST"} onSubmit={handleSubmit}>
                 <div className={styles.card}>
 
                     <p className={styles.eyebrow}>Welcome back again!</p>
