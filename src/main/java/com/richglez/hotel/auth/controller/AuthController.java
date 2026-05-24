@@ -1,5 +1,9 @@
-package com.richglez.hotel.auth;
+package com.richglez.hotel.auth.controller;
 
+import com.richglez.hotel.auth.dto.AuthResponse;
+import com.richglez.hotel.auth.service.AuthService;
+import com.richglez.hotel.auth.dto.LoginRequest;
+import com.richglez.hotel.auth.dto.RegisterRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;

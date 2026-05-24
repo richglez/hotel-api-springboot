@@ -1,5 +1,8 @@
-package com.richglez.hotel.auth;
+package com.richglez.hotel.auth.service;
 
+import com.richglez.hotel.auth.dto.LoginRequest;
+import com.richglez.hotel.auth.dto.RegisterRequest;
+import com.richglez.hotel.auth.dto.AuthResponse;
 import com.richglez.hotel.users.model.User;
 import com.richglez.hotel.common.enums.Roles;
 import com.richglez.hotel.users.repository.UserRepository;

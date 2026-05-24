@@ -37,7 +37,7 @@ const authService = {
 function getLoginError(status: number): string {
     switch (status) {
         case 401:
-            return "Invalid email or password";
+            return "Invalid email or password.";
         case 403:
             return "Your account doesn't  have access.";
         case 404:

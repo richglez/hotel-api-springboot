@@ -1,4 +1,4 @@
-package com.richglez.hotel.auth;
+package com.richglez.hotel.auth.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
