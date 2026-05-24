@@ -287,3 +287,27 @@
     from { opacity: 0; transform: scale(0.7); }
     to   { opacity: 1; transform: scale(1); }
 }
+
+.fieldError {
+    margin-top: 8px;
+    font-size: 11px;
+    font-family: 'Jost', sans-serif;
+    color: rgba(220, 120, 120, 0.95);
+    letter-spacing: 0.04em;
+    animation: fadeIn 0.2s ease;
+}
+
+.inputError {
+    border-bottom-color: rgba(220, 120, 120, 0.8) !important;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-2px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}

@@ -24,10 +24,26 @@ const authService = {
             body: JSON.stringify(data)
         });
         if (!res.ok) {
-            const message = await res.text();
+            // intenta leer el mensaje de error que manda Spring
+            const body = await res.json().catch(() => null)
+            const message = await body?.message ?? getLoginError(res.status)
             throw new Error(message);
         }
+
         return res.json();
+    }
+}
+
+function getLoginError(status: number): string {
+    switch (status) {
+        case 401:
+            return "Invalid email or password";
+        case 403:
+            return "Your account doesn't  have access.";
+        case 404:
+            return "No account found with that email";
+        default:
+            return "Login failed. Please try again.";
     }
 }
 
