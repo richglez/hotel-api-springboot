@@ -4,6 +4,7 @@ import {type ChangeEvent, type SyntheticEvent, useState} from "react";
 import type {LoginRequest} from "../types/LoginRequest.ts";
 import authService from "../api/authService.ts";
 
+
 const SignIn = () => {
     const navigate = useNavigate();
 

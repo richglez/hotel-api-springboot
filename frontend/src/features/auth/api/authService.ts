@@ -15,6 +15,7 @@ const authService = {
             const message = await res.text();
             throw new Error(message);
         }
+
         return res.json();
     },
     login: async (data: LoginRequest): Promise<AuthResponse> => {
