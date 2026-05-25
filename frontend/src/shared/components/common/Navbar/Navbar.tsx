@@ -1,9 +1,17 @@
 import styles from './Navbar.module.css';
-import {NavLink} from 'react-router-dom';
+import {NavLink, useNavigate} from 'react-router-dom';
 
 const Navbar = () => {
+    const navigate = useNavigate();
+    const token = localStorage.getItem('token')
+
+    const logout = () => {
+        localStorage.removeItem('token');
+        navigate('/')
+    }
+
     return (
-        <div className={styles.navWrapper }>
+        <div className={styles.navWrapper}>
             <nav className={styles.nav}>
                 <NavLink to={"/"} className={styles.logo}>
                     Hotel-<span>Reservations</span>
@@ -19,7 +27,11 @@ const Navbar = () => {
                         <NavLink to="/booking" className={styles.cta}>Book now</NavLink>
                     </li>
                     <li>
-                        <NavLink to="/login" className={styles.cta}>Sign In</NavLink>
+                        {token ? (
+                            <NavLink onClick={logout} className={styles.cta}>Log out</NavLink>
+                        ) : (
+                            <NavLink to="/login" className={styles.cta}>Sign In</NavLink>
+                        )}
                     </li>
                 </ul>
             </nav>

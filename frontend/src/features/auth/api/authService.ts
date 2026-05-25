@@ -34,6 +34,7 @@ const authService = {
     }
 }
 
+// fallback
 function getLoginError(status: number): string {
     switch (status) {
         case 401:

@@ -29,11 +29,11 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http
-                .csrf(csrf -> csrf.disable())
+                .csrf(csrf -> csrf.disable())// cookies -> token
                 .cors(cors -> {
-                })
+                }) // enabling cors
                 .sessionManagement(session ->
-                        session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                        session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)) // api stateless in each request needs a JWT token.
 
                 .exceptionHandling(ex -> ex
                         .authenticationEntryPoint((req, res, authException) -> {
@@ -42,7 +42,7 @@ public class SecurityConfig {
                             res.getWriter().write("\"message\": \"Invalid email or password\"");
                         })
                 )
-                // Esto hace que cualquier fallo de autenticación devuelva 401 con el mensaje genérico 
+
 
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
