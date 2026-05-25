@@ -77,6 +77,7 @@ const SignIn = () => {
         try {
             const response = await authService.login(form);
             localStorage.setItem("token", response.token) // save token in browser
+            setError(null);
             navigate("/");
         } catch (err) {
             if (err instanceof Error) {
