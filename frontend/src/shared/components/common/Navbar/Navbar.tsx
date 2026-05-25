@@ -28,7 +28,8 @@ const Navbar = () => {
                     </li>
                     <li>
                         {token ? (
-                            <NavLink onClick={logout} className={styles.cta}>Log out</NavLink>
+                            <button style={{border: "none", cursor: "pointer"}} onClick={logout}
+                                    className={styles.cta}>Log out</button>
                         ) : (
                             <NavLink to="/login" className={styles.cta}>Sign In</NavLink>
                         )}
