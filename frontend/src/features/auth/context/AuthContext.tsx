@@ -1,18 +1,17 @@
 import {createContext, useContext, useState, type ReactNode} from "react";
 
+// 1. molde
 type AuthContextType = {
-    token: string | null;
-    isAuthenticated: boolean;
-    login: (token: string) => void;
-    logout: () => void;
+    token: string | null; // ¿hay token?
+    isAuthenticated: boolean; // ¿el usuario está autenticado?
+    login: (token: string) => void; // ¿cómo hago login?
+    logout: () => void; // ¿cómo hago logout?
 };
 
+// 2. crear contexto de react de tipo authcontexttype o null, por defecto null
 const AuthContext = createContext<AuthContextType | null>(null);
 
-
-
-// El objeto debe tener una propiedad children que sea renderizable por React
-// “del objeto recibido, saca la propiedad children
+// 3. Creamos el componente Provider
 export const AuthProvider = ({children}: { children: ReactNode }) => {
     const [token, setToken] = useState<string | null>(() => {
         return localStorage.getItem("token")
@@ -28,11 +27,25 @@ export const AuthProvider = ({children}: { children: ReactNode }) => {
         setToken(null);
     }
 
-
-
     return (
-        <AuthContext.Provider></AuthContext.Provider>
+        <AuthContext.Provider
+            value={{
+                token,
+                isAuthenticated: Boolean(token),
+                login,
+                logout
+            }}>
+            {children}
+        </AuthContext.Provider>
     )
+}
 
+export const useAuth = () => {
+    const context = useContext(AuthContext);
 
+    if (!context) {
+        throw new Error("useAuth must be used inside AuthProvider")
+    }
+
+    return context;
 }

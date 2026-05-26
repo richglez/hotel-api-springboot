@@ -3,9 +3,11 @@ import {Link, useNavigate} from "react-router-dom";
 import {type ChangeEvent, type SyntheticEvent, useState} from "react";
 import type {LoginRequest} from "../types/LoginRequest.ts";
 import authService from "../api/authService.ts";
+import {useAuth} from "../context/AuthContext.tsx";
 
 
 const SignIn = () => {
+    const { login } = useAuth();
     const navigate = useNavigate();
 
     const [form, setForm] = useState<LoginRequest>({
@@ -76,7 +78,7 @@ const SignIn = () => {
         setLoading(true);
         try {
             const response = await authService.login(form);
-            localStorage.setItem("token", response.token) // save token in browser
+            login(response.token);
             setError(null);
             navigate("/");
         } catch (err) {

@@ -1,12 +1,13 @@
 import styles from './Navbar.module.css';
 import {NavLink, useNavigate} from 'react-router-dom';
+import {useAuth} from "../../../../features/auth/context/AuthContext.tsx";
 
 const Navbar = () => {
+    const {logout, isAuthenticated} = useAuth();
     const navigate = useNavigate();
-    const token = localStorage.getItem('token')
 
-    const logout = () => {
-        localStorage.removeItem('token');
+    const handleLogout = () => {
+        logout();
         navigate('/')
     }
 
@@ -27,8 +28,8 @@ const Navbar = () => {
                         <NavLink to="/booking" className={styles.cta}>Book now</NavLink>
                     </li>
                     <li>
-                        {token ? (
-                            <button style={{border: "none", cursor: "pointer"}} onClick={logout}
+                        {isAuthenticated ? (
+                            <button style={{border: "none", cursor: "pointer"}} onClick={handleLogout}
                                     className={styles.cta}>Log out</button>
                         ) : (
                             <NavLink to="/login" className={styles.cta}>Sign In</NavLink>

@@ -5,21 +5,24 @@ import RoomsPreview from "./features/rooms/pages/RoomsPreview.tsx";
 import Booking from "./features/reservations/pages/Booking.tsx";
 import MainLayout from "./shared/components/layuot/MainLayout.tsx";
 import SignUp from "./features/auth/pages/SignUp.tsx";
+import {AuthProvider} from "./features/auth/context/AuthContext.tsx";
 
 function App() {
     return (
-        <Routes>
-            {/* Rutas con navbar */}
-            <Route element={<MainLayout/>}>
-                <Route path="/" element={<Home/>}/>
-                <Route path="/rooms" element={<RoomsPreview/>}/>
-                <Route path="/booking" element={<Booking/>}/>
-            </Route>
+        <AuthProvider>
+            <Routes>
+                {/* Rutas con navbar */}
+                <Route element={<MainLayout/>}>
+                    <Route path="/" element={<Home/>}/>
+                    <Route path="/rooms" element={<RoomsPreview/>}/>
+                    <Route path="/booking" element={<Booking/>}/>
+                </Route>
 
-            {/* Rutas sin navbar */}
-            <Route path={"/login"} element={<SignIn/>}/>
-            <Route path={"/register"} element={<SignUp/>}/>
-        </Routes>
+                {/* Rutas sin navbar */}
+                <Route path={"/login"} element={<SignIn/>}/>
+                <Route path={"/register"} element={<SignUp/>}/>
+            </Routes>
+        </AuthProvider>
     )
 }
 
