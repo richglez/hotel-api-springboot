@@ -40,6 +40,7 @@ export const AuthProvider = ({children}: { children: ReactNode }) => {
     )
 }
 
+// custom hook useContext -> permite usar esos datos desde cualquier componente
 export const useAuth = () => {
     const context = useContext(AuthContext);
 
