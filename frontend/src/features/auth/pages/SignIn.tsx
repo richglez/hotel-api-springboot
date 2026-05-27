@@ -4,6 +4,7 @@ import {type ChangeEvent, type SyntheticEvent, useState} from "react";
 import type {LoginRequest} from "../types/LoginRequest.ts";
 import authService from "../api/authService.ts";
 import {useAuth} from "../context/AuthContext.tsx";
+import type {RegisterRequest} from "../types/RegisterRequest.ts";
 
 
 const SignIn = () => {
@@ -16,9 +17,9 @@ const SignIn = () => {
     })
 
     const [touched, setTouched] = useState<Record<string, boolean>>({})
-    const [error, setError] = useState<string | null>(null);
+    const [globalError, setGlobalError] = useState<string | null>(null);
     const [fieldErrors, setFieldErrors] = useState<Partial<Record<keyof LoginRequest, string
-    >>>()
+    >>>({})
     const [loading, setLoading] = useState(false);
 
     const validateFields = () => {
@@ -41,7 +42,16 @@ const SignIn = () => {
     }
 
     const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
-        setForm(prev => ({...prev, [e.target.name]: e.target.value}))
+        const {name, value} = e.target;
+        const fieldName = name as keyof RegisterRequest;
+        setForm(prev => ({...prev, [fieldName]: value}))
+
+        // Limpiar error ante cambio del usuario en el input, asi no siempre estar mostrando el error molesto.
+        setFieldErrors(prev => ({
+            ...prev,
+            [fieldName]: undefined,
+        }))
+        // el error solo ocurrira si se manda el formulario con campos invalidos
     }
 
     const handleBlur = (e: ChangeEvent<HTMLInputElement>) => {
@@ -71,6 +81,7 @@ const SignIn = () => {
         const validationError = validateFields();
         if (Object.keys(validationError).length > 0) {
             setFieldErrors(validationError)
+            setGlobalError(null) // -> no global error
             return;
         }
 
@@ -79,13 +90,13 @@ const SignIn = () => {
         try {
             const response = await authService.login(form);
             login(response.token);
-            setError(null);
+            setGlobalError(null);
             navigate("/");
         } catch (err) {
             if (err instanceof Error) {
-                setError(err.message)
+                setGlobalError(err.message)
             } else {
-                setError("Login failed. Please try again.")
+                setGlobalError("Login failed. Please try again.")
             }
         } finally {
             setLoading(false);
@@ -108,8 +119,8 @@ const SignIn = () => {
                     <h1 className={styles.brand}>Grand Palacio</h1>
                     <p className={styles.sub}>Hotel &amp; Reservations</p>
 
-                    {error && (
-                        <p className={styles.error}>{error}</p>
+                    {globalError && (
+                        <p className={styles.error}>{globalError}</p>
                     )}
 
 
@@ -125,7 +136,7 @@ const SignIn = () => {
                                 onBlur={handleBlur}
                                 placeholder={"email@domain.com"}/>
                         </div>
-                        {touched.email && (
+                        {touched.email && fieldErrors.email && (
                             <p className={styles.fieldError}>
                                 {fieldErrors?.email}
                             </p>
@@ -146,7 +157,8 @@ const SignIn = () => {
                                 placeholder={"*************"}/>
 
                         </div>
-                        {touched.password && (
+                        {/*Not render a simbple <p> even if there are not a error*/}
+                        {touched.password && fieldErrors.password && (
                             <p className={styles.fieldError}>
                                 {fieldErrors?.password}
                             </p>

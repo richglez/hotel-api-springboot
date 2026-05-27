@@ -17,9 +17,9 @@ const SignUp = () => {
     });
 
     const [touched, setTouched] = useState<Record<string, boolean>>({})
-    const [globalError, setGobalError] = useState<string | null>(null);
-    const [fieldError, setFieldError] = useState<Partial<Record<keyof RegisterRequest, string
-    >>>()
+    const [globalError, setGlobalError] = useState<string | null>(null);
+    const [fieldErrors, setFieldError] = useState<Partial<Record<keyof RegisterRequest, string
+    >>>({})
     const [loading, setLoading] = useState(false); // inicialmente no se esta mandando nada -> false
 
     const validateFields = () => {
@@ -70,7 +70,17 @@ const SignUp = () => {
         }
 
     const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
-        setForm(prev => ({...prev, [e.target.name]: e.target.value}));
+        const {name, value} = e.target
+        const fieldName = name as keyof RegisterRequest;
+
+        setForm(prev => ({...prev, [fieldName]: value}));
+
+        // Ante cambios en el input (es decir cuando el usuario esta escribiendo sobre el input) -> marcar indefinido el error, osea que puede haber un error, pero no mostrarlo en pantalla cuando el usuario esta escribiendo.
+        setFieldError(prev => ({
+            ...prev,
+            [fieldName]: undefined
+        }))
+        // aqui el error solo ocurre al mandar el formulario con campos invalidos
     };
 
     const handleSubmit = async (e: SyntheticEvent<HTMLFormElement>) => {
@@ -81,11 +91,11 @@ const SignUp = () => {
 
         if (Object.keys(validationField).length > 0) {
             setFieldError(validationField);
-            setGobalError(null); // no hay un error global nadamas de campo
+            setGlobalError(null); // no hay un error global nadamas de campo
             return; // salte
         }
 
-        setGobalError(null); // si pasa la prueba de arriba -> no hay un error global
+        setGlobalError(null); // si pasa la prueba de arriba -> no hay un error global
         setFieldError({}) // -> no hay error por campos
         setLoading(true); // pasara a un loading -> send
         try {
@@ -94,9 +104,9 @@ const SignUp = () => {
             navigate("/"); // 5. redirige a HOME
         } catch (err) {
             if (err instanceof Error) {
-                setGobalError(err.message) // 6a. error conocido
+                setGlobalError(err.message) // 6a. error conocido
             } else {
-                setGobalError("Registration failed") // 6b. error desconocido
+                setGlobalError("Registration failed") // 6b. error desconocido
             }
         } finally {
             setLoading(false); // termina la carga si hubo un exito o un error
@@ -127,7 +137,7 @@ const SignUp = () => {
                             <input
                                 type="email"
                                 name="email"
-                                className={`${styles.input} ${fieldError?.email ? styles.inputError : ""}`}
+                                className={`${styles.input} ${fieldErrors?.email ? styles.inputError : ""}`}
                                 placeholder="email@domain.com"
                                 value={form.email}
                                 onChange={handleChange}
@@ -144,8 +154,8 @@ const SignUp = () => {
                                   </span>
                             )}
                         </div>
-                        {touched.email && (
-                            <p className={styles.fieldError}>{fieldError?.email}</p>
+                        {touched.email && fieldErrors.email && (
+                            <p className={styles.fieldError}>{fieldErrors?.email}</p>
                         )}
                     </div>
 
@@ -156,7 +166,7 @@ const SignUp = () => {
                                 <input
                                     type="text"
                                     name="name"
-                                    className={`${styles.input} ${fieldError?.name ? styles.inputError : ""}`}
+                                    className={`${styles.input} ${fieldErrors?.name ? styles.inputError : ""}`}
                                     placeholder="John"
                                     value={form.name}
                                     onChange={handleChange}
@@ -173,8 +183,8 @@ const SignUp = () => {
                                     </span>
                                 )}
                             </div>
-                            {touched.name && (
-                                <p className={styles.fieldError}>{fieldError?.name}</p>
+                            {touched.name && fieldErrors.name && (
+                                <p className={styles.fieldError}>{fieldErrors?.name}</p>
                             )}
                         </div>
 
@@ -184,7 +194,7 @@ const SignUp = () => {
                                 <input
                                     type="text"
                                     name="lastName"
-                                    className={`${styles.input} ${fieldError?.lastName ? styles.inputError : ""}`}
+                                    className={`${styles.input} ${fieldErrors?.lastName ? styles.inputError : ""}`}
                                     placeholder="Doe"
                                     value={form.lastName}
                                     onChange={handleChange}
@@ -201,8 +211,8 @@ const SignUp = () => {
                                   </span>
                                 )}
                             </div>
-                            {touched.lastName && (
-                                <p className={styles.fieldError}>{fieldError?.lastName}</p>
+                            {touched.lastName && fieldErrors.lastName && (
+                                <p className={styles.fieldError}>{fieldErrors?.lastName}</p>
                             )}
                         </div>
                     </div>
@@ -214,7 +224,7 @@ const SignUp = () => {
                                 minLength={8}
                                 type="password"
                                 name="password"
-                                className={`${styles.input} ${fieldError?.password ? styles.inputError : ""}`}
+                                className={`${styles.input} ${fieldErrors?.password ? styles.inputError : ""}`}
                                 placeholder="••••••••••••"
                                 value={form.password}
                                 onChange={handleChange}
@@ -231,9 +241,10 @@ const SignUp = () => {
                                     </span>
                             )}
                         </div>
+                        {/*Not render a simbple <p> even if there are not a error*/}
                         <p className={styles.hint}>Minimum 8 characters</p>
-                        {touched.password && (
-                            <p className={styles.fieldError}>{fieldError?.password}</p>
+                        {touched.password && fieldErrors.password && (
+                            <p className={styles.fieldError}>{fieldErrors?.password}</p>
                         )}
                     </div>
 
