@@ -17,12 +17,41 @@ const SignUp = () => {
     });
 
     const [touched, setTouched] = useState<Record<string, boolean>>({})
-    const [error, setError] = useState<string | null>(null);
+    const [globalError, setGobalError] = useState<string | null>(null);
+    const [fieldError, setFieldError] = useState<Partial<Record<keyof RegisterRequest, string
+    >>>()
     const [loading, setLoading] = useState(false); // inicialmente no se esta mandando nada -> false
+
+    const validateFields = () => {
+        const errors: Partial<Record<keyof RegisterRequest, string>> = {};
+
+        if (!form.email.trim()) {
+            errors.email = "Email is required"
+        } else if (!/\S+@\S+\.\S+/.test(form.email)) {
+            errors.email = "Please enter a valid email address";
+        }
+
+        if (!form.name.trim()) {
+            errors.name = "Name is required";
+        }
+
+        if (!form.lastName.trim()) {
+            errors.lastName = "Last name is required";
+        }
+
+        if (!form.password.trim()) {
+            errors.password = "Password is required";
+        } else if (form.password.length < 8) {
+            errors.password = "Password must be at least 8 characters";
+        }
+
+        return errors
+    }
 
     const handleBlur = (e: ChangeEvent<HTMLInputElement>) => {
         setTouched(prev => ({...prev, [e.target.name]: true}))
     }
+
 
     const isFieldValid =
         (field: keyof RegisterRequest): boolean => {
@@ -44,27 +73,20 @@ const SignUp = () => {
         setForm(prev => ({...prev, [e.target.name]: e.target.value}));
     };
 
-    const validate = (): string | null => {
-        if (!form.email.trim()) return "Email is required";
-        if (!/\S+@\S+\.\S+/.test(form.email)) return "Invalid email format"
-        if (!form.name.trim()) return "Name is required";
-        if (!form.lastName.trim()) return "Last name is required";
-        if (form.password.length < 8) return "Password must be at least 8 characters";
-        return null
-    }
-
     const handleSubmit = async (e: SyntheticEvent<HTMLFormElement>) => {
 
         e.preventDefault();  // 1. evita reload del navegador
 
-        const validationError = validate();
-        if (validationError) {
-            setError(validationError)
-            return; // ← 2. corta antes de llamar al servicio (fetch)
+        const validationField = validateFields()
+
+        if (Object.keys(validationField).length > 0) {
+            setFieldError(validationField);
+            setGobalError(null); // no hay un error global nadamas de campo
+            return; // salte
         }
 
-
-        setError(null); // si pasa la prueba de arriba -> no hay un error
+        setGobalError(null); // si pasa la prueba de arriba -> no hay un error global
+        setFieldError({}) // -> no hay error por campos
         setLoading(true); // pasara a un loading -> send
         try {
             const response = await authService.register(form); // 3. llama al backend
@@ -72,9 +94,9 @@ const SignUp = () => {
             navigate("/"); // 5. redirige a HOME
         } catch (err) {
             if (err instanceof Error) {
-                setError(err.message) // 6a. error conocido
+                setGobalError(err.message) // 6a. error conocido
             } else {
-                setError("Registration failed") // 6b. error desconocido
+                setGobalError("Registration failed") // 6b. error desconocido
             }
         } finally {
             setLoading(false); // termina la carga si hubo un exito o un error
@@ -83,7 +105,7 @@ const SignUp = () => {
 
     return (
         <div className={styles.container}>
-            <form method={"POST"} onSubmit={handleSubmit}>
+            <form noValidate method={"POST"} onSubmit={handleSubmit}>
                 <div className={styles.card}>
 
                     <p className={styles.eyebrow}>Create your account</p>
@@ -97,7 +119,7 @@ const SignUp = () => {
                     <h1 className={styles.brand}>Grand Palacio</h1>
                     <p className={styles.sub}>Hotel &amp; Reservations</p>
 
-                    {error && <p className={styles.error}>{error}</p>}
+                    {globalError && <p className={styles.error}>{globalError}</p>}
 
                     <div className={styles.fieldWrap}>
                         <label className={styles.label}>Email</label>
@@ -105,7 +127,7 @@ const SignUp = () => {
                             <input
                                 type="email"
                                 name="email"
-                                className={styles.input}
+                                className={`${styles.input} ${fieldError?.email ? styles.inputError : ""}`}
                                 placeholder="email@domain.com"
                                 value={form.email}
                                 onChange={handleChange}
@@ -113,14 +135,18 @@ const SignUp = () => {
                             />
                             {touched.email && isFieldValid("email") && (
                                 <span className={styles.checkIcon}>
-                <svg viewBox="0 0 20 20" fill="none">
-                    <circle cx="10" cy="10" r="9" stroke="currentColor" strokeWidth="1.5"/>
-                    <path d="M6 10l3 3 5-5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"
-                          strokeLinejoin="round"/>
-                </svg>
-            </span>
+                                     <svg viewBox="0 0 20 20" fill="none">
+                                            <circle cx="10" cy="10" r="9" stroke="currentColor" strokeWidth="1.5"/>
+                                            <path d="M6 10l3 3 5-5" stroke="currentColor" strokeWidth="1.5"
+                                                  strokeLinecap="round"
+                                                  strokeLinejoin="round"/>
+                                     </svg>
+                                  </span>
                             )}
                         </div>
+                        {touched.email && (
+                            <p className={styles.fieldError}>{fieldError?.email}</p>
+                        )}
                     </div>
 
                     <div className={styles.row}>
@@ -130,7 +156,7 @@ const SignUp = () => {
                                 <input
                                     type="text"
                                     name="name"
-                                    className={styles.input}
+                                    className={`${styles.input} ${fieldError?.name ? styles.inputError : ""}`}
                                     placeholder="John"
                                     value={form.name}
                                     onChange={handleChange}
@@ -140,21 +166,25 @@ const SignUp = () => {
                                     <span className={styles.checkIcon}>
                                         <svg viewBox="0 0 20 20" fill="none">
                                             <circle cx="10" cy="10" r="9" stroke="currentColor" strokeWidth="1.5"/>
-                                            <path d="M6 10l3 3 5-5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"
-                                            strokeLinejoin="round"/>
+                                            <path d="M6 10l3 3 5-5" stroke="currentColor" strokeWidth="1.5"
+                                                  strokeLinecap="round"
+                                                  strokeLinejoin="round"/>
                                         </svg>
                                     </span>
                                 )}
                             </div>
-
+                            {touched.name && (
+                                <p className={styles.fieldError}>{fieldError?.name}</p>
+                            )}
                         </div>
+
                         <div className={styles.fieldWrap}>
                             <label className={styles.label}>Last name</label>
                             <div className={styles.inputWrap}>
                                 <input
                                     type="text"
                                     name="lastName"
-                                    className={styles.input}
+                                    className={`${styles.input} ${fieldError?.lastName ? styles.inputError : ""}`}
                                     placeholder="Doe"
                                     value={form.lastName}
                                     onChange={handleChange}
@@ -164,12 +194,16 @@ const SignUp = () => {
                                     <span className={styles.checkIcon}>
                                         <svg viewBox="0 0 20 20" fill="none">
                                            <circle cx="10" cy="10" r="9" stroke="currentColor" strokeWidth="1.5"/>
-                                         <path d="M6 10l3 3 5-5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"
-                                           strokeLinejoin="round"/>
+                                         <path d="M6 10l3 3 5-5" stroke="currentColor" strokeWidth="1.5"
+                                               strokeLinecap="round"
+                                               strokeLinejoin="round"/>
                                        </svg>
                                   </span>
                                 )}
                             </div>
+                            {touched.lastName && (
+                                <p className={styles.fieldError}>{fieldError?.lastName}</p>
+                            )}
                         </div>
                     </div>
 
@@ -180,7 +214,7 @@ const SignUp = () => {
                                 minLength={8}
                                 type="password"
                                 name="password"
-                                className={styles.input}
+                                className={`${styles.input} ${fieldError?.password ? styles.inputError : ""}`}
                                 placeholder="••••••••••••"
                                 value={form.password}
                                 onChange={handleChange}
@@ -190,13 +224,17 @@ const SignUp = () => {
                                 <span className={styles.checkIcon}>
                                         <svg viewBox="0 0 20 20" fill="none">
                                             <circle cx="10" cy="10" r="9" stroke="currentColor" strokeWidth="1.5"/>
-                                            <path d="M6 10l3 3 5-5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"
+                                            <path d="M6 10l3 3 5-5" stroke="currentColor" strokeWidth="1.5"
+                                                  strokeLinecap="round"
                                                   strokeLinejoin="round"/>
                                         </svg>
                                     </span>
                             )}
                         </div>
                         <p className={styles.hint}>Minimum 8 characters</p>
+                        {touched.password && (
+                            <p className={styles.fieldError}>{fieldError?.password}</p>
+                        )}
                     </div>
 
                     <div className={styles.fieldWrap}>

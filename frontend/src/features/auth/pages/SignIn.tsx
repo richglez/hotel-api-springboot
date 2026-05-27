@@ -7,7 +7,7 @@ import {useAuth} from "../context/AuthContext.tsx";
 
 
 const SignIn = () => {
-    const { login } = useAuth();
+    const {login} = useAuth();
     const navigate = useNavigate();
 
     const [form, setForm] = useState<LoginRequest>({
@@ -35,7 +35,7 @@ const SignIn = () => {
         } else if (form.password.length < 8) {
             errors.password = "Password must be at least 8 characters";
         }
-        console.log(errors)
+
         return errors;
 
     }
