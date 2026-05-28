@@ -92,9 +92,10 @@ const SignUp = () => {
         if (Object.keys(validationField).length > 0) {
             setFieldError(validationField);
             setGlobalError(null); // no hay un error global nadamas de campo
-            return; // salte
+            return; // termina handleSubmit
         }
 
+        // Al corregir los errores -> limpialos
         setGlobalError(null); // si pasa la prueba de arriba -> no hay un error global
         setFieldError({}) // -> no hay error por campos
         setLoading(true); // pasara a un loading -> send

@@ -85,8 +85,10 @@ const SignIn = () => {
             return;
         }
 
+        // Al corregir los errores -> limpialos
+        setGlobalError(null);
         setFieldErrors({});
-        setLoading(true);
+        setLoading(true); // -> Iniciael estado de carga
         try {
             const response = await authService.login(form);
             login(response.token);
