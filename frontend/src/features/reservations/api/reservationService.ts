@@ -14,7 +14,9 @@ const getAuthHeaders = () => {
 
 const reservationService = {
     getAll: async () => {
-        const res = await fetch(BASE_URL);
+        const res = await fetch(BASE_URL, {
+            headers: getAuthHeaders()
+        });
         if (!res.ok) await handleErrorResponse(res, getGeneralError)
         return res.json();
     },
