@@ -8,5 +8,6 @@ const PrivateRoute = ({children}: { children: ReactNode }) => {
     replace />;
 
 };
+// cualquier usuario no autenticado es redirigido al login antes de que el componente monte y haga el fetch.
 
 export default PrivateRoute;
