@@ -5,16 +5,14 @@ import {ROOM_TYPE_LABELS} from "../../rooms/types/models/Room.ts";
 import type {IRoom} from "../../rooms/types/models/Room.ts";
 import type {ICreateReservation} from "../types/dtos/reservations.dto.create.ts";
 import roomsService from "../../rooms/api/roomService.ts";
-import * as path from "node:path";
-
+import {useAuth} from "../../auth/context/AuthContext.tsx";
 
 // Decodificar el JWT para leer el id del usuario autenticado.
-const getClientIdFromToken = () => {
-    const token = sessionStorage.getItem("Authorization");
+const getClientIdFromToken = (token: string | null): number => {
     if (!token) return 0;
     try {
         const payload = JSON.parse(atob(token.split('.')[1]));
-        return payload.id ?? payload.sub ?? 0;
+        return payload.id ?? 0;
     } catch {
         return 0;
     }
@@ -22,6 +20,8 @@ const getClientIdFromToken = () => {
 
 
 const Booking = () => {
+    const {token} = useAuth();
+
     const [rooms, setRooms] = useState<IRoom[]>([]);
     const [selectedRoom, setSelectedRoom] = useState<IRoom | null>(null);
     const [error, setError] = useState<string | null>(null);
@@ -32,7 +32,7 @@ const Booking = () => {
     const [reservation, setReservation] = useState<ICreateReservation>({
         checkIn: "",
         checkOut: "",
-        clientId: getClientIdFromToken(),
+        clientId: getClientIdFromToken(token),
         roomId: 0,
         adults: 1,
         children: 0
@@ -60,7 +60,7 @@ const Booking = () => {
     const changeGuests = (field: "adults" | "children", delta: number): void => {
         setReservation(prev => ({
             ...prev,
-            [field]: Math.max(0, prev[field] + delta),
+            [field]: Math.max(0, (prev[field] ?? 0) + delta),
         }));
     };
 
@@ -97,7 +97,7 @@ const Booking = () => {
             0,
             Math.ceil(
                 (new Date(reservation.checkOut).getTime() - new Date(reservation.checkIn).getTime())
-                / (100 * 60 * 60 * 24)
+                / (1000 * 60 * 60 * 24)
             )
         ) : 0;
 
@@ -113,7 +113,7 @@ const Booking = () => {
                 <p className={styles.subtitle}>Complete the details below and we'll confirm</p>
                 <div className={styles.divider}/>
 
-                <form noValidate action="">
+                <form noValidate onSubmit={handleSubmit} method={'POST'}>
                     <p className={styles.sectionLabel}>Stay dates</p>
                     <div className={styles.fieldRow}>
                         <div className={styles.field}>
@@ -179,10 +179,58 @@ const Booking = () => {
                         successfully!</p>}
                     <button
                         className={styles.submitBtn}
-                        onClick={handleSubmit}
+                        type={"submit"}
                         disabled={submitting}
                     >{submitting ? "Processing wait..." : "Confirm Reservation"}</button>
                 </form>
+
+            </div>
+            {/* ── SUMMARY ── */}
+            <div className={styles.summarySide}>
+                <p className={styles.summaryEyebrow}>Reservation Summary</p>
+
+                {selectedRoom ? (
+                    <div className={styles.roomCard}>
+                        <p className={styles.roomBadge}>{ROOM_TYPE_LABELS[selectedRoom.roomType]}</p>
+                        <p className={styles.roomName}>{selectedRoom.name}</p>
+                        <p className={styles.roomDesc}>{selectedRoom.description}</p>
+                        <div className={styles.anemities}>
+                            <span className={styles.tag}>{selectedRoom.capacity} people</span>
+                            <span className={styles.tag}>{selectedRoom.size} m²</span>
+                        </div>
+                    </div>
+                ) : (
+                    <p className={styles.summaryEmpty}>No room selected yet.</p>
+                )}
+
+                <div className={styles.summaryRow}>
+                    <span className={styles.summaryKey}>Check-in</span>
+                    <span className={styles.summaryVal}>{reservation.checkIn || "—"}</span>
+                </div>
+                <div className={styles.summaryRow}>
+                    <span className={styles.summaryKey}>Check-out</span>
+                    <span className={styles.summaryVal}>{reservation.checkOut || "—"}</span>
+                </div>
+                <div className={styles.summaryRow}>
+                    <span className={styles.summaryKey}>Nights</span>
+                    <span className={styles.summaryVal}>{nights || "—"}</span>
+                </div>
+                <div className={styles.summaryRow}>
+                    <span className={styles.summaryKey}>Guests</span>
+                    <span className={styles.summaryVal}>{reservation.adults} · {reservation.children} children</span>
+                </div>
+
+                <div className={styles.priceTotal}>
+                    <p className={styles.priceLabel}>Estmated Total</p>
+                    <p className={styles.priceAmount}>
+                        {total > 0 ? `$${total.toLocaleString()}` : "—"}
+                    </p>
+                    {nights > 0 && selectedRoom && (
+                        <p className={styles.priceNote}>
+                            ${selectedRoom.price} × {nights} nights
+                        </p>
+                    )}
+                </div>
             </div>
         </div>
     )
