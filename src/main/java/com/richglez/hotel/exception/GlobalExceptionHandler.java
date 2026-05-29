@@ -31,10 +31,12 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<Map<String, String>> handleValidation(MethodArgumentNotValidException ex) {
         String message = ex.getBindingResult() // todos los errores de validacion del request
-                .getFieldErrors()
+                .getFieldErrors() // solo los errores de campo (checkIn, checkOut, etc)
                 .stream()
-                .map(err -> err.getField() + ": " + err.getDefaultMessage())
-                .collect(Collectors.joining(", "));
+                .map(err -> err.getField() // -> campo
+                        + ": " +
+                        err.getDefaultMessage())//  Error de dto por defecto de validacion
+                .collect(Collectors.joining(", ")); // si hay varios errores los une con coma.
 
         return ResponseEntity
                 .status(HttpStatus.UNPROCESSABLE_ENTITY) // 422
