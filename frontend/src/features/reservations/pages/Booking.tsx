@@ -1,24 +1,107 @@
 import reservationService from "../api/reservationService.ts";
 import styles from './Booking.module.css'
-import {type ChangeEvent, useState} from "react";
+import {type ChangeEvent, type SyntheticEvent, useEffect, useState} from "react";
+import {ROOM_TYPE_LABELS} from "../../rooms/types/models/Room.ts";
 import type {IRoom} from "../../rooms/types/models/Room.ts";
 import type {ICreateReservation} from "../types/dtos/reservations.dto.create.ts";
+import roomsService from "../../rooms/api/roomService.ts";
+import * as path from "node:path";
+
+
+// Decodificar el JWT para leer el id del usuario autenticado.
+const getClientIdFromToken = () => {
+    const token = sessionStorage.getItem("Authorization");
+    if (!token) return 0;
+    try {
+        const payload = JSON.parse(atob(token.split('.')[1]));
+        return payload.id ?? payload.sub ?? 0;
+    } catch {
+        return 0;
+    }
+};
+
 
 const Booking = () => {
-    const [rooms, setRooms] = useState<IRoom[]>([])
+    const [rooms, setRooms] = useState<IRoom[]>([]);
+    const [selectedRoom, setSelectedRoom] = useState<IRoom | null>(null);
+    const [error, setError] = useState<string | null>(null);
+    const [loading, setLoading] = useState<boolean>(true);
+    const [submitting, setSubmitting] = useState<boolean>(false);
+    const [succes, setSuccess] = useState<boolean>(false);
+
     const [reservation, setReservation] = useState<ICreateReservation>({
         checkIn: "",
         checkOut: "",
-        clientId: 0,
-        roomId: 0
+        clientId: getClientIdFromToken(),
+        roomId: 0,
+        adults: 1,
+        children: 0
     })
 
-    const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
-        const {name, value} = e.target;
+    useEffect(() => {
+        roomsService.getAll()
+            .then(setRooms)
+            .catch((err) => setError(err.message))
+            .finally(() => setLoading(false))
+    }, []);
 
+    const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+        const {name, value} = e.target;
         setReservation(prev => ({...prev, [name]: value})); // implicit return
 
+        // si el nombre del input es igual a roomId -> select input
+        if (name === "roomId") {
+            const found = rooms.find(r => r.id === Number(value)) ?? null;
+            setSelectedRoom(found);
+            setReservation(prev => ({...prev, roomId: Number(value)}));
+        }
     }
+
+    const changeGuests = (field: "adults" | "children", delta: number): void => {
+        setReservation(prev => ({
+            ...prev,
+            [field]: Math.max(0, prev[field] + delta),
+        }));
+    };
+
+    const handleSubmit = async (e: SyntheticEvent<HTMLFormElement>) => {
+
+        e.preventDefault();
+        // validation before send
+        if (!reservation.checkIn || !reservation.checkOut || reservation.roomId === 0) {
+            setError("Please complete check-in, check-out and select a room.")
+            return;
+        }
+
+        // server wait local date time value
+        const payload: ICreateReservation = {
+            ...reservation,
+            checkIn: `${reservation.checkIn}T00:00:00`,
+            checkOut: `${reservation.checkOut}T23:59:59`,
+        };
+
+        try {
+            setSubmitting(true);
+            setError(null);
+            await reservationService.create(payload);
+            setSuccess(true);
+        } catch (err: any) {
+            setError(err.message ?? "Failed at create reservation.")
+        } finally {
+            setSubmitting(false); // finalmente para el caso try y catch ya no se esta mandando
+        }
+    };
+
+    const nights = reservation.checkIn && reservation.checkOut
+        ? Math.max(
+            0,
+            Math.ceil(
+                (new Date(reservation.checkOut).getTime() - new Date(reservation.checkIn).getTime())
+                / (100 * 60 * 60 * 24)
+            )
+        ) : 0;
+
+    const total = selectedRoom ? selectedRoom.price * nights : 0;
 
     return (
         <div className={styles.page}>
@@ -35,9 +118,70 @@ const Booking = () => {
                     <div className={styles.fieldRow}>
                         <div className={styles.field}>
                             <label>Check-in</label>
-                            <input type="date" value={reservation.checkIn}/>
+                            <input
+                                type="date"
+                                name={"checkIn"}
+                                value={reservation.checkIn}
+                                onChange={handleChange}/>
+                        </div>
+                        <div className={styles.field}>
+                            <label>Check-out</label>
+                            <input
+                                type="date"
+                                name={"checkOut"}
+                                value={reservation.checkOut}
+                                onChange={handleChange}/>
+                        </div>
+
+                        <div className={styles.field}>
+                            <label>Room type</label>
+                            <div className={styles.selectWrap}>
+                                <select
+                                    name="roomId"
+                                    value={reservation.roomId}
+                                    onChange={handleChange}
+                                    disabled={loading}
+                                >
+                                    <option value={0} disabled>Select a room</option>
+                                    {rooms.map(room => (
+                                        <option key={room.id} value={room.id}>
+                                            {room.name} — {ROOM_TYPE_LABELS[room.roomType]} · ${room.price}/night
+                                        </option>
+                                    ))}
+                                </select>
+                            </div>
+                        </div>
+
+                    </div>
+                    <hr className={styles.sep}/>
+
+                    <p className={styles.sectionLabel}>Guest</p>
+                    <div className={styles.guestsRow}>
+                        <div className={styles.guestControl}>
+                            <span className={styles.guestLabel}>Adults</span>
+                            <div className={styles.counter}>
+                                <button type={"button"} onClick={() => changeGuests("adults", -1)}>−</button>
+                                <span>{reservation.adults}</span>
+                                <button type={"button"} onClick={() => changeGuests("adults", 1)}>+</button>
+                            </div>
+                        </div>
+                        <div className={styles.guestControl}>
+                            <span className={styles.guestLabel}>Children</span>
+                            <div className={styles.counter}>
+                                <button type={"button"} onClick={() => changeGuests("children", -1)}>−</button>
+                                <span>{reservation.children}</span>
+                                <button type={"button"} onClick={() => changeGuests("children", 1)}>+</button>
+                            </div>
                         </div>
                     </div>
+                    {error && <p style={{color: "#e57373", fontSize: "0.8rem", marginTop: "1rem"}}>{error}</p>}
+                    {succes && <p style={{color: "#81c784", fontSize: "0.8rem", marginTop: "1rem"}}>Reservation created
+                        successfully!</p>}
+                    <button
+                        className={styles.submitBtn}
+                        onClick={handleSubmit}
+                        disabled={submitting}
+                    >{submitting ? "Processing wait..." : "Confirm Reservation"}</button>
                 </form>
             </div>
         </div>

@@ -11,6 +11,8 @@ public class ReservationResponse {
     private LocalDateTime checkOut;
     private Long clientId;
     private Long roomId;
+    private Integer adults;
+    private Integer children;
     private LocalDateTime createAt;
     private LocalDateTime updateAt;
     private LocalDateTime deletedAt;

@@ -3,5 +3,7 @@ export interface IReservation {
     checkIn: string,
     checkOut: string,
     clientId: number,
-    roomId: number
+    roomId: number,
+    adults: number,
+    children: number
 }

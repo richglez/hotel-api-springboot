@@ -19,3 +19,12 @@ export interface IRoom {
     name: string,
     description: string,
 }
+
+// Diccionario profesional para las etiquetas de la interfaz de usuario (UI)
+export const ROOM_TYPE_LABELS: Record<RoomTypes, string> = {
+    [ROOM_TYPES.Standard]: "Standard Room",
+    [ROOM_TYPES.StandardDouble]: "Standard Double Room",
+    [ROOM_TYPES.Suite]: "Suite",
+    [ROOM_TYPES.JuniorSuite]: "Junior Suite",
+    [ROOM_TYPES.Presidential]: "Suite Presidencial"
+};

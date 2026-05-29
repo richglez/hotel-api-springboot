@@ -11,7 +11,8 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import java.time.LocalDateTime;
 
 @Entity
-@Getter @Setter // enves de @Data, solo lo necesario
+@Getter
+@Setter // enves de @Data, solo lo necesario
 @NoArgsConstructor
 @AllArgsConstructor
 @EntityListeners(AuditingEntityListener.class) // poblar automáticamente @CreatedDate y @LastModifiedDate
@@ -30,6 +31,9 @@ public class Reservation {
     @ManyToOne
     @JoinColumn(name = "room_id")
     private Room room;
+
+    private Integer adults;
+    private Integer children;
 
     @CreatedDate
     @Column(updatable = false) // pero la DB nunca lo sobreescribe en un UPDATE .save()

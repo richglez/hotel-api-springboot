@@ -45,6 +45,8 @@ public class ReservationService {
         reservation.setCheckOut(request.getCheckOut());
         reservation.setUser(user);
         reservation.setRoom(room);
+        reservation.setAdults(request.getAdults());
+        reservation.setChildren(request.getChildren());
 
         return toResponse(reservationRepository.save(reservation));
     }
@@ -84,6 +86,8 @@ public class ReservationService {
         reservation.setCheckOut(request.getCheckOut());
         reservation.setUser(user);
         reservation.setRoom(room);
+        reservation.setAdults(request.getAdults());
+        reservation.setChildren(request.getChildren());
 
         return toResponse(reservationRepository.save(reservation));
     }
@@ -111,6 +115,14 @@ public class ReservationService {
             reservation.setRoom(room);
         }
 
+        if (request.getAdults() != null) {
+            reservation.setAdults(request.getAdults());
+
+        }
+        if (request.getChildren() != null) {
+            reservation.setChildren(request.getChildren());
+        }
+
         return toResponse(reservationRepository.save(reservation));
     }
 
@@ -132,6 +144,10 @@ public class ReservationService {
         response.setId(reservation.getId());
         response.setCheckIn(reservation.getCheckIn());
         response.setCheckOut(reservation.getCheckOut());
+        response.setClientId(reservation.getUser().getId());
+        response.setRoomId(reservation.getRoom().getId());
+        response.setAdults(reservation.getAdults());
+        response.setChildren(reservation.getChildren());
         response.setCreateAt(reservation.getCreateAt());
         response.setUpdateAt(reservation.getUpdateAt());
         response.setDeletedAt(reservation.getDeletedAt());

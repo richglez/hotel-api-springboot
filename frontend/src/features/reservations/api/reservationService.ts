@@ -1,4 +1,5 @@
 import type {IReservation} from "../types/models/Reservation.ts";
+import type {ICreateReservation} from "../types/dtos/reservations.dto.create.ts";
 
 const BASE_URL = "http://localhost:8080/api/reservations" // url backend
 
@@ -22,9 +23,11 @@ const reservationService = {
         return res.json();
     },
 
-    create: async () => {
+    create: async (reservation: ICreateReservation) => {
         const res = await fetch(BASE_URL, {
-            headers: getAuthHeaders()
+            method: 'POST',
+            headers: getAuthHeaders(),
+            body: JSON.stringify(reservation)
         })
         if (!res.ok) throw new Error('Failed creating reservation');
         return res.json();

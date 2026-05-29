@@ -3,4 +3,6 @@ export interface ICreateReservation {
     checkOut: string;
     clientId: number;
     roomId: number;
+    adults: number,
+    children?: number
 }

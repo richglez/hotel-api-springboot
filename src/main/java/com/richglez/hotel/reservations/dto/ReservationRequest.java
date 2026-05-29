@@ -21,4 +21,9 @@ public class ReservationRequest {
 
     @NotNull(message = "Room is required")
     private Long roomId;
+
+    @NotNull(message = "Number of adults is required")
+    private Integer adults;
+
+    private Integer children; // optional?
 }

@@ -10,4 +10,6 @@ public class ReservationPatchRequest {
     private LocalDateTime checkOut;
     private Long clientId;
     private Long roomId;
+    private Integer adults;
+    private Integer children;
 }
