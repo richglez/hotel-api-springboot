@@ -36,7 +36,7 @@ public class ReservationController {
     }
 
     @PostMapping
-    @PreAuthorize("hasRole('ADMIN')") // solo ADMIN
+//    @PreAuthorize("hasRole('ADMIN')") // solo ADMIN
     public ResponseEntity<ReservationResponse> saveReservation(@Valid @RequestBody ReservationRequest request) {
         return ResponseEntity.status(HttpStatus.CREATED).body(service.saveReservation(request));
     }

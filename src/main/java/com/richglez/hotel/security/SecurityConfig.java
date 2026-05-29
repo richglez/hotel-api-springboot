@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
@@ -36,10 +37,22 @@ public class SecurityConfig {
                         session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)) // api stateless in each request needs a JWT token.
 
                 .exceptionHandling(ex -> ex
-                        .authenticationEntryPoint((req, res, authException) -> {
-                            res.setStatus(HttpServletResponse.SC_UNAUTHORIZED); // 401
-                            res.setContentType("application/json");
-                            res.getWriter().write("\"message\": \"Invalid email or password\"");
+                        // 401 → no hay token o es inválido
+                        .authenticationEntryPoint((request, response, authException) -> {
+                            response.setContentType("application/json");
+                            response.setStatus(HttpStatus.UNAUTHORIZED.value()); // 401
+                            response.getWriter().write(
+                                    "{\"message\": \"Authentication required. Please log in.\"}"
+                            );
+                        })
+
+                        // 403 -> hay token pero sin permisos suficientes de usuario
+                        .accessDeniedHandler((request, response, accessDeniedException) -> {
+                            response.setContentType("application/json");
+                            response.setStatus(HttpStatus.FORBIDDEN.value());
+                            response.getWriter().write(
+                                    "{\"message\": \"You don't have permission to access this resource.\"}"
+                            );
                         })
                 )
 

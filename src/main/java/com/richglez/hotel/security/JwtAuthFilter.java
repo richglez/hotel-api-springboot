@@ -33,23 +33,31 @@ public class JwtAuthFilter extends OncePerRequestFilter {
             return; // se acaba el filtro aqui
         }
 
-        final String token = authHeader.substring(7);
-        final String email = jwtService.extractUsername(token);
+        try {
+            final String token = authHeader.substring(7);
+            final String email = jwtService.extractUsername(token); // ← puede lanzar ExpiredJwtException, MalformedJwtException...
 
-        if (email != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-            UserDetails userDetails = userDetailsService.loadUserByUsername(email);
+            if (email != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+                UserDetails userDetails = userDetailsService.loadUserByUsername(email);
 
-            if (jwtService.isTokenValid(token, userDetails)) {
-                var authToken = new UsernamePasswordAuthenticationToken(
-                        userDetails, null, userDetails.getAuthorities()
-                );
+                if (jwtService.isTokenValid(token, userDetails)) {
+                    var authToken = new UsernamePasswordAuthenticationToken(
+                            userDetails, null, userDetails.getAuthorities()
+                    );
 
-                authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-                SecurityContextHolder.getContext().setAuthentication(authToken);
+                    authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+                    SecurityContextHolder.getContext().setAuthentication(authToken);
+                }
             }
+
+        } catch (Exception e) {
+            // Token inválido o expirado → limpia el contexto
+            // AuthenticationEntryPoint devolverá el 401 limpiamente
+            SecurityContextHolder.clearContext();
+            System.out.println("❌ JwtAuthFilter error: " + e.getClass().getSimpleName() + " → " + e.getMessage());
         }
 
-        filterChain.doFilter(request, response);
+        filterChain.doFilter(request, response); // ← siempre continúa la cadena
     }
 }
 
