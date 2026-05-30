@@ -42,4 +42,6 @@ public class GlobalExceptionHandler {
                 .status(HttpStatus.UNPROCESSABLE_ENTITY) // 422
                 .body(Map.of("message", message));
     }
+
+    // others exceptions
 }
