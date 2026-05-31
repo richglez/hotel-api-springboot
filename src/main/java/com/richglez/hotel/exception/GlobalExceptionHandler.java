@@ -14,6 +14,7 @@ import java.util.stream.Collectors;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
+    // auth/register bad credentials
     @ExceptionHandler(BadCredentialsException.class)
     public ResponseEntity<Map<String, String>> handleBadCredentials(BadCredentialsException ex) {
         return ResponseEntity
@@ -28,6 +29,8 @@ public class GlobalExceptionHandler {
                 .body(Map.of("message", "No account found with that email."));
     }
 
+
+    // Validation global error
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<Map<String, String>> handleValidation(MethodArgumentNotValidException ex) {
         String message = ex.getBindingResult() // todos los errores de validacion del request
