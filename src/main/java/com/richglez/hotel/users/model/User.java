@@ -16,8 +16,10 @@ import java.util.List;
 
 @Entity
 @Table(name = "users")
-@Getter @Setter
-@NoArgsConstructor @AllArgsConstructor
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 @Builder
 @EntityListeners(AuditingEntityListener.class) //registry createdDatg, updatedDate, deletedData etc
 public class User implements UserDetails {
