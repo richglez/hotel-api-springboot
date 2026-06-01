@@ -35,7 +35,9 @@ const reservationService = {
             headers: getAuthHeaders(),
             body: JSON.stringify(reservation)
         })
-        if (!res.ok) await handleErrorResponse(res, getCreateError);
+        if (!res.ok) {
+            await handleErrorResponse(res, getCreateError);
+        }
         return res.json();
     },
 

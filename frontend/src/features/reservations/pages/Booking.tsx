@@ -45,17 +45,20 @@ const Booking = () => {
             .finally(() => setLoading(false))
     }, []);
 
+
+// ✅ Limpio — un solo setState por caso
     const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
         const {name, value} = e.target;
-        setReservation(prev => ({...prev, [name]: value})); // implicit return
 
-        // si el nombre del input es igual a roomId -> select input
         if (name === "roomId") {
-            const found = rooms.find(r => r.id === Number(value)) ?? null;
+            const numericId = Number(value);
+            const found = rooms.find(r => r.id === numericId) ?? null;
             setSelectedRoom(found);
-            setReservation(prev => ({...prev, roomId: Number(value)}));
+            setReservation(prev => ({...prev, roomId: numericId})); // number desde el inicio
+        } else {
+            setReservation(prev => ({...prev, [name]: value}));
         }
-    }
+    };
 
     const changeGuests = (field: "adults" | "children", delta: number): void => {
         setReservation(prev => ({
@@ -63,6 +66,8 @@ const Booking = () => {
             [field]: Math.max(0, (prev[field] ?? 0) + delta),
         }));
     };
+
+    const today = new Date().toISOString().split('T')[0]; // "2026-06-01"
 
     const handleSubmit = async (e: SyntheticEvent<HTMLFormElement>) => {
 
@@ -76,9 +81,16 @@ const Booking = () => {
         // server wait local date time value
         const payload: ICreateReservation = {
             ...reservation,
-            checkIn: `${reservation.checkIn}T00:00:00`,
-            checkOut: `${reservation.checkOut}T23:59:59`,
+            checkIn: `${reservation.checkIn}T12:00:00`,
+            checkOut: `${reservation.checkOut}T12:00:00`,
         };
+
+        if (reservation.checkIn && reservation.checkOut) {
+            if (new Date(reservation.checkOut) <= new Date(reservation.checkIn)) {
+                setError("Check-out must be after check-in")
+                return;
+            }
+        }
 
         try {
             setSubmitting(true);
@@ -121,6 +133,7 @@ const Booking = () => {
                             <input
                                 type="date"
                                 name={"checkIn"}
+                                min={today}    // ← no puede elegir ayer
                                 value={reservation.checkIn}
                                 onChange={handleChange}/>
                         </div>
@@ -129,6 +142,7 @@ const Booking = () => {
                             <input
                                 type="date"
                                 name={"checkOut"}
+                                min={reservation.checkIn || today}
                                 value={reservation.checkOut}
                                 onChange={handleChange}/>
                         </div>
@@ -145,7 +159,7 @@ const Booking = () => {
                                     <option value={0} disabled>Select a room</option>
                                     {rooms.map(room => (
                                         <option key={room.id} value={room.id}>
-                                            {room.name} — {ROOM_TYPE_LABELS[room.roomType]} · ${room.price}/night
+                                            {room.roomType} · ${room.price}/night
                                         </option>
                                     ))}
                                 </select>
