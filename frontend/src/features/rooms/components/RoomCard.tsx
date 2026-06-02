@@ -1,7 +1,7 @@
 import type {IRoom} from "../types/models/Room.ts";
 import {ROOM_TYPE_META} from "../utils/roomTypeMapper.ts";
 import {useNavigate} from "react-router-dom";
-import styles from "./RoomCard.module.css"; // o desde RoomsPreview si no lo separas aún
+import styles from "../pages/RoomsPreview.module.css"; // o desde RoomsPreview si no lo separas aún
 
 // card props
 interface RoomCardProps {
