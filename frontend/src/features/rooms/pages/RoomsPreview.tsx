@@ -1,23 +1,11 @@
-import {useState, useEffect} from "react";
-import type {IRoom} from "../types/models/Room.ts";
-import roomsService from "../api/roomService.ts";
 import styles from "./RoomsPreview.module.css"
 import {ROOM_TYPE_META} from "../utils/roomTypeMapper.ts"
 import {useNavigate} from "react-router-dom";
+import useRooms from "../hooks/useRooms.ts";
 
 const RoomsPreview = () => {
     const navigate = useNavigate();
-
-    const [rooms, setRooms] = useState<IRoom[]>([]);
-    const [error, setError] = useState<string | null>(null);
-    const [loading, setLoading] = useState<boolean>(true);
-
-    useEffect(() => {
-        roomsService.getAll()
-            .then(setRooms)
-            .catch((err) => setError(err.message))
-            .finally(() => setLoading(false))
-    }, [])
+    const {rooms, loading, error} = useRooms();
 
     if (loading) return <p>Cargando...</p>
     if (error) return <p>Error: {error}</p>
@@ -31,8 +19,8 @@ const RoomsPreview = () => {
             </div>
             <div className={styles.grid}>
                 {rooms.map((room) => {
-                        const meta = ROOM_TYPE_META[room.roomType] ?? { icon: 'ti-bed', badge: room.roomType };
-                    console.log('roomType:', room.roomType, '→ meta:', meta);
+                        const meta = ROOM_TYPE_META[room.roomType] ?? {icon: 'ti-bed', badge: room.roomType};
+                        console.log('roomType:', room.roomType, '→ meta:', meta);
                         return (
                             <div key={room.id} className={styles.card}>
                                 <div className={styles.cardImage}>
