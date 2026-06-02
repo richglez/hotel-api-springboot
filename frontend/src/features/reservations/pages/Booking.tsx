@@ -7,7 +7,8 @@ import type {ICreateReservation} from "../types/dtos/reservations.dto.create.ts"
 import roomsService from "../../rooms/api/roomService.ts";
 import {useAuth} from "../../auth/context/AuthContext.tsx";
 import {getClientIdFromToken} from "../../auth/utils/tokenUtils.ts";
-
+import {calculateNights} from "../utils/reservationUtils.ts";
+import useRooms from "../../rooms/hooks/useRooms.ts"; // <- rooms fetch
 
 const Booking = () => {
     const {token} = useAuth();
@@ -36,74 +37,7 @@ const Booking = () => {
     }, []);
 
 
-// ✅ Limpio — un solo setState por caso
-    const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
-        const {name, value} = e.target;
-
-        if (name === "roomId") {
-            const numericId = Number(value);
-            const found = rooms.find(r => r.id === numericId) ?? null;
-            setSelectedRoom(found);
-            setReservation(prev => ({...prev, roomId: numericId})); // number desde el inicio
-        } else {
-            setReservation(prev => ({...prev, [name]: value}));
-        }
-    };
-
-    const changeGuests = (field: "adults" | "children", delta: number): void => {
-        setReservation(prev => ({
-            ...prev,
-            [field]: Math.max(0, (prev[field] ?? 0) + delta),
-        }));
-    };
-
     const today = new Date().toISOString().split('T')[0]; // "2026-06-01"
-
-    const handleSubmit = async (e: SyntheticEvent<HTMLFormElement>) => {
-
-        e.preventDefault();
-        // validation before send
-        if (!reservation.checkIn || !reservation.checkOut || reservation.roomId === 0) {
-            setError("Please complete check-in, check-out and select a room.")
-            return;
-        }
-
-        // server wait local date time value
-        const payload: ICreateReservation = {
-            ...reservation,
-            checkIn: `${reservation.checkIn}T12:00:00`,
-            checkOut: `${reservation.checkOut}T12:00:00`,
-        };
-
-        if (reservation.checkIn && reservation.checkOut) {
-            if (new Date(reservation.checkOut) <= new Date(reservation.checkIn)) {
-                setError("Check-out must be after check-in")
-                return;
-            }
-        }
-
-        try {
-            setSubmitting(true);
-            setError(null);
-            await reservationService.create(payload);
-            setSuccess(true);
-        } catch (err: any) {
-            setError(err.message ?? "Failed at create reservation.")
-        } finally {
-            setSubmitting(false); // finalmente para el caso try y catch ya no se esta mandando
-        }
-    };
-
-    const nights = reservation.checkIn && reservation.checkOut
-        ? Math.max(
-            0,
-            Math.ceil(
-                (new Date(reservation.checkOut).getTime() - new Date(reservation.checkIn).getTime())
-                / (1000 * 60 * 60 * 24)
-            )
-        ) : 0;
-
-    const total = selectedRoom ? selectedRoom.price * nights : 0;
 
     return (
         <div className={styles.page}>
