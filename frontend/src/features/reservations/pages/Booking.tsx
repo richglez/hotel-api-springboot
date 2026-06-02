@@ -6,17 +6,7 @@ import type {IRoom} from "../../rooms/types/models/Room.ts";
 import type {ICreateReservation} from "../types/dtos/reservations.dto.create.ts";
 import roomsService from "../../rooms/api/roomService.ts";
 import {useAuth} from "../../auth/context/AuthContext.tsx";
-
-// Decodificar el JWT para leer el id del usuario autenticado.
-const getClientIdFromToken = (token: string | null): number => {
-    if (!token) return 0;
-    try {
-        const payload = JSON.parse(atob(token.split('.')[1]));
-        return payload.id ?? 0;
-    } catch {
-        return 0;
-    }
-};
+import {getClientIdFromToken} from "../../auth/utils/tokenUtils.ts";
 
 
 const Booking = () => {
