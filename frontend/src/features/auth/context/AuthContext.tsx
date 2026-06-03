@@ -1,4 +1,6 @@
-import {createContext, useContext, useState, type ReactNode} from "react";
+import {createContext, useContext, useState, type ReactNode, useCallback, useEffect} from "react";
+import {setupInterceptors} from "../../../api/apiClient.ts";
+import {isTokenExpired} from "../utils/tokenUtils.ts";
 
 // 1. molde
 type AuthContextType = {
@@ -22,10 +24,20 @@ export const AuthProvider = ({children}: { children: ReactNode }) => {
         setToken(newToken)
     }
 
-    const logout = () => {
-        localStorage.removeItem("token");
+    const logout = useCallback(() => {
         setToken(null);
-    }
+        localStorage.removeItem("token");
+    }, []);
+
+    useEffect(() => {
+        if (isTokenExpired(token)) {
+            logout();
+        }
+    }, [token, logout]);
+
+    useEffect(() => {
+        setupInterceptors(logout);
+    }, [logout]);
 
     return (
         <AuthContext.Provider

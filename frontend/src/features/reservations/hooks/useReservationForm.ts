@@ -96,3 +96,4 @@ const useReservationForm = (
 };
 
 export default useReservationForm;
+// Extrae TODO lo que no es JSX

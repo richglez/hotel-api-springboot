@@ -1,54 +1,33 @@
-import type {IRoom} from '../types/models/Room.ts'
+import type {IRoom} from '../types/models/Room.ts';
+import apiClient from "../../../api/apiClient.ts";
 
-const BASE_URL = "http://localhost:8080/api/rooms";
-
-const getAuthHeaders = () => {
-    const token = sessionStorage.getItem("Authorization");
-
-    return {"Content-Type": "application/json", "Authorization": `Bearer${token}` || "",}
-}
+// BASE_URL ya no hace falta — apiClient tiene baseURL configurado
+// getAuthHeaders ya no hace falta — el interceptor lo maneja
 
 const roomsService = {
-    getAll: async () => {
-        const res = await fetch(BASE_URL)
-        if (!res.ok) throw new Error("Error al obtener habitaciones")
-        return res.json();
+    getAll: async (): Promise<IRoom[]> => {
+        const res = await apiClient.get<IRoom[]>("/rooms");
+        return res.data;
     },
 
-    getById: async (id: number) => {
-        const res = await fetch(`${BASE_URL}/${id}`)
-        if (!res.ok) throw new Error("Habitacion no encontrada")
-        return res.json();
+    getById: async (id: number): Promise<IRoom> => {
+        const res = await apiClient.get<IRoom>(`/rooms/${id}`);
+        return res.data;
     },
 
-    create: async (room: IRoom) => {
-        const res = await fetch(BASE_URL, {
-            method: "POST",
-            headers: getAuthHeaders(),
-            body: JSON.stringify(room)
-        })
-        if (!res.ok) throw new Error("Error al crear habitacion")
-        return res.json()
+    create: async (room: IRoom): Promise<IRoom> => {
+        const res = await apiClient.post<IRoom>("/rooms", room);
+        return res.data;
     },
 
-    update: async (id: number, room: IRoom) => {
-        const res = await fetch(`${BASE_URL}/${id}`, {
-            method: "PUT",
-            headers: getAuthHeaders(),
-            body: JSON.stringify(room)
-        })
-        if (!res.ok) throw new Error("Error al actualizar datos de habitacion")
-        return res.json();
+    update: async (id: number, room: IRoom): Promise<IRoom> => {
+        const res = await apiClient.put<IRoom>(`/rooms/${id}`, room);
+        return res.data;
     },
 
-    delete: async (id: number) => {
-        const res = await fetch(`${BASE_URL}/${id}`, {
-            method: "DELETE",
-            headers: getAuthHeaders()
-        });
-        if (!res.ok) throw new Error("Error al eliminar habitacion");
-        return res.json();
+    delete: async (id: number): Promise<void> => {
+        await apiClient.delete(`/rooms/${id}`);
     }
-}
+};
 
 export default roomsService;
