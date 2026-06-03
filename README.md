@@ -219,7 +219,7 @@ Planned features for future development:
 * [x] Spring Security + JWT authentication
 * [x] Role-based authorization
 * [x] Frontend integration
-* [ ] Docker support
+* [x] Docker support
 * [ ] Swagger/OpenAPI documentation
 * [ ] Unit and integration testing
 * [ ] Pagination and filtering
