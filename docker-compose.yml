@@ -11,6 +11,43 @@ services:
       - "5433:5432"
     volumes:
       - hotel_postgres_data:/var/lib/postgresql/data
+    networks:
+      - hotel_network
+
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: hotel_backend
+    restart: unless-stopped
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/hotel_db
+      SPRING_DATASOURCE_USERNAME: ${DB_USER}
+      SPRING_DATASOURCE_PASSWORD: ${DB_PASSWORD}
+      JWT_SECRET: ${JWT_SECRET}
+    ports:
+      - "8080:8080"
+    depends_on:
+      - postgres
+    networks:
+      - hotel_network
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: hotel_frontend
+    restart: unless-stopped
+    ports:
+      - "5173:80"
+    depends_on:
+      - backend
+    networks:
+      - hotel_network
+
+networks:
+  hotel_network:
+    driver: bridge
 
 volumes:
   hotel_postgres_data:
