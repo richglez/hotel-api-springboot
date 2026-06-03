@@ -7,7 +7,7 @@ import ReservationSummary from "../components/ReservationSummary.tsx";
 
 const Booking = () => {
     const {token} = useAuth();
-    const {rooms, loading, error: fetchError} = useRooms();
+    const {rooms, loading, error: fetchError} = useRooms(); // renaming destructuring
     const {
         reservation, selectedRoom, submitting, success,
         formError, nights, total,

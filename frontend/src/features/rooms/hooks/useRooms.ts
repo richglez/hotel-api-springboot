@@ -20,7 +20,7 @@ const useRooms = (): UseRoomsReturn => {
             .finally(() => setLoading(false));
     }, []);
 
-    return {rooms, loading, error}
+    return {rooms, loading, error} // states
 };
 
 export default useRooms;
