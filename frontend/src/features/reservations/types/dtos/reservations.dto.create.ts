@@ -4,5 +4,5 @@ export interface ICreateReservation {
     clientId: number;
     roomId: number;
     adults: number,
-    children?: number
+    children: number
 }
