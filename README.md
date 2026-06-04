@@ -284,16 +284,16 @@ public enum RoomType {
 
 ---
 
-## Future Improvements
+## Roadmap
 
-Planned features for future development:
+Project Status planned features for future development:
 
 * [x] PostgreSQL database integration
 * [x] Spring Security + JWT authentication
 * [x] Role-based authorization
 * [x] Frontend integration
 * [x] Docker support
-* [ ] Swagger/OpenAPI documentation
+* [x] Swagger/OpenAPI documentation
 * [ ] Unit and integration testing
 * [ ] Pagination and filtering
 * [ ] Global exception handling
