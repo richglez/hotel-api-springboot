@@ -47,14 +47,87 @@ API design following clean backend development practices.
 ## Project Structure
 
 ```bash
-src/main/java/com/richglez/hotel
+hotel-api-springboot/
 │
-├── controller  # Handles HTTP requests and API endpoints
-├── service     # Contains business logic and application rules
-├── repository  # Handles database access using Spring Data JPA
-├── dto         # Data Transfer Objects used for requests and responses
-├── model       # JPA entities and domain models
-└── config      # Application and custom configuration classes
+├── .env                          # Environment variables
+├── docker-compose.yml            # Docker Compose setup (PostgreSQL + app)
+├── Dockerfile                    # Docker image for the backend
+├── pom.xml                       # Maven project configuration
+│
+├── frontend/                     # React + TypeScript frontend
+│   ├── src/
+│   │   ├── api/                  # Axios API client
+│   │   ├── app/router/           # App router
+│   │   ├── context/              # React contexts
+│   │   ├── features/             # Feature modules (auth, rooms, reservations, clients)
+│   │   ├── pages/                # Page-level components (Home)
+│   │   ├── router/               # Route definitions
+│   │   ├── shared/               # Shared components (Navbar, Footer, UI)
+│   │   └── styles/               # Global styles
+│   └── ...config files
+│
+├── src/
+│   ├── main/
+│   │   ├── java/com/richglez/hotel/
+│   │   │   │
+│   │   │   ├── HotelApiSpringbootApplication.java   # Entry point
+│   │   │   │
+│   │   │   ├── auth/                                # Authentication module
+│   │   │   │   ├── controller/AuthController.java   # Login & register endpoints
+│   │   │   │   ├── dto/                             # LoginRequest, RegisterRequest, AuthResponse
+│   │   │   │   └── service/AuthService.java         # Authentication logic
+│   │   │   │
+│   │   │   ├── common/                              # Shared enums & utilities
+│   │   │   │   └── enums/                           # Roles, RoomType
+│   │   │   │
+│   │   │   ├── config/                              # App configuration
+│   │   │   │   ├── CorsConfig.java                  # CORS configuration
+│   │   │   │   ├── DataInitializer.java             # Seed data on startup
+│   │   │   │   └── OpenApiConfig.java               # Swagger/OpenAPI config
+│   │   │   │
+│   │   │   ├── exception/                           # Global error handling
+│   │   │   │   └── GlobalExceptionHandler.java      # @ControllerAdvice
+│   │   │   │
+│   │   │   ├── reservations/                        # Reservation module
+│   │   │   │   ├── controller/                      # ReservationController
+│   │   │   │   ├── dto/                             # Request/Response/Patch DTOs
+│   │   │   │   ├── model/Reservation.java           # JPA entity
+│   │   │   │   ├── repository/                      # ReservationRepository
+│   │   │   │   └── service/                         # ReservationService
+│   │   │   │
+│   │   │   ├── rooms/                               # Room module
+│   │   │   │   ├── controller/                      # RoomController
+│   │   │   │   ├── dto/                             # Request/Response/Patch DTOs
+│   │   │   │   ├── model/Room.java                  # JPA entity
+│   │   │   │   ├── repository/                      # RoomRepository
+│   │   │   │   └── service/                         # RoomService
+│   │   │   │
+│   │   │   ├── security/                            # JWT & Spring Security
+│   │   │   │   ├── JwtAuthFilter.java               # Request filter
+│   │   │   │   ├── JwtService.java                  # Token generation/validation
+│   │   │   │   ├── SecurityConfig.java              # Security chain config
+│   │   │   │   └── UserDetailsServiceImpl.java      # Loads user from DB
+│   │   │   │
+│   │   │   └── users/                               # User module
+│   │   │       ├── controller/                      # UserController
+│   │   │       ├── dto/                             # Request/Response/Patch DTOs
+│   │   │       ├── model/User.java                  # JPA entity
+│   │   │       ├── repository/                      # UserRepository
+│   │   │       └── service/                         # UserService
+│   │   │
+│   │   └── resources/
+│   │       ├── application.yml                      # Main config
+│   │       ├── application-local.yml                # Local profile overrides
+│   │       └── application-local.yml.example        # Template for local config
+│   │
+│   └── test/java/com/richglez/hotel/
+│       └── HotelApiSpringbootApplicationTests.java  # Smoke test
+│
+├── docs/
+│   └── architecture/
+│       └── architecture.md          # Architecture documentation
+│
+└── target/                          # Compiled output (gitignored)
 ```
 
 ---
