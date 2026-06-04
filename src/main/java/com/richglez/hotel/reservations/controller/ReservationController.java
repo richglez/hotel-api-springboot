@@ -38,8 +38,15 @@ public class ReservationController {
     // GET
     @GetMapping
     @PreAuthorize("hasAnyRole('ADMIN', 'MANAGER', 'RECEPTIONIST')")
-    public Page<ReservationResponse> getReservations(Pageable pageable) {
-        return service.getReservations(pageable);
+    public Page<ReservationResponse> getReservations(
+
+            @RequestParam(required = false) Long clientId,
+
+            @RequestParam(required = false) Long roomId,
+
+            Pageable pageable
+    ) {
+        return service.getReservations(clientId, roomId, pageable);
     }
 
 

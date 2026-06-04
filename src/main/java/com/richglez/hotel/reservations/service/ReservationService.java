@@ -53,9 +53,38 @@ public class ReservationService {
         return toResponse(reservationRepository.save(reservation));
     }
 
-    public Page<ReservationResponse> getReservations(Pageable pageable) {
-        return reservationRepository.findAll(pageable)
-                .map(this::toResponse);
+    public Page<ReservationResponse> getReservations(
+            Long clientId,
+            Long roomId,
+            Pageable pageable
+    ) {
+
+        Page<Reservation> reservations;
+
+        // Both filters
+        if (clientId != null && roomId != null) {
+            reservations = reservationRepository
+                    .findByUserIdAndRoomId(clientId, roomId, pageable);
+        }
+
+        // Filter only clientId Param
+        else if (clientId != null) {
+            reservations = reservationRepository
+                    .findByUserId(clientId, pageable);
+        }
+
+        // Filter only roomId Param
+        else if (roomId != null) {
+            reservations = reservationRepository
+                    .findByUserId(roomId, pageable);
+        }
+
+        // No Filters
+        else {
+            reservations = reservationRepository.findAll(pageable);
+        }
+
+        return reservations.map(this::toResponse);
     }
 
     // private for logic
