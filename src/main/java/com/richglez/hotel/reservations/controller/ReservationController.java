@@ -10,6 +10,8 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -33,13 +35,14 @@ public class ReservationController {
         this.service = service;
     }
 
-    // Metodos
+    // GET
     @GetMapping
     @PreAuthorize("hasAnyRole('ADMIN', 'MANAGER', 'RECEPTIONIST')")
-    public List<ReservationResponse> getReservations() {
-        return service.getReservations();
+    public Page<ReservationResponse> getReservations(Pageable pageable) {
+        return service.getReservations(pageable);
     }
 
+    // GET
     @Operation(summary = "Get reservation with an ID")
     @Parameter(name = "id", description = "ID de la reservación", required = true)
     @GetMapping("/{id}")
@@ -49,6 +52,7 @@ public class ReservationController {
     }
 
 
+    // POST
     @Operation(
             summary = "Create new reservation",
             description = "Create a new reservation for a guest with an available room"
@@ -76,24 +80,44 @@ public class ReservationController {
     }
 
 
+    // PUT
+    @Operation(
+            summary = "Update reservation",
+            description = "Update a reservation for a guest"
+    )
     @PutMapping("/{id}")
     public ReservationResponse updateReservation(@PathVariable Long id, @Valid @RequestBody ReservationRequest reservation) {
         return service.updateReservation(id, reservation);
     }
 
 
+    @Operation(
+            summary = "Patch reservation",
+            description = "Patch reservation for a guest"
+    )
+    // PATCH
     @PatchMapping("/{id}")
     public ReservationResponse patchReservation(@PathVariable Long id, @RequestBody ReservationRequest reservation) {
         return service.patchReservation(id, reservation);
     }
 
 
+    @Operation(
+            summary = "Softdelete reservation",
+            description = "Softdelete reservation for a guest"
+    )
+    // DELETE
     @DeleteMapping("/{id}")
     public ResponseEntity<ReservationResponse> softDeleteReservation(@PathVariable Long id) {
         return ResponseEntity.ok(service.softDeleteReservation(id));
     }
 
 
+    @Operation(
+            summary = "Permanent Delete reservation",
+            description = "Permanent Delete reservation for a guest"
+    )
+    // DELETE
     @DeleteMapping("/{id}/permanent")
     public ResponseEntity<Void> hardDeleteReservation(@PathVariable Long id) {
         service.hardDeleteReservation(id);

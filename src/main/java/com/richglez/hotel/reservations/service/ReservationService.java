@@ -8,6 +8,8 @@ import com.richglez.hotel.users.model.User;
 import com.richglez.hotel.reservations.repository.ReservationRepository;
 import com.richglez.hotel.rooms.repository.RoomRepository;
 import com.richglez.hotel.users.repository.UserRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 import org.springframework.http.HttpStatus;
@@ -51,11 +53,9 @@ public class ReservationService {
         return toResponse(reservationRepository.save(reservation));
     }
 
-    public List<ReservationResponse> getReservations() {
-        return reservationRepository.findAll()
-                .stream()
-                .map(this::toResponse)
-                .toList();
+    public Page<ReservationResponse> getReservations(Pageable pageable) {
+        return reservationRepository.findAll(pageable)
+                .map(this::toResponse);
     }
 
     // private for logic
