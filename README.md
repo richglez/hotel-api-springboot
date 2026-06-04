@@ -365,7 +365,7 @@ Planned features for future development:
 * [x] Frontend integration
 * [x] Docker support
 * [ ] Unit and integration testing
-* [ ] Pagination and filtering
+* [x] Pagination and filtering
 
 ---
 
