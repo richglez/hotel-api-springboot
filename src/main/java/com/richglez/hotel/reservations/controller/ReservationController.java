@@ -21,7 +21,6 @@ import org.springframework.web.bind.annotation.*;
 import jakarta.validation.Valid;
 import com.richglez.hotel.users.model.User;
 
-import java.util.List;
 
 @Tag(name = "Reservation", description = "Reservation Management")
 @RestController
@@ -35,12 +34,14 @@ public class ReservationController {
         this.service = service;
     }
 
+
     // GET
     @GetMapping
     @PreAuthorize("hasAnyRole('ADMIN', 'MANAGER', 'RECEPTIONIST')")
     public Page<ReservationResponse> getReservations(Pageable pageable) {
         return service.getReservations(pageable);
     }
+
 
     // GET
     @Operation(summary = "Get reservation with an ID")
