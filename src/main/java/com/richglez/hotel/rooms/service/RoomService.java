@@ -1,5 +1,6 @@
 package com.richglez.hotel.rooms.service;
 
+import com.richglez.hotel.common.enums.RoomType;
 import com.richglez.hotel.rooms.dto.RoomPatchRequest;
 import com.richglez.hotel.rooms.dto.RoomRequest;
 import com.richglez.hotel.rooms.dto.RoomResponse;
@@ -7,6 +8,8 @@ import com.richglez.hotel.rooms.model.Room;
 import com.richglez.hotel.rooms.repository.RoomRepository;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -33,11 +36,45 @@ public class RoomService {
         return toResponse(roomRepository.save(room));
     }
 
-    public List<RoomResponse> getAllRooms() {
-        return roomRepository.findByDeletedAtIsNull()
-                .stream()
-                .map(this::toResponse)
-                .toList();
+    public Page<RoomResponse> getAllRooms(
+            Boolean available,
+            RoomType roomType,
+            Integer capacity,
+            Pageable pageable
+    ) {
+
+        Page<Room> rooms; // crea una pagina de recamaras y almacenala en rooms
+
+        // available + roomType
+        if (available != null && roomType != null) {
+
+            rooms = roomRepository.findByAvailableAndRoomType(
+                    available,
+                    roomType,
+                    pageable
+            );
+
+        }
+
+        // available only
+        else if (available != null) {
+            rooms = roomRepository.findByAvailable(
+                    available,
+                    pageable
+            );
+        }
+
+        // roomType only
+        else if (roomType != null) {
+            rooms = roomRepository.findByRoomType(
+                    roomType,
+                    pageable
+            );
+        } else {
+            rooms = roomRepository.findAll(pageable);
+        }
+
+        return rooms.map(this::toResponse);
     }
 
     // Metodo privado para logica interna

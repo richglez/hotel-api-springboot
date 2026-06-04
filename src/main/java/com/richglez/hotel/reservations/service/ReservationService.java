@@ -76,7 +76,7 @@ public class ReservationService {
         // Filter only roomId Param
         else if (roomId != null) {
             reservations = reservationRepository
-                    .findByUserId(roomId, pageable);
+                    .findByRoomId(roomId, pageable);
         }
 
         // No Filters
