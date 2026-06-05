@@ -364,7 +364,7 @@ Planned features for future development:
 * [x] Swagger / OpenAPI documentation
 * [x] Frontend integration
 * [x] Docker support
-* [ ] Unit and integration testing
+* [x] Unit and integration testing
 * [x] Pagination and filtering
 
 ---
