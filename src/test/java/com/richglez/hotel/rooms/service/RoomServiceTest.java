@@ -64,3 +64,4 @@ public class RoomServiceTest {
         verify(roomRepository).findById(1L);
     }
 }
+
