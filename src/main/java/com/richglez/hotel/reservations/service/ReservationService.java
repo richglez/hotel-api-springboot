@@ -39,7 +39,7 @@ public class ReservationService {
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Room not found"));
 
         if (request.getCheckOut().isBefore(request.getCheckIn()))
-            throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_CONTENT, "Check-in must be before check-out");
+            throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, "Check-in must be before check-out"); // 422 Error
 
         // Next create a new reservation
         Reservation reservation = new Reservation();
@@ -109,7 +109,7 @@ public class ReservationService {
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Room not found"));
 
         if (request.getCheckOut().isBefore(request.getCheckIn()))
-            throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_CONTENT, "Check-in must be before check-out");
+            throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, "Check-in must be before check-out"); // 422 Error
 
         reservation.setCheckIn(request.getCheckIn());
         reservation.setCheckOut(request.getCheckOut());
@@ -125,7 +125,7 @@ public class ReservationService {
         Reservation reservation = findReservationById(id);
 
         if (request.getCheckOut().isBefore(request.getCheckIn()))
-            throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_CONTENT, "Check-in must be before check-out");
+            throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, "Check-in must be before check-out"); // 422 Error
 
         if (request.getCheckIn() != null) {
             reservation.setCheckIn(request.getCheckIn());
