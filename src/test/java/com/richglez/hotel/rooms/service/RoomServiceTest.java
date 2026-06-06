@@ -42,7 +42,7 @@ public class RoomServiceTest {
         var response = roomService.getRoomById(1L);
 
         // Assert
-        assertNotNull(response); // el response no es null
+        assertNotNull(response); // debe de fallar cuando response sea null?
         assertEquals("Luxury Suite", response.getName());
         // verify if the results are the same
 
