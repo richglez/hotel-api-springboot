@@ -14,7 +14,7 @@ API design following clean backend development practices.
     * Rooms
     * Reservations
 * Authentication & authorization with JWT + Spring Security
-* Role-based access control (ADMIN, MANAGER, RECEPTIONIST, GUEST)
+* Role-based access control RBAC (ADMIN, MANAGER, RECEPTIONIST, GUEST)
 * Room browsing (public access) and reservation management
 * RESTful API architecture
 * DTO pattern implementation
