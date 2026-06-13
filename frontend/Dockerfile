@@ -1,5 +1,6 @@
 # ── Etapa 1: compilar ──────────────────────────────────
 FROM node:22-alpine AS builder
+#está basada en Alpine Linux, una distribución de Linux extremadamente ligera.
 WORKDIR /app
 
 # Habilitar pnpm vía corepack (ya viene en Node 20)
