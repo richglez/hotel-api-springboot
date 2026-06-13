@@ -1,1 +1,39 @@
-name: CI Pipeline  # Nombre que aparece en GitHub
+name: CI Pipeline  # Nombre de workflow que aparece en GitHub
+
+on:     # Cuando se ejecuta
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main]
+
+jobs:
+  build-and-test:           # Nombre del job(se define)
+    runs-on: ubuntu-latest  # Maquina virtual a usar
+
+    steps:
+      # 1. Clona el repositorio en el runner
+      - name: Checkout codigo
+        uses: actions/checkout@v4
+
+      # 2. Configura Node.js
+      - name: Setup Node.js
+        uses: actions/setup/node@v4
+        with:
+          node-version: '20'
+          cache: 'pnpm' # Cachea dependencias para ir mas rapido
+
+      # 3. Instala dependencias
+      - name: Instalar dependencias
+        run: pnpm ci
+
+      # 4. Corre el linter
+      - name: Lint
+        run: pnpm run lint
+
+      # 5. Corre los test
+      - name: Test
+        run: pnpm test
+
+      # 6. Build
+      - name: Build
+        run: pnpm run build
