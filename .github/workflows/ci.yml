@@ -14,25 +14,25 @@ jobs:
     name: Backend — Build & Test
     runs-on: ubuntu-latest
 
-  services: # container
-    postgres:   # service name (database test/temp)
-      image: postgres:16    # levanta un contenedor de postgres igual que docker-compose
-      env:  # credenciales de la base temporal
-        POSTGRES_DB: hotel_test # base de datos para tests
-        POSTGRES_USER: postgres
-        POSTGRES_PASSWORD: postgres
-      ports:
-        - 5432:5432
-      options: >-
-        --health-cmd pg_isready
-        --health-interval 10s
-        --health-timeout 5s
-        --health-retries 5
-      # postgres listo ? si/no
-      # pregunta cada 10 s si esta listo
-      # si en 5 segundos no responde -> failed
-      # si falla 5 veces seguidas -> algo salio mal
+    services: # container
+      postgres:   # service name (database test/temp)
+        image: postgres:16    # levanta un contenedor de postgres igual que docker-compose
+        env:  # credenciales de la base temporal
+          POSTGRES_DB: hotel_test # base de datos para tests
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        # postgres listo ? si/no
+        # pregunta cada 10 s si esta listo
+        # si en 5 segundos no responde -> failed
+        # si falla 5 veces seguidas -> algo salio mal
 
-  steps:
-    - name: Checkout code
-      uses: actions/checkout@v4   # Accion de clonar en la maquina virtual
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4   # Accion de clonar en la maquina virtual
