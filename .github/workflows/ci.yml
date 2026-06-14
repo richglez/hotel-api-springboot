@@ -2,22 +2,22 @@ name: CI Pipeline
 
 on:
   push:
-    branches: [main]
+    branches: [ main ]
   pull_request:
-    branches: [main]
+    branches: [ main ]
 
 jobs:
   # ─────────────────────────────────────────
   # JOB 1: Tests backend (Spring Boot)
   # ─────────────────────────────────────────
-  backend-ci:   # ID JOB
+  backend-ci: # ID JOB
     name: Backend — Build & Test
     runs-on: ubuntu-latest
 
     services: # container
-      postgres:   # service name (database test/temp)
+      postgres: # service name (database test/temp)
         image: postgres:16    # levanta un contenedor de postgres igual que docker-compose
-        env:  # credenciales de la base temporal
+        env: # credenciales de la base temporal
           POSTGRES_DB: hotel_test # base de datos para tests
           POSTGRES_USER: postgres
           POSTGRES_PASSWORD: postgres
@@ -35,4 +35,11 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4   # Accion de clonar en la maquina virtual
+        uses: actions/checkout@v4   # Accion / Funcion de clonar repositorio en la VM
+
+      - name: Setup Java 21 VM
+        uses: actions/setup-java@v4  # Accion / Funcion de instalar java en VM
+        with:  # Pasar parametros y variables a la accion de arriba
+          java-version: '21'  # Same as project
+          distribution: 'terium'  # Distribucion de java
+          cache: 'maven' # Guarda las dependencias entre runs
