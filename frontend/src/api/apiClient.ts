@@ -6,7 +6,7 @@ const apiClient = axios.create({
 });
 
 // Función para inyectar el header y el logout desde afuera
-let _logout: (() => void) | null = null;
+let _logout: (() => void) | null = null; // esto puede ser una funcion o un null, su valor inicial null
 
 export const setupInterceptors = (logout: () => void) => {
     _logout = logout;
