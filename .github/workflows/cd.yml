@@ -39,28 +39,3 @@
 #            cd /app/hotel-api
 #            docker compose pull
 #            docker compose up -d --no-build
-#
-#
-#
-#
-#
-##
-##  Push a develop / PR a main
-##  ↓
-##  ┌─────────────────┐   ┌──────────────────┐
-##  │  backend-ci     │   │  frontend-ci      │
-##  │  Java + Maven   │   │  React + Node     │
-##  │  + Postgres     │   │  lint/test/build  │
-##  └────────┬────────┘   └────────┬──────────┘
-##  └──────────┬──────────┘
-##  ↓ (ambos pasaron)
-##  ┌────────────────┐
-##  │  docker-build  │
-##  │  solo verifica │
-##  └────────────────┘
-##
-##  Push a main (merge)
-##  ↓
-##  ┌───────────┐
-##  │  deploy   │ → Docker Hub → VPS
-##  └───────────┘

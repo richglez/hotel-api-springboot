@@ -2,17 +2,37 @@ name: CI Pipeline
 
 on:
   push:
-    branches: [ main ]    # en cada push hacia main:
+    branches: [main]
+  pull_request:
+    branches: [main]
 
-jobs: # ejecuta es job
-  build: # nombre del job
+jobs:
+  # ─────────────────────────────────────────
+  # JOB 1: Tests backend (Spring Boot)
+  # ─────────────────────────────────────────
+  backend-ci:   # ID JOB
+    name: Backend — Build & Test
     runs-on: ubuntu-latest
 
-    steps:
-      - name: "Display message"
-        run: echo "Hello World!"
+  services: # container
+    postgres:   # service name (database test/temp)
+      image: postgres:16    # levanta un contenedor de postgres igual que docker-compose
+      env:  # credenciales de la base temporal
+        POSTGRES_DB: hotel_test # base de datos para tests
+        POSTGRES_USER: postgres
+        POSTGRES_PASSWORD: postgres
+      ports:
+        - 5432:5432
+      options: >-
+        --health-cmd pg_isready
+        --health-interval 10s
+        --health-timeout 5s
+        --health-retries 5
+      # postgres listo ? si/no
+      # pregunta cada 10 s si esta listo
+      # si en 5 segundos no responde -> failed
+      # si falla 5 veces seguidas -> algo salio mal
 
-      - name: "Mostrando variables por defecto"
-        run: |
-          echo "Event: ${{ toJSON(github.event) }}"
-        
+  steps:
+    - name: Checkout code
+      uses: actions/checkout@v4   # Accion de clonar en la maquina virtual

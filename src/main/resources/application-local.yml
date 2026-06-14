@@ -1,11 +1,11 @@
 jwt:
-  secret: tu-clave-secreta-muy-larga-minimo-32-caracteres
+  secret: ${JWT_SECRET}
   expiration: 86400000
 
 spring:
   datasource:
-    username: postgres
-    password: postgrespassword
+    username: ${DB_USER}
+    password: ${DB_PASSWORD}
 
 springdoc:
   api-docs:

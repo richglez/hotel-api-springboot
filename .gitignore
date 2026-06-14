@@ -36,4 +36,20 @@ build/
 .env.local
 .env.production
 .env.development
+.env.development.local
+.env.production.local
+
+# Logs
+*.log
+npm-debug.log*
+
+# IDEs
+.idea/
+*.swp
+*.swo
+
+# Node
+node_modules/
+npm-package-lock.json
+
 application-local.yml
