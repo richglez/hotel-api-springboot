@@ -1,4 +1,4 @@
-import {AuthProvider} from "./features/auth/context/AuthContext.tsx";
+import {AuthProvider} from "./features/auth/context/AuthProvider.tsx"
 import AppRouter from "./app/router/Router.tsx";
 
 function App() {
