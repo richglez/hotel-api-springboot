@@ -30,3 +30,6 @@ springdoc:
     enabled: false
   swagger-ui:
     enabled: false
+
+
+# le dice a Spring cómo conectarse a la DB

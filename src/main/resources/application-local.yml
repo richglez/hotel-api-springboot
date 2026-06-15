@@ -19,3 +19,5 @@ springdoc:
     tags-sorter: alpha             # Ordena los tags alfabéticamente
     display-request-duration: true # Muestra el tiempo de respuesta
   packages-to-scan: com.richglez.hotel  # Escanea solo ese paquete
+
+# le dice a Spring cómo conectarse a la DB

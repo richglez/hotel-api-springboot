@@ -9,3 +9,5 @@ spring:
 
 server:
   port: ${PORT:8080}
+
+# # le dice a Spring cómo conectarse a la DB
