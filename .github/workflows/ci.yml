@@ -14,7 +14,7 @@ jobs:
     name: Backend — Build & Test
     runs-on: ubuntu-latest
 
-    services: # container
+    services: # create a container in VM
       postgres: # service name (database test/temp)
         image: postgres:16    # levanta un contenedor de postgres igual que docker-compose
         env: # credenciales de la base temporal
@@ -33,7 +33,7 @@ jobs:
         # si en 5 segundos no responde -> failed
         # si falla 5 veces seguidas -> algo salio mal
 
-    steps:
+    steps:  # Job Step
       - name: Checkout code
         uses: actions/checkout@v6   # Accion / Funcion de clonar repositorio en la VM
 
@@ -43,3 +43,11 @@ jobs:
           java-version: '21'  # Same as project
           distribution: 'temurin'  # Distribucion de java
           cache: 'maven' # Guarda las dependencias entre runs
+
+      - name: Run tests
+        run: ./mvnw verify
+        env:
+          SPRING_DATASOURCE_URL: jdbc:postgresql://localhost:5432/hotel_test
+          SPRING_DATASOURCE_USERNAME: postgres
+          SPRING_DATASOURCE_PASSWORD: postgres
+          JWT_SECRET: ${{ secrets.JWT_SECRET }}
