@@ -67,3 +67,8 @@ jobs:
       run:
         working-directory: ./frontend # all steps in this job run from /frontend
         # avoids writing "cd frontend &&" on every step
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v6 # clones the repo into the VM (VM starts empty)
+        
