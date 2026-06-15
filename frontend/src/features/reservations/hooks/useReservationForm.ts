@@ -78,8 +78,10 @@ const useReservationForm = (
             setFormError(null);
             await reservationService.create(payload);
             setSuccess(true);
-        } catch (err: any) {
-            setFormError(err.message ?? "Failed to create reservation.");
+        } catch (err) {         // ¿este error es una instancia de la clase Error?
+            const message = err instanceof Error ? err.message : "Failed to create reservation."
+            setFormError(message);
+            // err instanceof Error → false → usamos el texto por defecto
         } finally {
             setSubmitting(false);
         }

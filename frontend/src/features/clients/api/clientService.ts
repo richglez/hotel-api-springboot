@@ -3,9 +3,12 @@ import type {IClient} from "../types/models/Client.ts";
 const BASE_URL = "http://localhost:8080/api/clients" // url backend
 
 const getAuthHeaders = () => {
-    const token = sessionStorage.getItem("Authorization");
+    const token = localStorage.getItem("token");
 
-    return {"Content-Type": "application/json", "Authorization": `Bearer${token}` || "",}
+    return {
+        "Content-Type": "application/json",
+        "Authorization": token ? `Bearer ${token}` : "",
+    }
 }
 
 const clientService = {

@@ -1,4 +1,4 @@
-import {createContext, useContext, useState, type ReactNode, useCallback, useEffect} from "react";
+import {createContext, useState, type ReactNode, useCallback, useEffect} from "react";
 import {setupInterceptors} from "../../../api/apiClient.ts";
 import {isTokenExpired} from "../utils/tokenUtils.ts";
 
@@ -11,12 +11,17 @@ type AuthContextType = {
 };
 
 // 2. crear contexto de react de tipo authcontexttype o null, por defecto null
-const AuthContext = createContext<AuthContextType | null>(null);
+export const AuthContext = createContext<AuthContextType | null>(null);
 
 // 3. Creamos el componente Provider
 export const AuthProvider = ({children}: { children: ReactNode }) => {
     const [token, setToken] = useState<string | null>(() => {
-        return localStorage.getItem("token")
+        const stored = localStorage.getItem("token");
+        if (isTokenExpired(stored)) {
+            localStorage.removeItem("token");
+            return null;
+        }
+        return stored;
     });
 
     const login = (newToken: string) => {
@@ -29,11 +34,6 @@ export const AuthProvider = ({children}: { children: ReactNode }) => {
         localStorage.removeItem("token");
     }, []);
 
-    useEffect(() => {
-        if (isTokenExpired(token)) {
-            logout();
-        }
-    }, [token, logout]);
 
     useEffect(() => {
         setupInterceptors(logout);
@@ -50,15 +50,4 @@ export const AuthProvider = ({children}: { children: ReactNode }) => {
             {children}
         </AuthContext.Provider>
     )
-}
-
-// custom hook useContext -> permite usar esos datos desde cualquier componente
-export const useAuth = () => {
-    const context = useContext(AuthContext);
-
-    if (!context) {
-        throw new Error("useAuth must be used inside AuthProvider")
-    }
-
-    return context;
 }
