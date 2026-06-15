@@ -1,6 +1,6 @@
 import styles from './Navbar.module.css';
 import {NavLink, useNavigate} from 'react-router-dom';
-import {useAuth} from "../../../../features/auth/context/AuthContext.tsx";
+import {useAuth} from "../../../../features/auth/hooks/useAuth.ts";
 
 const Navbar = () => {
     const {logout, isAuthenticated} = useAuth();

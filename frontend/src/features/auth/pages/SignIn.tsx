@@ -3,7 +3,7 @@ import {Link, useNavigate} from "react-router-dom";
 import {type ChangeEvent, type SyntheticEvent, useState} from "react";
 import type {LoginRequest} from "../types/LoginRequest.ts";
 import authService from "../api/authService.ts";
-import {useAuth} from "../context/AuthContext.tsx";
+import {useAuth} from "../hooks/useAuth.ts";
 import type {RegisterRequest} from "../types/RegisterRequest.ts";
 
 

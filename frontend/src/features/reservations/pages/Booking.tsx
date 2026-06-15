@@ -1,5 +1,5 @@
 import styles from './Booking.module.css';
-import {useAuth} from "../../auth/context/AuthContext.tsx";
+import {useAuth} from "../../auth/hooks/useAuth.ts";
 import useRooms from "../../rooms/hooks/useRooms.ts";
 import useReservationForm from "../hooks/useReservationForm.ts";
 import GuestCounter from "../components/GuestCounter.tsx";

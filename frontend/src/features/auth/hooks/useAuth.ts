@@ -1,5 +1,5 @@
 import {useContext} from "react";
-import {AuthContext} from "./AuthContext";
+import {AuthContext} from "../context/AuthContext";
 
 // custom hook -> allows using auth data from any component
 export const useAuth = () => {
