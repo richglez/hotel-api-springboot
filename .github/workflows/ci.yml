@@ -26,12 +26,17 @@ jobs:
           POSTGRES_PASSWORD: postgres
         ports:
           - 5432:5432            # expose postgres port to the VM
+
+        # check if postgres is ready (yes/no)
+        # ask every 10s
+        # if no response in 5s → failed attempt
+        # if fails 5 times in a row → something is wrong
+        # steps won't run until postgres is healthy
         options: >-
-          --health-cmd pg_isready   # check if postgres is ready (yes/no)
-          --health-interval 10s     # ask every 10s
-          --health-timeout 5s       # if no response in 5s → failed attempt
-          --health-retries 5        # if fails 5 times in a row → something is wrong
-                                    # steps won't run until postgres is healthy
+          --health-cmd pg_isready   
+          --health-interval 10s     
+          --health-timeout 5s       
+          --health-retries 5                        
 
     steps:
       - name: Checkout code
@@ -71,4 +76,3 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v6 # clones the repo into the VM (VM starts empty)
-        
