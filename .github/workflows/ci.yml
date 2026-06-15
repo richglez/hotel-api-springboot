@@ -106,3 +106,6 @@ jobs:
 
         # folder /dist ready to production
 
+      - name: Lint
+        run: pnpm run lint    # checks code quality with ESLint
+
