@@ -1,5 +1,5 @@
 import {useState, type ReactNode, useCallback, useEffect} from "react";
-import {AuthContext} from "./AuthContext.ts";
+import {AuthContext} from "./AuthContext.tsx";
 import {setupInterceptors} from "../../../api/apiClient.ts";
 import {isTokenExpired} from "../utils/tokenUtils.ts";
 
