@@ -85,7 +85,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v6   # Installs Node.js on the VM
         with:
-          node-version: '20'    # LTS version, most stable
+          node-version: '22'    # LTS version, most stable
           cache: 'pnpm'          # cache node_modules between runs ⚡
           cache-dependency-path: frontend/pnpm-lock.yaml   # where to find lock file
 
