@@ -366,6 +366,9 @@ Planned features for future development:
 * [x] Docker support
 * [x] Unit and integration testing
 * [x] Pagination and filtering
+* [ ] Railway Deployment
+* [ ] Configure Root Directory in Railway
+* [ ] CD that completes CI/CD
 * [ ] Setting Checkstyle (backend lintern) for backend lintern
 * [ ] Vitest / Jest Integration for frontend testing
 
