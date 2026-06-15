@@ -35,11 +35,11 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4   # Accion / Funcion de clonar repositorio en la VM
+        uses: actions/checkout@v6   # Accion / Funcion de clonar repositorio en la VM
 
       - name: Setup Java 21 VM
-        uses: actions/setup-java@v4  # Accion / Funcion de instalar java en VM
+        uses: actions/setup-java@v5  # Accion / Funcion de instalar java en VM
         with:  # Pasar parametros y variables a la accion de arriba
           java-version: '21'  # Same as project
-          distribution: 'terium'  # Distribucion de java
+          distribution: 'temurin'  # Distribucion de java
           cache: 'maven' # Guarda las dependencias entre runs
