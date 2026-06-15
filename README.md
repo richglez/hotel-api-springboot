@@ -366,6 +366,7 @@ Planned features for future development:
 * [x] Docker support
 * [x] Unit and integration testing
 * [x] Pagination and filtering
+* [ ] Setting Checkstyle
 
 ---
 

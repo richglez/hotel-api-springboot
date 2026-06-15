@@ -49,7 +49,7 @@ jobs:
 
       - name: Run tests
         run: ./mvnw verify
-        env:
+        env:    # Create env file in VM
           SPRING_DATASOURCE_URL: jdbc:postgresql://localhost:5432/hotel_test
           SPRING_DATASOURCE_USERNAME: postgres
           SPRING_DATASOURCE_PASSWORD: postgres
