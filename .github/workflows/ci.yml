@@ -17,7 +17,7 @@ jobs:
 
     # Spin up a real PostgreSQL container alongside the job
     # (the VM has no database by default — we need to create one)
-    services:
+    services:   # container
       postgres:                  # service name (used as hostname inside the VM)
         image: postgres:16       # same version as docker-compose.yml
         env:                     # temp database credentials (only for testing)
@@ -76,3 +76,16 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v6 # clones the repo into the VM (VM starts empty)
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v6    # install pnpm
+        with:   # parameters for action
+          version: 11   # local version
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v6   # Installs Node.js on the VM
+        with:
+          node-version: '20'    # LTS version, most stable
+          cache: 'pnpm'          # cache node_modules between runs ⚡
+          cache-dependency-path: frontend/pnpm-lock.yaml   # where to find lock file
+
