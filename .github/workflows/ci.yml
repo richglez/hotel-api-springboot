@@ -44,6 +44,9 @@ jobs:
           distribution: 'temurin'  # Distribucion de java
           cache: 'maven' # Guarda las dependencias entre runs
 
+      - name: Give permission to mvnw
+        run: chmod +x ./mvnw    # Agregale permiso de ejecucion 'x' a este archivo
+
       - name: Run tests
         run: ./mvnw verify
         env:
