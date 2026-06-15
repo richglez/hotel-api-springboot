@@ -3,7 +3,7 @@ import type {LoginRequest} from "../types/LoginRequest.ts";
 import type {AuthResponse} from "../types/AuthResponse.ts";
 import {handleErrorResponse} from "../../../shared/utils/apiError.ts";
 
-const BASE_URL = "http://localhost:8080/api/auth";
+const BASE_URL = import.meta.env.VITE_API_BASE_URL + "/auth";
 
 const authService = {
     register: async (data: RegisterRequest): Promise<AuthResponse> => {

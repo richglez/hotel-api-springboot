@@ -1,6 +1,6 @@
 import type {IClient} from "../types/models/Client.ts";
 
-const BASE_URL = "http://localhost:8080/api/clients" // url backend
+const BASE_URL = import.meta.env.VITE_API_BASE_URL + "/clients" // url backend
 
 const getAuthHeaders = () => {
     const token = localStorage.getItem("token");
