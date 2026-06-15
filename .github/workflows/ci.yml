@@ -1,56 +1,69 @@
-name: CI Pipeline
+name: CI Pipeline # Workflow name shown in GitHub Actions tab
 
+# Triggers: when does this workflow run?
 on:
   push:
-    branches: [ main ]
+    branches: [ main ]          # runs on every push to main
   pull_request:
-    branches: [ main ]
+    branches: [ main ]          # runs when a PR targets main
 
 jobs:
   # ─────────────────────────────────────────
-  # JOB 1: Tests backend (Spring Boot)
+  # JOB 1: Backend tests (Spring Boot)
   # ─────────────────────────────────────────
-  backend-ci: # ID JOB
-    name: Backend — Build & Test
-    runs-on: ubuntu-latest
+  backend-ci:                   # job ID (used to reference this job)
+    name: Backend — Build & Test # job name shown in GitHub UI
+    runs-on: ubuntu-latest       # fresh Ubuntu VM for every run
 
-    services: # create a container in VM
-      postgres: # service name (database test/temp)
-        image: postgres:16    # levanta un contenedor de postgres igual que docker-compose
-        env: # credenciales de la base temporal
-          POSTGRES_DB: hotel_test # base de datos para tests
+    # Spin up a real PostgreSQL container alongside the job
+    # (the VM has no database by default — we need to create one)
+    services:
+      postgres:                  # service name (used as hostname inside the VM)
+        image: postgres:16       # same version as docker-compose.yml
+        env:                     # temp database credentials (only for testing)
+          POSTGRES_DB: hotel_test
           POSTGRES_USER: postgres
           POSTGRES_PASSWORD: postgres
         ports:
-          - 5432:5432
+          - 5432:5432            # expose postgres port to the VM
         options: >-
-          --health-cmd pg_isready
-          --health-interval 10s
-          --health-timeout 5s
-          --health-retries 5
-        # postgres listo ? si/no
-        # pregunta cada 10 s si esta listo
-        # si en 5 segundos no responde -> failed
-        # si falla 5 veces seguidas -> algo salio mal
+          --health-cmd pg_isready   # check if postgres is ready (yes/no)
+          --health-interval 10s     # ask every 10s
+          --health-timeout 5s       # if no response in 5s → failed attempt
+          --health-retries 5        # if fails 5 times in a row → something is wrong
+                                    # steps won't run until postgres is healthy
 
-    steps:  # Job Step
+    steps:
       - name: Checkout code
-        uses: actions/checkout@v6   # Accion / Funcion de clonar repositorio en la VM
+        uses: actions/checkout@v6   # clones the repo into the VM (VM starts empty)
 
-      - name: Setup Java 21 VM
-        uses: actions/setup-java@v5  # Accion / Funcion de instalar java en VM
-        with:  # Pasar parametros y variables a la accion de arriba
-          java-version: '21'  # Same as project
-          distribution: 'temurin'  # Distribucion de java
-          cache: 'maven' # Guarda las dependencias entre runs
+      - name: Setup Java 21
+        uses: actions/setup-java@v5 # installs Java on the VM
+        with:                       # parameters passed to the action above
+          java-version: '21'        # must match the project's Java version
+          distribution: 'temurin'   # OpenJDK distribution, most used in industry
+          cache: 'maven'            # caches ~/.m2 dependencies between runs ⚡
 
-      - name: Give permission to mvnw
-        run: chmod +x ./mvnw    # Agregale permiso de ejecucion 'x' a este archivo
+      - name: Give execute permission to mvnw
+        run: chmod +x ./mvnw        # Linux requires explicit execute permission (+x)
+        # without this → Permission denied error
 
       - name: Run tests
-        run: ./mvnw verify
-        env:    # Create env file in VM
+        run: ./mvnw verify          # compile → test → verify (all in one command)
+        env:                        # inject env variables into the VM for Spring Boot
           SPRING_DATASOURCE_URL: jdbc:postgresql://localhost:5432/hotel_test
           SPRING_DATASOURCE_USERNAME: postgres
           SPRING_DATASOURCE_PASSWORD: postgres
-          JWT_SECRET: ${{ secrets.JWT_SECRET }}
+          JWT_SECRET: ${{ secrets.JWT_SECRET }} # pulled from GitHub Secrets (never hardcoded)
+
+  # ─────────────────────────────────────────
+  # JOB 2: Frontend build (React/Vite + TypeScript)
+  # ─────────────────────────────────────────
+  frontend-ci:                  # job ID
+    name: Frontend — Build      # job name shown in GitHub UI
+    runs-on: ubuntu-latest      # fresh Ubuntu VM
+
+    defaults:
+      run:
+        working-directory: ./frontend # all steps in this job run from /frontend
+        # avoids writing "cd frontend &&" on every step
