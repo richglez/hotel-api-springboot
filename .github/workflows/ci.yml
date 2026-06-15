@@ -101,3 +101,8 @@ jobs:
         # Si el lock file cambia en CI → instaló versiones
         #diferentes → comportamiento inesperado → bugs raros
 
+      - name: Build
+        run: pnpm run build   # compiles React + TypeScript + static files
+
+        # folder /dist ready to production
+
