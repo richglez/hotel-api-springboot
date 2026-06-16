@@ -18,6 +18,7 @@ const reservationService = {
         try {
             const res = await apiClient.get<Page<IReservation>>("/reservations");
             return Array.isArray(res.data) ? res.data : res.data.content; // soporta paginado y array simple
+            // si es un array la response data entonces
         } catch (error) {
             return throwServiceError(error, getGeneralError);
         }
