@@ -7,8 +7,8 @@ import type { Page } from '../../../shared/types/Page.ts';
 
 const roomsService = {
     getAll: async (): Promise<IRoom[]> => {
-        const res = await apiClient.get<Page<IRoom | IRoom[]>>("/rooms");
-        return res.data.content ?? (res.data as unknown as IRoom[]); // soporta paginado y array simple
+        const res = await apiClient.get<Page<IRoom>>("/rooms");
+        return Array.isArray(res.data) ? res.data : res.data.content; // soporta paginado y array simple
     },
 
     getById: async (id: number): Promise<IRoom> => {
