@@ -1,13 +1,14 @@
 import type {IRoom} from '../types/models/Room.ts';
 import apiClient from "../../../api/apiClient.ts";
+import type { Page } from '../../../shared/types/Page.ts';
 
 // BASE_URL ya no hace falta — apiClient tiene baseURL configurado
 // getAuthHeaders ya no hace falta — el interceptor lo maneja
 
 const roomsService = {
     getAll: async (): Promise<IRoom[]> => {
-        const res = await apiClient.get<any>("/rooms");
-        return res.data.content ?? res.data; // soporta paginado y array simple
+        const res = await apiClient.get<Page<IRoom | IRoom[]>>("/rooms");
+        return (res.data as Page<IRoom>).content ?? (res.data as IRoom[]); // soporta paginado y array simple
     },
 
     getById: async (id: number): Promise<IRoom> => {

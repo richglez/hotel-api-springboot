@@ -2,6 +2,7 @@ import type {IReservation} from "../types/models/Reservation.ts";
 import type {ICreateReservation} from "../types/dtos/reservations.dto.create.ts";
 import apiClient from "../../../api/apiClient.ts";
 import type {AxiosError} from "axios";
+import type { Page } from '../../../shared/types/Page.ts';
 
 // Helper: extrae el status del error de axios y lanza el mensaje correcto
 const throwServiceError = (
@@ -15,8 +16,8 @@ const throwServiceError = (
 const reservationService = {
     getAll: async (): Promise<IReservation[]> => {
         try {
-            const res = await apiClient.get<any>("/reservations");
-            return res.data.content ?? res.data; // soporta paginado y array simple
+            const res = await apiClient.get<Page<IReservation> | IReservation[]>("/reservations");
+            return (res.data as Page<IReservation>).content ?? (res.data as IReservation[]); // soporta paginado y array simple
         } catch (error) {
             return throwServiceError(error, getGeneralError);
         }
