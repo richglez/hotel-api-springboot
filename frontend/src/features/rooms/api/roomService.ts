@@ -6,8 +6,8 @@ import apiClient from "../../../api/apiClient.ts";
 
 const roomsService = {
     getAll: async (): Promise<IRoom[]> => {
-        const res = await apiClient.get<IRoom[]>("/rooms");
-        return res.data;
+        const res = await apiClient.get<any>("/rooms");
+        return res.data.content ?? res.data; // soporta paginado y array simple
     },
 
     getById: async (id: number): Promise<IRoom> => {

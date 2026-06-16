@@ -15,8 +15,8 @@ const throwServiceError = (
 const reservationService = {
     getAll: async (): Promise<IReservation[]> => {
         try {
-            const res = await apiClient.get<IReservation[]>("/reservations");
-            return res.data;
+            const res = await apiClient.get<any>("/reservations");
+            return res.data.content ?? res.data; // soporta paginado y array simple
         } catch (error) {
             return throwServiceError(error, getGeneralError);
         }

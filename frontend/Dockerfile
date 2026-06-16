@@ -18,6 +18,7 @@ RUN pnpm install --frozen-lockfile  # Instala las dependencias
 # Recibe la variable en build time
 ARG VITE_API_BASE_URL
 ENV VITE_API_BASE_URL=$VITE_API_BASE_URL
+#  El ARG VITE_API_BASE_URL en el Dockerfile las toma desde Railway Build Arguments, no desde .env.production.
 
 # Copia todos los archivos y carpetas (excepto los ignorados por .dockerignore)
 
