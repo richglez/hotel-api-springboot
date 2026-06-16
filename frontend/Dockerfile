@@ -14,7 +14,13 @@ RUN pnpm install --frozen-lockfile  # Instala las dependencias
 # El primer . → Directorio actual en tu máquina host
 #(donde está el Dockerfile) El segundo . → Directorio actual
 # dentro del contenedor (usualmente definido con WORKDIR antes)
+
+# Recibe la variable en build time
+ARG VITE_API_BASE_URL
+ENV VITE_API_BASE_URL=$VITE_API_BASE_URL
+
 # Copia todos los archivos y carpetas (excepto los ignorados por .dockerignore)
+
 COPY . .
 RUN pnpm run build
 

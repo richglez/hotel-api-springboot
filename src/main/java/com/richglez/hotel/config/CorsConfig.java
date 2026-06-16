@@ -7,9 +7,11 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @Configuration
 public class CorsConfig implements WebMvcConfigurer {
-
-    @Value("${FRONTEND_URL:http://localhost:5173}")
+//Variables de entorno ← gana siempre
+    // Anotacion inyectar valor a esta variable de acuerdo al entorno en donde se encuentre
+    @Value("${FRONTEND_URL:http://localhost:5173}") // Valor default
     private String frontendUrl;
+    // "Busca la variable de entorno FRONTEND_URL. Si existe, úsala. Si NO existe, usa http://localhost:5173 como fallback."
 
     @Override
     public void addCorsMappings(CorsRegistry registry) {
