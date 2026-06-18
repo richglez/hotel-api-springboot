@@ -1,4 +1,4 @@
-#name: CD Pipeline
+#name: CD Pipeline Continues Integration
 #
 #on:
 #  push:
