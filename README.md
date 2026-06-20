@@ -1,6 +1,6 @@
 # Hotel API Spring Boot
 
-A modern RESTful API for hotel reservation management built with Java and Spring Boot.
+A modern RESTful API app web for hotel reservation management built with Java and Spring Boot.
 
 This project is focused on backend architecture, CRUD operations, DTO handling, JPA entity relationships, and scalable
 API design following clean backend development practices.
