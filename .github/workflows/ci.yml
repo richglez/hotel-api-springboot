@@ -39,7 +39,7 @@ jobs:
           --health-retries 5                        
 
     steps:
-      - name: Checkout code
+      - name: Checkout code # Action
         uses: actions/checkout@v6   # clones the repo into the VM (VM starts empty)
 
       - name: Setup Java 21
