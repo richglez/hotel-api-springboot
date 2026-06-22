@@ -1,5 +1,18 @@
 name: CI Pipeline # Workflow name shown in GitHub Actions tab
 
+# PERMISSIONS: the default GITHUB_TOKEN can be more powerful than we need.
+# We only read code here, so we explicitly limit it to read-only.
+permissions: # Security
+  contents: read  # <-- Security Restriction for VM
+
+# CONCURRENCY: if you push multiple commits quickly, this cancels the
+# outdated run for the same branch instead of letting old and new runs
+# race each other and waste minutes.
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+
 # Triggers: when does this workflow run?
 on:
   push:
@@ -11,16 +24,20 @@ jobs:
   # ─────────────────────────────────────────
   # JOB 1: Backend tests (Spring Boot)
   # ─────────────────────────────────────────
-  backend-ci:                   # job ID (used to reference this job)
+  backend-ci: # job ID (used to reference this job)
     name: Backend — Build & Test # job name shown in GitHub UI
     runs-on: ubuntu-latest       # fresh Ubuntu VM for every run
 
+    # TIMEOUT: default is 6 hours. If something hangs (e.g. a DB connection
+    # that never resolves), we want it to fail fast instead of burning minutes.
+    timeout-minutes: 15
+
     # Spin up a real PostgreSQL container alongside the job
     # (the VM has no database by default — we need to create one)
-    services:   # container
-      postgres:                  # service name (used as hostname inside the VM)
+    services: # container
+      postgres: # service name (used as hostname inside the VM)
         image: postgres:16       # same version as docker-compose.yml
-        env:                     # temp database credentials (only for testing)
+        env: # temp database credentials (only for testing)
           POSTGRES_DB: hotel_test
           POSTGRES_USER: postgres
           POSTGRES_PASSWORD: postgres
@@ -42,9 +59,9 @@ jobs:
       - name: Checkout code # Action
         uses: actions/checkout@v6   # clones the repo into the VM (VM starts empty)
 
-      - name: Setup Java 21
+      - name: Setup Java 21 # Action
         uses: actions/setup-java@v5 # installs Java on the VM
-        with:                       # parameters passed to the action above
+        with: # parameters passed to the action above
           java-version: '21'        # must match the project's Java version
           distribution: 'temurin'   # OpenJDK distribution, most used in industry
           cache: 'maven'            # caches ~/.m2 dependencies between runs ⚡
@@ -55,16 +72,38 @@ jobs:
 
       - name: Run tests
         run: ./mvnw verify          # compile → test → verify (all in one command)
-        env:                        # inject env variables into the VM for Spring Boot
+        env: # inject env variables into the VM for Spring Boot
           SPRING_DATASOURCE_URL: jdbc:postgresql://localhost:5432/hotel_test
           SPRING_DATASOURCE_USERNAME: postgres
           SPRING_DATASOURCE_PASSWORD: postgres
           JWT_SECRET: ${{ secrets.JWT_SECRET }} # pulled from GitHub Secrets (never hardcoded)
 
+      # ARTIFACT: saves the full JUnit/Surefire report so we have details
+      # to debug a failure, not just the console log.
+      # if: always() — runs even if the previous step failed (which is
+      # exactly when we need this report most).
+      - name: Upload backend test report
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: backend-test-report
+          path: target/surefire-reports/
+          retention-days: 7
+
+      # ARTIFACT: saves the compiled .jar — useful for manual testing now,
+      # and later becomes the input for a CD job instead of rebuilding.
+      - name: Upload backend build (.jar)
+        if: success()
+        uses: actions/upload-artifact@v7
+        with:
+          name: backend-jar
+          path: target/*.jar
+          retention-days: 7
+
   # ─────────────────────────────────────────
   # JOB 2: Frontend build (React/Vite + TypeScript)
   # ─────────────────────────────────────────
-  frontend-ci:                  # job ID
+  frontend-ci: # job ID
     name: Frontend — Build      # job name shown in GitHub UI
     runs-on: ubuntu-latest      # fresh Ubuntu VM
 
@@ -74,15 +113,15 @@ jobs:
         # avoids writing "cd frontend &&" on every step
 
     steps:
-      - name: Checkout code
+      - name: Checkout code  # Action
         uses: actions/checkout@v6 # clones the repo into the VM (VM starts empty)
 
-      - name: Install pnpm
+      - name: Install pnpm   # Action
         uses: pnpm/action-setup@v6    # install pnpm
-        with:   # parameters for action
+        with: # parameters for action
           version: 11   # local version
 
-      - name: Setup Node.js
+      - name: Setup Node.js   # Action
         uses: actions/setup-node@v6   # Installs Node.js on the VM
         with:
           node-version: '22'    # LTS version, most stable
@@ -91,12 +130,12 @@ jobs:
 
       - name: Install dependecies
         run: pnpm install --frozen-lockfile   # installs dependecies from pnpm-lock.yaml
-                                              # fails if lock file is out of sync
+        # fails if lock file is out of sync
         # pnpm install → can update lock file
         # → solo lee el lock file, nunca lo modifica
 
         # código en GitHub debe ser exactamente
-        # lo mismo que probaste en VM.
+        # lo mismo que en VM.
 
         # Si el lock file cambia en CI → instaló versiones
         #diferentes → comportamiento inesperado → bugs raros
@@ -109,3 +148,32 @@ jobs:
       - name: Lint
         run: pnpm run lint    # checks code quality with ESLint
 
+      # ARTIFACT: saves dist/, the exact output that would ship to
+      # production — same reasoning as the backend .jar above.
+      - name: Upload frontend build (dist)
+        if: success()
+        uses: actions/upload-artifact@v7
+        with:
+          name: frontend-dist
+          path: frontend/dist/
+          retention-days: 7
+
+  # ─────────────────────────────────────────
+  # JOB 3: Dependency vulnerability review (security)
+  # ─────────────────────────────────────────
+  # Compares dependencies before vs. after a PR and flags known CVEs in
+  # anything new or upgraded. Only makes sense on pull_request (there's no
+  # "before" to compare on a direct push). No Java/Node needed — it just
+  # reads dependency files, it doesn't build anything.
+  dependency-review:
+    name: Dependency Review
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    if: github.event_name == 'pull_request'
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v7
+
+      - name: Dependency Review
+        uses: actions/dependency-review-action@v5
