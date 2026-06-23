@@ -10,8 +10,8 @@ permissions: # Security
 # race each other and waste minutes.
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: true
-
+  cancel-in-progress: true  # If are any work in progress cancel the old one
+  # Canceling the above immediately saves valuable server time.
 
 # Triggers: when does this workflow run?
 on:
