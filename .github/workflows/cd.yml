@@ -1,6 +1,6 @@
 name: CD Pipeline # workflow name
 
-permissions: # VM can read only repo
+permissions: # VM can read only repo.
   contents: read # read only VM workflow don't need to write anything or touch other resources in the repo.
 
 # Control what happens when multiple executions of workflow are triggered at the same time in the same branch or environment.
