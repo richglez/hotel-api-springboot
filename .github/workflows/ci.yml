@@ -56,7 +56,7 @@ jobs:
 
     steps:
       - name: Checkout code # step name
-        uses: actions/checkout@v6   # Action: clones the repo into the VM (VM starts empty)
+        uses: actions/checkout@v7   # Action: clones the repo into the VM (VM starts empty)
 
       - name: Setup Java 21 # Action step name
         uses: actions/setup-java@v5 # installs Java on the VM
@@ -113,7 +113,7 @@ jobs:
 
     steps:
       - name: Checkout code  # step name
-        uses: actions/checkout@v6 # Action in VM terminal:clones the repo into the VM (VM starts empty)
+        uses: actions/checkout@v7 # Action in VM terminal:clones the repo into the VM (VM starts empty)
 
       - name: Install pnpm   # step name
         uses: pnpm/action-setup@v6    # Action in VM terminal: install pnpm
