@@ -43,7 +43,8 @@ jobs:
           done
           echo "::error::Backend did not respond in time after deploy"
           exit 1
-          # 10 max attemps
+          # 10 max attempts($i -> attempt 1,2...)
+          # exit 0 -> finish script & SUCCESS status.
 
       - name: Check frontend health   # step name
         run: |
