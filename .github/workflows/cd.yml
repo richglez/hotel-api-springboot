@@ -5,30 +5,33 @@ permissions: # VM can read only repo
 
 # Control what happens when multiple executions of workflow are triggered at the same time in the same branch or environment.
 concurrency:
-  group: cd-${{ github.ref }} # This creates a single "group" to control the flow.
-  cancel-in-progress: false   # if there's a workflow in progress, wait for it to finish before starting a new one -> CI -> CD
+  group: cd-${{ github.ref }} # ID to group runs based in branch or tag Its primary purpose is to ensure that only one workflow is running at a time for that particular group.
+  cancel-in-progress: false   # Queues the new commit; ideal for CD because it ensures complete and clean deployments.
+
 
 # Runs after "CI Pipeline" (ci.yml) finishes on main
 # the name below must match ci.yml's "name:" exactly, or this won't trigger
-on:
-  workflow_run:
-    workflows: ["CI Pipeline"]
-    types: [completed]
+on:   # This event happens when:
+  workflow_run:   # Listen for finishing other workflow
+    workflows: ["CI Pipeline"]  # wait for ci workflow
+    types: [completed]  # when is completed
     branches: [main]
 
 jobs:
-  verify-deploy:
-    name: Verify Railway deployment
-    runs-on: ubuntu-latest
-    timeout-minutes: 10
+  verify-deploy: # job ID (used to reference this job)
+    name: Verify Railway deployment # job name shown in GitHub UI
+    runs-on: ubuntu-latest          # fresh Ubuntu VM for every run
+    timeout-minutes: 10             # tiempo de salida si algo fue mal -> evitar consumir minutos
 
+    # ci.yml .conclusion -> success | failure | cancelled
     if: github.event.workflow_run.conclusion == 'success' # skip if CI failed
-
+    # this never happen if 'failure' or 'cancelled' -> SKIPPED
     steps:
-      - name: Wait for Railway's initial build
-        run: sleep 60 # give Railway time to build + deploy before checking
+      - name: Wait for Railway's initial build   # step name
+        run: sleep 60 # Action in VM terminal: this command freezes ⏸️ the workflow process  during 60s before go to the next step -> give Railway time to copy/build/install + deploy before checking
 
-      - name: Check backend health
+      # Next We checked if Railway had finished its part of correct deployment.
+      - name: Check backend health    # step name
         run: |
           for i in $(seq 1 10); do
             if curl -fsS "${{ vars.BACKEND_HEALTH_URL }}" > /dev/null; then
@@ -40,8 +43,9 @@ jobs:
           done
           echo "::error::Backend did not respond in time after deploy"
           exit 1
+          # 10 max attemps
 
-      - name: Check frontend health
+      - name: Check frontend health   # step name
         run: |
           for i in $(seq 1 10); do
             if curl -fsS "${{ vars.FRONTEND_URL }}" > /dev/null; then

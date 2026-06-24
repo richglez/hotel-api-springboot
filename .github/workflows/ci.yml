@@ -10,8 +10,7 @@ permissions: # Security
 # race each other and waste minutes.
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: true  # If are any work in progress cancel the old one
-  # Canceling the above immediately saves valuable server time.
+  cancel-in-progress: true  # Cancels the old run and starts the new one; ideal for CI (saves time and minutes).
 
 # Triggers: when does this workflow run?
 on:
@@ -56,22 +55,22 @@ jobs:
           --health-retries 5                        
 
     steps:
-      - name: Checkout code # Action
-        uses: actions/checkout@v6   # clones the repo into the VM (VM starts empty)
+      - name: Checkout code # step name
+        uses: actions/checkout@v6   # Action: clones the repo into the VM (VM starts empty)
 
-      - name: Setup Java 21 # Action
+      - name: Setup Java 21 # Action step name
         uses: actions/setup-java@v5 # installs Java on the VM
         with: # parameters passed to the action above
           java-version: '21'        # must match the project's Java version
           distribution: 'temurin'   # OpenJDK distribution, most used in industry
           cache: 'maven'            # caches ~/.m2 dependencies between runs ⚡
 
-      - name: Give execute permission to mvnw
-        run: chmod +x ./mvnw        # Linux requires explicit execute permission (+x)
+      - name: Give execute permission to mvnw  # step name
+        run: chmod +x ./mvnw        # Action in VM terminal Linux requires explicit execute permission (+x)
         # without this → Permission denied error
 
-      - name: Run tests
-        run: ./mvnw verify          # compile → test → verify (all in one command)
+      - name: Run tests   # step name
+        run: ./mvnw verify          # Action in VM terminal: compile → test → verify (all in one command)
         env: # inject env variables into the VM for Spring Boot
           SPRING_DATASOURCE_URL: jdbc:postgresql://localhost:5432/hotel_test
           SPRING_DATASOURCE_USERNAME: postgres
@@ -82,7 +81,7 @@ jobs:
       # to debug a failure, not just the console log.
       # if: always() — runs even if the previous step failed (which is
       # exactly when we need this report most).
-      - name: Upload backend test report
+      - name: Upload backend test report    # step name
         if: always()
         uses: actions/upload-artifact@v7
         with:
@@ -92,7 +91,7 @@ jobs:
 
       # ARTIFACT: saves the compiled .jar — useful for manual testing now,
       # and later becomes the input for a CD job instead of rebuilding.
-      - name: Upload backend build (.jar)
+      - name: Upload backend build (.jar)   # step name
         if: success()
         uses: actions/upload-artifact@v7
         with:
@@ -105,7 +104,7 @@ jobs:
   # ─────────────────────────────────────────
   frontend-ci: # job ID
     name: Frontend — Build      # job name shown in GitHub UI
-    runs-on: ubuntu-latest      # fresh Ubuntu VM
+    runs-on: ubuntu-latest      # Action: fresh Ubuntu VM
 
     defaults:
       run:
@@ -113,23 +112,23 @@ jobs:
         # avoids writing "cd frontend &&" on every step
 
     steps:
-      - name: Checkout code  # Action
-        uses: actions/checkout@v6 # clones the repo into the VM (VM starts empty)
+      - name: Checkout code  # step name
+        uses: actions/checkout@v6 # Action in VM terminal:clones the repo into the VM (VM starts empty)
 
-      - name: Install pnpm   # Action
-        uses: pnpm/action-setup@v6    # install pnpm
+      - name: Install pnpm   # step name
+        uses: pnpm/action-setup@v6    # Action in VM terminal: install pnpm
         with: # parameters for action
           version: 11   # local version
 
-      - name: Setup Node.js   # Action
-        uses: actions/setup-node@v6   # Installs Node.js on the VM
+      - name: Setup Node.js   # step name
+        uses: actions/setup-node@v6   # Action in VM terminal: Installs Node.js on the VM
         with:
           node-version: '22'    # LTS version, most stable
           cache: 'pnpm'          # cache node_modules between runs ⚡
           cache-dependency-path: frontend/pnpm-lock.yaml   # where to find lock file
 
-      - name: Install dependecies
-        run: pnpm install --frozen-lockfile   # installs dependecies from pnpm-lock.yaml
+      - name: Install dependecies   # step name
+        run: pnpm install --frozen-lockfile   # Action in VM terminal: installs dependecies from pnpm-lock.yaml
         # fails if lock file is out of sync
         # pnpm install → can update lock file
         # → solo lee el lock file, nunca lo modifica
@@ -140,17 +139,17 @@ jobs:
         # Si el lock file cambia en CI → instaló versiones
         #diferentes → comportamiento inesperado → bugs raros
 
-      - name: Build
-        run: pnpm run build   # compiles React + TypeScript + static files
+      - name: Build   # step name
+        run: pnpm run build   # Action in VM terminal: compiles React + TypeScript + static files
 
         # folder /dist ready to production
 
-      - name: Lint
-        run: pnpm run lint    # checks code quality with ESLint
+      - name: Lint    # step name
+        run: pnpm run lint    # Action in VM terminal: checks code quality with ESLint
 
       # ARTIFACT: saves dist/, the exact output that would ship to
       # production — same reasoning as the backend .jar above.
-      - name: Upload frontend build (dist)
+      - name: Upload frontend build (dist)    # step name
         if: success()
         uses: actions/upload-artifact@v7
         with:
@@ -166,7 +165,7 @@ jobs:
   # "before" to compare on a direct push). No Java/Node needed — it just
   # reads dependency files, it doesn't build anything.
   dependency-review:
-    name: Dependency Review
+    name: Dependency Review   # step name
     runs-on: ubuntu-latest
     timeout-minutes: 5
     if: github.event_name == 'pull_request'
