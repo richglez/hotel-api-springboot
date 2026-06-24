@@ -60,6 +60,12 @@ API design following clean backend development practices.
 
 ---
 
+## Screenshots
+[App Screenshot](public/assets/screenshot_1234523423.png)
+[App Screenshot](public/assets/screenshot_1234523423456.png)
+
+---
+
 ## Project Structure
 
 ```bash
