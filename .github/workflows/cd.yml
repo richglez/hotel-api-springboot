@@ -21,6 +21,9 @@ jobs:
   verify-deploy: # job ID (used to reference this job)
     name: Verify Railway deployment # job name shown in GitHub UI
     runs-on: ubuntu-latest          # fresh Ubuntu VM for every run
+    environment:
+      name: production         # deployment environment
+      url: https://hotel-reservations.up.railway.app
     timeout-minutes: 10             # tiempo de salida si algo fue mal -> evitar consumir minutos
 
     # ci.yml .conclusion -> success | failure | cancelled
