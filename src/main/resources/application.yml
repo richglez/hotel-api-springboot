@@ -31,5 +31,13 @@ springdoc:
   swagger-ui:
     enabled: false
 
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health   # nada más — no expongas env, beans, etc.
+  endpoint:
+    health:
+      show-details: never  # explícito, aunque ya es el default información que no quieres regalarle a internet.
 
-# le dice a Spring cómo conectarse a la DB
+

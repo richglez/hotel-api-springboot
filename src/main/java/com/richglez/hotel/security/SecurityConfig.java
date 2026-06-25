@@ -64,7 +64,8 @@ public class SecurityConfig {
                                 "/swagger-ui.html",
                                 "/swagger-ui/**",
                                 "/api-docs/**",
-                                "/v3/api-docs/**"
+                                "/v3/api-docs/**",
+                                "/actuator/health/**" // ← health check público (Railway + smoke test)
                         ).permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/rooms/**").permitAll()
                         // ← quita todas las reglas específicas de rooms
