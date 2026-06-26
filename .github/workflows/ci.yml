@@ -77,7 +77,7 @@ jobs:
           SPRING_DATASOURCE_PASSWORD: postgres
           JWT_SECRET: ${{ secrets.JWT_SECRET }} # pulled from GitHub Secrets (never hardcoded)
 
-      # ARTIFACT: saves the full JUnit/Surefire report so we have details
+      # ARTIFACT: saves the full JUnit/Surefire report so we have details.
       # to debug a failure, not just the console log.
       # if: always() — runs even if the previous step failed (which is
       # exactly when we need this report most).
