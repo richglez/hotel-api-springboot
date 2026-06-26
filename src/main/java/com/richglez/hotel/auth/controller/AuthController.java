@@ -27,6 +27,7 @@ public class AuthController {
 
     private final AuthService authService;
 
+    // Docs
     @Operation(summary = "Register", security = @SecurityRequirement(name = ""))
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "Usuario registrado exitosamente",
@@ -39,6 +40,7 @@ public class AuthController {
         return ResponseEntity.ok((authService.register(request)));
     }
 
+    // Docs
     @Operation(summary = "Login", security = @SecurityRequirement(name = ""))
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "Login exitoso, retorna JWT",
