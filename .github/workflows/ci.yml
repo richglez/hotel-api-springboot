@@ -164,8 +164,8 @@ jobs:
   # anything new or upgraded. Only makes sense on pull_request (there's no
   # "before" to compare on a direct push). No Java/Node needed — it just
   # reads dependency files, it doesn't build anything.
-  dependency-review:
-    name: Dependency Review   # step name
+  dependency-review:  # job id
+    name: Dependency Review   # job name
     runs-on: ubuntu-latest
     timeout-minutes: 5
     if: github.event_name == 'pull_request'
