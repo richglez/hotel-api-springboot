@@ -5,12 +5,12 @@ import com.richglez.hotel.users.dto.UserPutRequest;
 import com.richglez.hotel.users.dto.UserResponse;
 import com.richglez.hotel.users.model.User;
 import com.richglez.hotel.users.repository.UserRepository;
+import java.time.LocalDateTime;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
-import java.util.List;
 
 
 /**
