@@ -1,8 +1,24 @@
 package com.richglez.hotel.users.model;
 
 import com.richglez.hotel.common.enums.Roles;
-import jakarta.persistence.*;
-import lombok.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EntityListeners;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+import java.time.LocalDateTime;
+import java.util.Collection;
+import java.util.List;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.NonNull;
+import lombok.Setter;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -10,10 +26,10 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import java.time.LocalDateTime;
-import java.util.Collection;
-import java.util.List;
-
+/**
+ * JPA entity representing a registered user. Implements {@link UserDetails} so it can be
+ * used directly by Spring Security for authentication and authorization.
+ */
 @Entity
 @Table(name = "users")
 @Getter
@@ -21,7 +37,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@EntityListeners(AuditingEntityListener.class) //registry createdDatg, updatedDate, deletedData etc
+@EntityListeners(AuditingEntityListener.class) // registry createdAt, updatedDate, deletedData etc
 public class User implements UserDetails {
 
     @Id
@@ -60,7 +76,9 @@ public class User implements UserDetails {
     @Override
     @NonNull
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        if (role == null) return List.of(); // Eviita el error si el rol es nulo
+        if (role == null) {
+            return List.of(); // Evita el error si el rol es nulo
+        }
         return List.of(new SimpleGrantedAuthority("ROLE_" + role.name()));
     }
 
