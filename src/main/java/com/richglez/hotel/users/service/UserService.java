@@ -6,16 +6,19 @@ import com.richglez.hotel.users.dto.UserResponse;
 import com.richglez.hotel.users.model.User;
 import com.richglez.hotel.users.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
-@RequiredArgsConstructor
+@RequiredArgsConstructor // Inyeccion de dependencias Lombok generará el constructor para userRepository y passwordEncoder
 public class UserService {
 
     private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
 
     // ── Métodos públicos (devuelven DTO) ─────────────────────────
 
@@ -36,7 +39,10 @@ public class UserService {
         user.setName(userPutRequest.getName());
         user.setLastName(userPutRequest.getLastName());
         user.setEmail(userPutRequest.getEmail());
-        user.setPassword(userPutRequest.getPassword());
+
+        String securedPassword = passwordEncoder.encode(userPutRequest.getPassword());
+        user.setPassword(securedPassword);
+
         user.setPhone(userPutRequest.getPhone());
 
         return toResponse(userRepository.save(user));
@@ -50,7 +56,9 @@ public class UserService {
 
         if (userPatchRequest.getEmail() != null) user.setEmail(userPatchRequest.getEmail());
 
-        if (userPatchRequest.getPassword() != null) user.setPassword(userPatchRequest.getPassword());
+        if (userPatchRequest.getPassword() != null) {
+            user.setPassword(passwordEncoder.encode(userPatchRequest.getPassword()));
+        }
 
         if (userPatchRequest.getPhone() != null) user.setPhone(userPatchRequest.getPhone());
 
@@ -59,13 +67,13 @@ public class UserService {
 
     public void softDelete(Long id) {
         User user = findById(id);
-        userRepository.delete(user);
+        user.setDeletedAt(LocalDateTime.now());
+        userRepository.save(user);
     }
 
     public void hardDelete(Long id) {
         User user = findById(id);
-        user.setDeletedAt(LocalDateTime.now()); // soft delete
-        userRepository.save(user);
+        userRepository.delete(user);
     }
 
     // ── Métodos privados (trabajan con entidad) ───────────────────
