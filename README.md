@@ -381,6 +381,7 @@ Planned features for future development:
 * [ ] CD that completes CI/CD
 * [ ] Setting Checkstyle (backend lintern) for backend lintern
 * [ ] Vitest / Jest Integration for frontend testing
+* [ ] Redis implementation
 
 ---
 
