@@ -26,7 +26,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
 
         final String authHeader = request.getHeader("Authorization");
 
-        // ← si no hay token, simplemente deja pasar — Spring Security
+        // ← If there is no token, simply let it pass — Spring Security
         //    decidirá si el endpoint requiere auth o no
         if (authHeader == null || !authHeader.startsWith("Bearer ")) {
             filterChain.doFilter(request, response); // pasa estos atributos al siguiente filtro
