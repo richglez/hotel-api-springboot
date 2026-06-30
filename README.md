@@ -378,10 +378,11 @@ Planned features for future development:
 * [x] Unit and integration testing
 * [x] Pagination and filtering
 * [x] Railway Deployment
-* [ ] CD that completes CI/CD
-* [ ] Setting Checkstyle (backend lintern) for backend lintern
+* [X] CD that completes CI/CD
+* [X] Setting Checkstyle (backend lintern) for backend lintern
 * [ ] Vitest / Jest Integration for frontend testing
 * [ ] Redis implementation
+* [ ] Performance, complete % testing
 
 ---
 
