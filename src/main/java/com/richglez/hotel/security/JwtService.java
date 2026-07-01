@@ -3,17 +3,16 @@ package com.richglez.hotel.security;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.stereotype.Service;
-import org.springframework.beans.factory.annotation.Value;
-
 import java.security.Key;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.stereotype.Service;
 
-
+/** Creates and validates JWT tokens. */
 @Service
 public class JwtService {
 
@@ -21,16 +20,10 @@ public class JwtService {
     private String secret;
 
     @Value("${jwt.expiration}")
-    private long expiration; // en milisegundos
+    private long expiration;
 
-    // transformar el secreto en un formato criptográfico (Key) para firmar
-    private Key getSigninKey() {
-        return Keys.hmacShaKeyFor(secret.getBytes()); // (Hashed Message Authentication Code).
-    } // HMAC SHA
-
-    // El metodo para generar una carta con un destinatario, informacion y sello/firma
-    public String
-    generateToken(UserDetails userDetails) {
+    /** Generates a JWT for a user. */
+    public String generateToken(UserDetails userDetails) {
         Map<String, Object> claims = new HashMap<>();
 
         claims.put("role", userDetails.getAuthorities()
@@ -41,30 +34,36 @@ public class JwtService {
 
         return Jwts.builder()
                 .setClaims(claims)
-                .setSubject(userDetails.getUsername()) // 2. Agregamos datos (Payload)
-                .setIssuedAt(new Date()) // 3. Fecha de inicio
-                .setExpiration(new Date(System.currentTimeMillis() + expiration)) // 4. Expira en ...
-                .signWith(getSigninKey(), SignatureAlgorithm.HS256) // 5. FIRMAMOS con nuestra Key
-                .compact(); // 6. "Empaquetamos" todo en un String
+                .setSubject(userDetails.getUsername())
+                .setIssuedAt(new Date())
+                .setExpiration(new Date(System.currentTimeMillis() + expiration))
+                .signWith(getSigningKey(), SignatureAlgorithm.HS256)
+                .compact();
     }
 
+    /** Extracts the username from a JWT. */
     public String extractUsername(String token) {
         return Jwts.parserBuilder()
-                .setSigningKey(getSigninKey())
+                .setSigningKey(getSigningKey())
                 .build()
                 .parseClaimsJws(token)
                 .getBody()
                 .getSubject();
     }
 
+    /** Returns whether a JWT belongs to a user and is not expired. */
     public boolean isTokenValid(String token, UserDetails userDetails) {
         final String username = extractUsername(token);
         return username.equals(userDetails.getUsername()) && !isTokenExpired(token);
     }
 
+    private Key getSigningKey() {
+        return Keys.hmacShaKeyFor(secret.getBytes());
+    }
+
     private boolean isTokenExpired(String token) {
         return Jwts.parserBuilder()
-                .setSigningKey(getSigninKey())
+                .setSigningKey(getSigningKey())
                 .build()
                 .parseClaimsJws(token)
                 .getBody()
@@ -72,5 +71,3 @@ public class JwtService {
                 .before(new Date());
     }
 }
-
-// Token logistic, create, validate and extract info token

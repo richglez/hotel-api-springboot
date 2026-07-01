@@ -2,10 +2,10 @@ package com.richglez.hotel.reservations.dto;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotNull;
+import java.time.LocalDateTime;
 import lombok.Data;
 
-import java.time.LocalDateTime;
-
+/** Required fields for creating or replacing a reservation. */
 @Schema(description = "DTO for response reservation")
 @Data
 public class ReservationRequest {
@@ -31,9 +31,5 @@ public class ReservationRequest {
     private Integer adults;
 
     @Schema(description = "Quantity of children", example = "0")
-    private Integer children; // optional?
-
-//    @Schema(description = "Estado de la reservación", example = "CONFIRMED",
-//            allowableValues = {"PENDING", "CONFIRMED", "CANCELLED"})
-//    private String status;
+    private Integer children;
 }

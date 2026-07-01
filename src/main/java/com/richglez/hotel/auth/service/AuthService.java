@@ -1,18 +1,19 @@
 package com.richglez.hotel.auth.service;
 
+import com.richglez.hotel.auth.dto.AuthResponse;
 import com.richglez.hotel.auth.dto.LoginRequest;
 import com.richglez.hotel.auth.dto.RegisterRequest;
-import com.richglez.hotel.auth.dto.AuthResponse;
-import com.richglez.hotel.users.model.User;
 import com.richglez.hotel.common.enums.Roles;
-import com.richglez.hotel.users.repository.UserRepository;
 import com.richglez.hotel.security.JwtService;
+import com.richglez.hotel.users.model.User;
+import com.richglez.hotel.users.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken; //Representa las credenciales del login.
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+/** Handles registration and login workflows. */
 @Service
 @RequiredArgsConstructor
 public class AuthService {
@@ -22,8 +23,8 @@ public class AuthService {
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
 
+    /** Registers a guest user and returns an authentication response. */
     public AuthResponse register(RegisterRequest request) {
-
         if (userRepository.findByEmail(request.getEmail()).isPresent()) {
             throw new RuntimeException("Email already exists");
         }
@@ -34,7 +35,7 @@ public class AuthService {
                 .email(request.getEmail())
                 .password(passwordEncoder.encode(request.getPassword()))
                 .phone(request.getPhone())
-                .role(Roles.GUEST) // <- siempre GUEST, el cliente nunca lo controla
+                .role(Roles.GUEST)
                 .build();
 
         userRepository.save(user);
@@ -43,6 +44,7 @@ public class AuthService {
         return AuthResponse.builder().token(token).build();
     }
 
+    /** Authenticates an existing user and returns an authentication response. */
     public AuthResponse login(LoginRequest request) {
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(

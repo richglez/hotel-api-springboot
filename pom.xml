@@ -173,6 +173,37 @@
                     </execution>
                 </executions>
             </plugin>
+
+            <!-- Checkstyle -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-checkstyle-plugin</artifactId>
+                <version>3.6.0</version>
+                <dependencies>
+                    <!-- el plugin trae Checkstyle 9.3 por defecto; lo subimos para soporte completo de Java 21 -->
+                    <dependency>
+                        <groupId>com.puppycrawl.tools</groupId>
+                        <artifactId>checkstyle</artifactId>
+                        <version>13.6.0</version>
+                    </dependency>
+                </dependencies>
+                <configuration>
+                    <configLocation>${project.basedir}/checkstyle.xml</configLocation>
+                    <consoleOutput>true</consoleOutput>          <!-- imprime violaciones en consola/log de CI -->
+                    <failOnViolation>true</failOnViolation>
+                    <violationSeverity>warning</violationSeverity> <!-- sin esto, no falla nunca con google_checks -->
+                    <includeTestSourceDirectory>false</includeTestSourceDirectory> <!-- solo src/main, no tests -->
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>checkstyle-validate</id>
+                        <phase>validate</phase>   <!-- corre antes de compile/test, falla rápido -->
+                        <goals>
+                            <goal>check</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
         </plugins>
     </build>
 

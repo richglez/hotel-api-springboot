@@ -7,11 +7,13 @@ import io.swagger.v3.oas.models.security.SecurityScheme;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+/** Configures OpenAPI security metadata. */
 @Configuration
 public class OpenApiConfig {
 
+    /** Builds the OpenAPI custom configuration. */
     @Bean
-    public OpenAPI customOpenAPI() {
+    public OpenAPI customOpenApi() {
         return new OpenAPI()
                 .addSecurityItem(new SecurityRequirement().addList("Bearer Auth"))
                 .components(new Components()
@@ -26,5 +28,3 @@ public class OpenApiConfig {
                 );
     }
 }
-
-// configura el esquema de seguridad JWT 

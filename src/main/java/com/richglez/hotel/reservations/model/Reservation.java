@@ -2,20 +2,30 @@ package com.richglez.hotel.reservations.model;
 
 import com.richglez.hotel.rooms.model.Room;
 import com.richglez.hotel.users.model.User;
-import jakarta.persistence.*;
-import lombok.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EntityListeners;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import java.time.LocalDateTime;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-import java.time.LocalDateTime;
-
+/** Reservation entity persisted by JPA. */
 @Entity
 @Getter
-@Setter // enves de @Data, solo lo necesario
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@EntityListeners(AuditingEntityListener.class) // poblar automáticamente @CreatedDate y @LastModifiedDate
+@EntityListeners(AuditingEntityListener.class)
 public class Reservation {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -36,12 +46,11 @@ public class Reservation {
     private Integer children;
 
     @CreatedDate
-    @Column(updatable = false) // pero la DB nunca lo sobreescribe en un UPDATE .save()
+    @Column(updatable = false)
     private LocalDateTime createAt;
 
     @LastModifiedDate
     private LocalDateTime updateAt;
 
     private LocalDateTime deletedAt;
-
 }

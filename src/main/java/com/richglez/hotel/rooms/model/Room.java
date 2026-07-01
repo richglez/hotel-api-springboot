@@ -1,17 +1,25 @@
 package com.richglez.hotel.rooms.model;
 
 import com.richglez.hotel.common.enums.RoomType;
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EntityListeners;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import java.time.LocalDateTime;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-import java.time.LocalDateTime;
-
+/** Room entity persisted by JPA. */
 @Entity
-@Getter @Setter // enves de @Data, solo lo necesario
+@Getter
+@Setter
 @EntityListeners(AuditingEntityListener.class)
 public class Room {
     @Id
@@ -20,24 +28,23 @@ public class Room {
 
     private String roomNumber;
 
-    @Enumerated(EnumType.STRING) // guarda un string enves de indices 0,1,2
-    @Column(length = 50) // Reducir el tamaño
+    @Enumerated(EnumType.STRING)
+    @Column(length = 50)
     private RoomType roomType;
 
     private Double price;
     private Boolean available;
-    private Integer capacity; // cuántas personas caben
-    private Double size; // m²
-    private String name; // titulo de la recamara
-    private String description; // // descripción visible al cliente
+    private Integer capacity;
+    private Double size;
+    private String name;
+    private String description;
 
-    @CreatedDate // Fecha de creado al hacer .save()
-    @Column(updatable = false) // pero la DB nunca lo sobreescribe en un UPDATE .save()
+    @CreatedDate
+    @Column(updatable = false)
     private LocalDateTime createdAt;
 
     @LastModifiedDate
     private LocalDateTime updatedAt;
 
-    // null = activa / tiene fecha = eliminada
     private LocalDateTime deletedAt;
 }

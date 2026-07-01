@@ -3,6 +3,7 @@ package com.richglez.hotel.auth.dto;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
 
+/** Login request credentials. */
 @Data
 public class LoginRequest {
     @NotBlank(message = "Email is required")

@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+/** Authentication response containing the generated token. */
 @Data
 @Builder
 @AllArgsConstructor

@@ -4,6 +4,7 @@ import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -12,8 +13,7 @@ import org.springframework.security.web.authentication.WebAuthenticationDetailsS
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
-import java.io.IOException;
-
+/** Validates JWT bearer tokens for incoming requests. */
 @Component
 @RequiredArgsConstructor
 public class JwtAuthFilter extends OncePerRequestFilter {
@@ -22,44 +22,41 @@ public class JwtAuthFilter extends OncePerRequestFilter {
     private final UserDetailsServiceImpl userDetailsService;
 
     @Override
-    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-
+    protected void doFilterInternal(
+            HttpServletRequest request,
+            HttpServletResponse response,
+            FilterChain filterChain) throws ServletException, IOException {
         final String authHeader = request.getHeader("Authorization");
 
-        // ← si no hay token, simplemente deja pasar — Spring Security
-        //    decidirá si el endpoint requiere auth o no
         if (authHeader == null || !authHeader.startsWith("Bearer ")) {
-            filterChain.doFilter(request, response); // pasa estos atributos al siguiente filtro
-            return; // se acaba el filtro aqui
+            filterChain.doFilter(request, response);
+            return;
         }
 
         try {
             final String token = authHeader.substring(7);
-            final String email = jwtService.extractUsername(token); // ← puede lanzar ExpiredJwtException, MalformedJwtException...
+            final String email = jwtService.extractUsername(token);
 
             if (email != null && SecurityContextHolder.getContext().getAuthentication() == null) {
                 UserDetails userDetails = userDetailsService.loadUserByUsername(email);
 
                 if (jwtService.isTokenValid(token, userDetails)) {
                     var authToken = new UsernamePasswordAuthenticationToken(
-                            userDetails, null, userDetails.getAuthorities()
+                            userDetails,
+                            null,
+                            userDetails.getAuthorities()
                     );
 
-                    authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+                    authToken.setDetails(
+                            new WebAuthenticationDetailsSource().buildDetails(request));
                     SecurityContextHolder.getContext().setAuthentication(authToken);
                 }
             }
-
-        } catch (Exception e) {
-            // Token inválido o expirado → limpia el contexto
-            // AuthenticationEntryPoint devolverá el 401 limpiamente
+        } catch (Exception ex) {
             SecurityContextHolder.clearContext();
-            System.out.println("❌ JwtAuthFilter error: " + e.getClass().getSimpleName() + " → " + e.getMessage());
+            logger.debug("JWT authentication failed", ex);
         }
 
-        filterChain.doFilter(request, response); // ← siempre continúa la cadena
+        filterChain.doFilter(request, response);
     }
 }
-
-
-// Seguridad Para interceptar requests y validar tokens.

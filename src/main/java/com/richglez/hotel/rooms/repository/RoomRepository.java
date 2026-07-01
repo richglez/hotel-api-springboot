@@ -2,33 +2,33 @@ package com.richglez.hotel.rooms.repository;
 
 import com.richglez.hotel.common.enums.RoomType;
 import com.richglez.hotel.rooms.model.Room;
+import java.util.List;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import java.util.List;
-
+/** Repository for room entities. */
 public interface RoomRepository extends JpaRepository<Room, Long> {
-    // SELECT * FROM room WHERE deleted_at IS NULL
+
+    /** Finds rooms that have not been soft-deleted. */
     List<Room> findByDeletedAtIsNull();
 
-    // available filter
+    /** Finds rooms by availability. */
     Page<Room> findByAvailable(Boolean available, Pageable pageable);
 
-    // room type filter
+    /** Finds rooms by room type. */
     Page<Room> findByRoomType(RoomType roomType, Pageable pageable);
 
-    // capacity filter
+    /** Finds rooms by minimum capacity. */
     Page<Room> findByCapacityGreaterThanEqual(Double capacity, Pageable pageable);
 
-    // combined filters
+    /** Finds rooms by availability and room type. */
     Page<Room> findByAvailableAndRoomType(
             Boolean available,
             RoomType roomType,
             Pageable pageable
     );
 
-    // active rooms only filter
+    /** Finds rooms that have been soft-deleted. */
     List<Room> findByDeletedAtIsNotNull();
-
 }

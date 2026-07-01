@@ -9,6 +9,7 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
+/** Seeds required startup data. */
 @Slf4j
 @Component
 @RequiredArgsConstructor
@@ -18,7 +19,7 @@ public class DataInitializer implements CommandLineRunner {
     private final PasswordEncoder passwordEncoder;
 
     @Override
-    public void run(String... args){
+    public void run(String... args) {
         createAdminIfNotExists();
     }
 
@@ -36,11 +37,9 @@ public class DataInitializer implements CommandLineRunner {
                     .build();
 
             userRepository.save(admin);
-            log.info("✅ Admin creado: {} / Admin1234!", adminEmail);
+            log.info("Admin created: {} / Admin1234!", adminEmail);
         } else {
-            log.info("ℹ️ Admin ya existe, no se crea de nuevo.");
+            log.info("Admin already exists; skipping creation.");
         }
     }
 }
-
-// create an admin user
