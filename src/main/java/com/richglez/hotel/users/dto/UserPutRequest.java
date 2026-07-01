@@ -3,6 +3,7 @@ package com.richglez.hotel.users.dto;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
+/** Required fields for replacing a user. */
 @Data
 public class UserPutRequest {
     @NotNull(message = "Name is required")

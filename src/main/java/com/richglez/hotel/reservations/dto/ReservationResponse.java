@@ -1,9 +1,9 @@
 package com.richglez.hotel.reservations.dto;
 
+import java.time.LocalDateTime;
 import lombok.Data;
 
-import java.time.LocalDateTime;
-
+/** Reservation data returned by API endpoints. */
 @Data
 public class ReservationResponse {
     private Long id;

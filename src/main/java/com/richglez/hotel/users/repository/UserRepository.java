@@ -1,12 +1,11 @@
 package com.richglez.hotel.users.repository;
+
+import com.richglez.hotel.users.model.User;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
-import com.richglez.hotel.users.model.User;
 
-/**
- * Spring Data JPA repository for {@link User} entities.
- */
+/** Spring Data JPA repository for {@link User} entities. */
 public interface UserRepository extends JpaRepository<User, Long> {
 
     /**

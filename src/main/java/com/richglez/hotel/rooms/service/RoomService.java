@@ -7,64 +7,47 @@ import com.richglez.hotel.rooms.dto.RoomResponse;
 import com.richglez.hotel.rooms.model.Room;
 import com.richglez.hotel.rooms.repository.RoomRepository;
 import jakarta.persistence.EntityNotFoundException;
+import java.time.LocalDateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
-
+/** Provides room management operations. */
 @Service
 public class RoomService {
 
     @Autowired
     private RoomRepository roomRepository;
 
+    /** Creates a room from a request. */
     public RoomResponse addRoom(RoomRequest request) {
         Room room = new Room();
 
-        room.setRoomNumber(request.getRoomNumber());
-        room.setRoomType(request.getRoomType());
-        room.setPrice(request.getPrice());
-        room.setAvailable(request.getAvailable());
-        room.setCapacity(request.getCapacity());
-        room.setSize(request.getSize());
-        room.setName(request.getName());
-        room.setDescription(request.getDescription());
-
+        applyRoomRequest(room, request);
         return toResponse(roomRepository.save(room));
     }
 
+    /** Returns rooms using optional filters. */
     public Page<RoomResponse> getAllRooms(
             Boolean available,
             RoomType roomType,
             Integer capacity,
-            Pageable pageable
-    ) {
+            Pageable pageable) {
+        Page<Room> rooms;
 
-        Page<Room> rooms; // crea una pagina de recamaras y almacenala en rooms
-
-        // available + roomType
         if (available != null && roomType != null) {
-
             rooms = roomRepository.findByAvailableAndRoomType(
                     available,
                     roomType,
                     pageable
             );
-
-        }
-
-        // available only
-        else if (available != null) {
+        } else if (available != null) {
             rooms = roomRepository.findByAvailable(
                     available,
                     pageable
             );
-        }
-
-        // roomType only
-        else if (roomType != null) {
+        } else if (roomType != null) {
             rooms = roomRepository.findByRoomType(
                     roomType,
                     pageable
@@ -76,20 +59,74 @@ public class RoomService {
         return rooms.map(this::toResponse);
     }
 
-    // Metodo privado para logica interna
-    private Room findRoomById(Long id) {
-        return roomRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Room with id " + id + " not found"));
-    }
-
-    //Metodo publico para controller peticiones endpoints
+    /** Returns a room by id. */
     public RoomResponse getRoomById(Long id) {
         return toResponse(findRoomById(id));
     }
 
+    /** Replaces a room by id. */
     public RoomResponse updateRoom(Long id, RoomRequest request) {
         Room room = findRoomById(id);
 
+        applyRoomRequest(room, request);
+        return toResponse(roomRepository.save(room));
+    }
+
+    /** Partially updates a room by id. */
+    public RoomResponse patchRoom(Long id, RoomPatchRequest roomRequest) {
+        Room room = findRoomById(id);
+
+        if (roomRequest.getRoomNumber() != null) {
+            room.setRoomNumber(roomRequest.getRoomNumber());
+        }
+        if (roomRequest.getRoomType() != null) {
+            room.setRoomType(roomRequest.getRoomType());
+        }
+        if (roomRequest.getPrice() != null) {
+            room.setPrice(roomRequest.getPrice());
+        }
+        if (roomRequest.getAvailable() != null) {
+            room.setAvailable(roomRequest.getAvailable());
+        }
+        if (roomRequest.getCapacity() != null) {
+            room.setCapacity(roomRequest.getCapacity());
+        }
+        if (roomRequest.getSize() != null) {
+            room.setSize(roomRequest.getSize());
+        }
+        if (roomRequest.getName() != null) {
+            room.setName(roomRequest.getName());
+        }
+        if (roomRequest.getDescription() != null) {
+            room.setDescription(roomRequest.getDescription());
+        }
+
+        return toResponse(roomRepository.save(room));
+    }
+
+    /** Soft deletes a room by id. */
+    public RoomResponse softDeleteRoom(Long id) {
+        Room room = findRoomById(id);
+
+        room.setDeletedAt(LocalDateTime.now());
+        return toResponse(roomRepository.save(room));
+    }
+
+    /** Permanently deletes a room by id. */
+    public RoomResponse hardDeleteRoom(Long id) {
+        Room room = findRoomById(id);
+        roomRepository.delete(room);
+
+        return toResponse(room);
+    }
+
+    private Room findRoomById(Long id) {
+        return roomRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException(
+                        "Room with id " + id + " not found"));
+    }
+
+    private void applyRoomRequest(Room room, RoomRequest request) {
         room.setRoomNumber(request.getRoomNumber());
         room.setRoomType(request.getRoomType());
         room.setPrice(request.getPrice());
@@ -98,44 +135,8 @@ public class RoomService {
         room.setSize(request.getSize());
         room.setName(request.getName());
         room.setDescription(request.getDescription());
-
-        return toResponse(roomRepository.save(room));
     }
 
-    public RoomResponse patchRoom(Long id, RoomPatchRequest roomRequest) {
-        Room room = findRoomById(id);
-
-        if (roomRequest.getRoomNumber() != null) room.setRoomNumber(roomRequest.getRoomNumber());
-        if (roomRequest.getRoomType() != null) room.setRoomType(roomRequest.getRoomType());
-        if (roomRequest.getPrice() != null) room.setPrice(roomRequest.getPrice());
-        if (roomRequest.getAvailable() != null) room.setAvailable(roomRequest.getAvailable());
-        if (roomRequest.getCapacity() != null) room.setCapacity(roomRequest.getCapacity());
-        if (roomRequest.getSize() != null) room.setSize(roomRequest.getSize());
-        if (roomRequest.getName() != null) room.setName(roomRequest.getName());
-        if (roomRequest.getDescription() != null) room.setDescription(roomRequest.getDescription());
-
-        return toResponse(roomRepository.save(room));
-    }
-
-    // soft delete
-    public RoomResponse softDeleteRoom(Long id) {
-        Room room = findRoomById(id);
-
-        room.setDeletedAt(LocalDateTime.now());
-        return toResponse(roomRepository.save(room));
-
-    }
-
-    // hard delete
-    public RoomResponse hardDeleteRoom(Long id) {
-        Room room = findRoomById(id);
-        roomRepository.delete(room);
-
-        return toResponse(room);
-    }
-
-
-    // helper response
     private RoomResponse toResponse(Room room) {
         RoomResponse response = new RoomResponse();
 
@@ -154,5 +155,4 @@ public class RoomService {
 
         return response;
     }
-
 }

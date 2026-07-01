@@ -1,9 +1,9 @@
 package com.richglez.hotel.reservations.dto;
 
+import java.time.LocalDateTime;
 import lombok.Data;
 
-import java.time.LocalDateTime;
-
+/** Optional fields for partially updating a reservation. */
 @Data
 public class ReservationPatchRequest {
     private LocalDateTime checkIn;

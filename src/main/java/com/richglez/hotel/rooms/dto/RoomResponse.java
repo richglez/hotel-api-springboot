@@ -1,11 +1,10 @@
 package com.richglez.hotel.rooms.dto;
 
 import com.richglez.hotel.common.enums.RoomType;
+import java.time.LocalDateTime;
 import lombok.Data;
 
-import java.time.LocalDateTime;
-
-// Datos enregados al usuario
+/** Room data returned by API endpoints. */
 @Data
 public class RoomResponse {
     private Long id;

@@ -1,26 +1,26 @@
 package com.richglez.hotel.reservations.repository;
 
 import com.richglez.hotel.reservations.model.Reservation;
+import java.util.List;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import java.util.List;
-
+/** Repository for reservation entities. */
 public interface ReservationRepository extends JpaRepository<Reservation, Long> {
-    // SELECT * FROM reservation WHERE deletedAt IS NULL
+
+    /** Finds reservations that have not been soft-deleted. */
     List<Reservation> findAllByDeletedAtIsNull();
 
-    // SELECT * FROM reservation WHERE deletedAt IS NOT NULL
+    /** Finds reservations that have been soft-deleted. */
     List<Reservation> findAllByDeletedAtIsNotNull();
 
-    // Filter by clientId
+    /** Finds reservations by user id. */
     Page<Reservation> findByUserId(Long userId, Pageable pageable);
 
-    // Filter by roomId
+    /** Finds reservations by room id. */
     Page<Reservation> findByRoomId(Long roomId, Pageable pageable);
 
-    // Filter by clientId and roomId
+    /** Finds reservations by user id and room id. */
     Page<Reservation> findByUserIdAndRoomId(Long userId, Long roomId, Pageable pageable);
-
 }

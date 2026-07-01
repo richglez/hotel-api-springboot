@@ -5,6 +5,7 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
 
+/** Registration request for a new guest user. */
 @Data
 public class RegisterRequest {
     @NotBlank(message = "Name is required")
@@ -22,5 +23,4 @@ public class RegisterRequest {
     private String password;
 
     private String phone;
-    // role no se expone — el backend asigna GUEST por defecto
 }

@@ -1,8 +1,6 @@
 package com.richglez.hotel.security;
 
-import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -18,6 +16,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
+/** Configures Spring Security for the API. */
 @Configuration
 @EnableWebSecurity
 @EnableMethodSecurity
@@ -27,36 +26,31 @@ public class SecurityConfig {
     private final JwtAuthFilter jwtAuthFilter;
     private final UserDetailsServiceImpl userDetailsService;
 
+    /** Builds the API security filter chain. */
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http
-                .csrf(csrf -> csrf.disable())// cookies -> token
+                .csrf(csrf -> csrf.disable())
                 .cors(cors -> {
-                }) // enabling cors
+                })
                 .sessionManagement(session ->
-                        session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)) // api stateless in each request needs a JWT token.
-
+                        session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .exceptionHandling(ex -> ex
-                        // 401 → no hay token o es inválido
                         .authenticationEntryPoint((request, response, authException) -> {
                             response.setContentType("application/json");
-                            response.setStatus(HttpStatus.UNAUTHORIZED.value()); // 401
+                            response.setStatus(HttpStatus.UNAUTHORIZED.value());
                             response.getWriter().write(
                                     "{\"message\": \"Authentication required. Please log in.\"}"
                             );
                         })
-
-                        // 403 -> hay token pero sin permisos suficientes de usuario
                         .accessDeniedHandler((request, response, accessDeniedException) -> {
                             response.setContentType("application/json");
                             response.setStatus(HttpStatus.FORBIDDEN.value());
                             response.getWriter().write(
-                                    "{\"message\": \"You don't have permission to access this resource.\"}"
+                                    "{\"message\": \"You do not have permission.\"}"
                             );
                         })
                 )
-
-
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                         .requestMatchers(
@@ -65,33 +59,30 @@ public class SecurityConfig {
                                 "/swagger-ui/**",
                                 "/api-docs/**",
                                 "/v3/api-docs/**",
-                                "/actuator/health/**" // ← health check público (Railway + smoke test)
+                                "/actuator/health/**"
                         ).permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/rooms/**").permitAll()
-                        // ← quita todas las reglas específicas de rooms
                         .requestMatchers("/api/admin/**").hasRole("ADMIN")
                         .requestMatchers("/api/manager/**").hasAnyRole("ADMIN", "MANAGER")
-                        .requestMatchers("/api/reception/**").hasAnyRole("ADMIN", "MANAGER", "RECEPTIONIST")
+                        .requestMatchers("/api/reception/**")
+                        .hasAnyRole("ADMIN", "MANAGER", "RECEPTIONIST")
                         .anyRequest().authenticated()
                 )
-
                 .userDetailsService(userDetailsService)
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();
     }
 
+    /** Provides the password encoder used by authentication services. */
     @Bean
     public PasswordEncoder passwordEncoder() {
-        // BCrypt genera automáticamente un 'salt' aleatorio para cada contraseña
         return new BCryptPasswordEncoder();
     }
 
-
+    /** Provides the authentication manager from Spring Security. */
     @Bean
-    public AuthenticationManager authenticationManagerBean(AuthenticationConfiguration config) throws Exception {
+    public AuthenticationManager authenticationManagerBean(
+            AuthenticationConfiguration config) throws Exception {
         return config.getAuthenticationManager();
     }
-
 }
-
-// configurar: rutas públicas rutas protegidas filtros
