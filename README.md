@@ -383,6 +383,10 @@ Planned features for future development:
 * [ ] Vitest / Jest Integration for frontend testing
 * [ ] Redis implementation
 * [ ] Performance, complete % testing
+* [ ] Overlap/double-booking validation
+* [ ] Auth test coverage + JaCoCo
+* [ ] API versioning
+* [ ] Async email notification on reservation confirmation RabbitMQ 
 
 ---
 
