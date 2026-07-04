@@ -384,6 +384,10 @@ Planned features for future development:
 * [ ] Microservices integration + Circuit Breaker
 * [ ] Redis implementation
 * [ ] Performance, complete % testing
+* [ ] Overlap/double-booking validation
+* [ ] Auth test coverage + JaCoCo
+* [ ] API versioning
+* [ ] Async email notification on reservation confirmation RabbitMQ 
 
 ---
 
