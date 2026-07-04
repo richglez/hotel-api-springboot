@@ -381,6 +381,7 @@ Planned features for future development:
 * [X] CD that completes CI/CD
 * [X] Setting Checkstyle (backend lintern) for backend lintern
 * [ ] Vitest / Jest Integration for frontend testing
+* [ ] Microservices integration + Circuit Breaker
 * [ ] Redis implementation
 * [ ] Performance, complete % testing
 * [ ] Overlap/double-booking validation
