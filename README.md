@@ -388,6 +388,7 @@ Planned features for future development:
 * [ ] Overlap/double-booking validation
 * [ ] Auth test coverage + JaCoCo
 * [ ] API versioning
+* [ ] Stripe payments
 * [ ] Async email notification on reservation confirmation RabbitMQ 
 
 ---
